@@ -23,9 +23,10 @@
             <div class="card-body register-card-body">
                 <p class="login-box-msg">Register a new membership</p>
 
-                <form action="../../index.html" method="post">
+                <form action="{{ route('saveregister') }}" method="post">
+                    {{ csrf_field() }}
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Full name">
+                        <input type="text" class="form-control" name="name" placeholder="Full name">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-user"></span>
@@ -33,7 +34,7 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="username" class="form-control" placeholder="Username">
+                        <input type="username" class="form-control" name="username" placeholder="Username">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
@@ -43,32 +44,34 @@
                     <div class="col-mb-3">
                         <!-- select -->
                         <div class="form-group">
-                            <select class="form-control">
+                            <select class="form-control" name="role">
                                 <option>--Role--</option>
-                                <option>Admin</option>
-                                <option>Akunting</option>
-                                <option>Direktur</option>
-                                <option>Teknisi</option>
-                                <option>Logistik</option>
+                                <option value="admin">Admin</option>
+                                <option value="akunting">Akunting</option>
+                                <option value="direktur">Direktur</option>
+                                <option value="teknisi">Teknisi</option>
+                                <option value="logistik">Logistik</option>
                             </select>
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Password">
+                        <input type="password" class="form-control" name="password" placeholder="Password">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
                     </div>
-                    <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Retype password">
+
+                    {{-- <div class="input-group mb-3">
+                        <input type="password" class="form-control" name="retype-password" placeholder="Retype password">
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
+
                     <div class="row">
                         <div class="col-8">
                             {{-- <div class="icheck-primary">
