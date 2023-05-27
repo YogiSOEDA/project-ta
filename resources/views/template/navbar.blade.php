@@ -125,15 +125,51 @@
                 <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
             </div>
         </li>
+        {{-- <li class="nav-item dropdown user-menu">
+            <a class="nav-link" data-widget="dropdown" href="#">
+                <i class="fas fa-th-large"></i>
+            </a>
+            {{-- <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right"> --}}
+        {{-- <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+            <li class="user-header">
+                <img src="{{ asset('img/logo.png') }}" alt="" srcset="">
+            </li>
+            <li class="user-footer">
+                <div class="pull-left">
+                    <button class="btn btn-success btn-flat">Profile</button>
+                </div>
+                <div class="pull-right">
+                    <button class="btn btn-danger btn-flat" id="logout">Sign Out</button>
+                </div>
+            </li>
+        </ul> --}}
+        {{-- </div> --}}
+        {{-- </li> --}}
+        <li class="nav-item dropdown user-menu">
+            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                <span class="d-none d-md-inline">Alexander Pierce</span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                <!-- User image -->
+                <li class="user-header bg-white">
+                    <img src="{{ asset('img/logo.png') }}" class="elevation-1" alt="User Image">
+                    {{-- <img src="{{ asset('img/logo.png') }}" class="img-circle elevation-2" alt="User Image"> --}}
+
+                    <p>
+                        Alexander Pierce - Web Developer
+                    </p>
+                </li>
+                <!-- Menu Footer-->
+                <li class="user-footer">
+                    <a href="#" class="btn btn-success btn-flat">Profile</a>
+                    <a href="{{ route('logout') }}" class="btn btn-danger btn-flat float-right">Sign out</a>
+                </li>
+            </ul>
+        </li>
         <li class="nav-item">
             <a class="nav-link" data-widget="fullscreen" href="#" role="button">
                 <i class="fas fa-expand-arrows-alt"></i>
             </a>
         </li>
-        {{-- <li class="nav-item">
-            <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
-                <i class="fas fa-th-large"></i>
-            </a>
-        </li> --}}
     </ul>
 </nav>
