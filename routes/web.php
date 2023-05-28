@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DataBarangController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +35,8 @@ Route::post('/postlogin', [UserController::class, 'postlogin'])->name('postlogin
 Route::post('/saveregister', [UserController::class, 'register'])->name('saveregister');
 Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
+Route::get('/databarang', [DataBarangController::class, 'index'])->name('databarang');
+Route::get('/tabelbarang', [DataBarangController::class, 'table'])->name('tabelbarang');
 // Route::group(['middleware' => ['auth']], function () {
 //     Route::get('/dashboard', [UserController::class, 'index']);
 // });
