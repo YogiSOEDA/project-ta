@@ -42,7 +42,7 @@
 
                {{-- brot brot --}}
                <li class="nav-item">
-                    <a href="#" class="nav-link active">
+                    <a href="{{ route('dashboard') }}" class="nav-link {{ 'dashboard' == request()->path() ? 'active' : '' }}">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
@@ -74,7 +74,7 @@
                 </li> --}}
                 <li class="nav-item menu">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-circle"></i>
+                        <i class="nav-icon fas fa-shopping-cart"></i>
                         <p>
                             Purchasing
                             <i class="right fas fa-angle-left"></i>
@@ -97,7 +97,7 @@
                 </li>
                 <li class="nav-item menu">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-circle"></i>
+                        <i class="nav-icon fas fa-warehouse"></i>
                         <p>
                             Gudang
                             <i class="right fas fa-angle-left"></i>
@@ -126,19 +126,19 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon far fa-circle"></i>
+                        <i class="nav-icon far fa-chart-bar"></i>
                         <p>Prediksi</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="nav-icon far fa-circle"></i>
+                        <i class="nav-icon far fa-file-alt"></i>
                         <p>Laporan</p>
                     </a>
                 </li>
-                <li class="nav-item menu">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-circle"></i>
+                <li class="nav-item {{ 'dataproyek' == request()->path() || 'databarang' == request()->path() ? 'menu-open' : 'menu' }}">
+                    <a href="#" class="nav-link {{ 'dataproyek' == request()->path() || 'databarang' == request()->path() ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-archive"></i>
                         <p>
                             Master Data
                             <i class="right fas fa-angle-left"></i>
@@ -146,13 +146,13 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('databarang') }}" class="nav-link {{ 'databarang' == request()->path() ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Data Barang</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('dataproyek') }}" class="nav-link {{ 'dataproyek' == request()->path() ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Data Proyek</p>
                             </a>

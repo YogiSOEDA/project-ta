@@ -29,13 +29,25 @@ class DataBarangController extends Controller
             ->addIndexColumn()
             ->editColumn('gambar', function($data) {
                 // dd($data)
+                $awok = 'storage/'.$data->gambar;
                 // $awok = `<img src="` + $data->gambar + `" class="img-fluid mb-2"/>`;
-                return '<img src='.$data->gambar. ' class="img-fluid mb-2" style="max-width:30%"/>';
+                return '<img src="/storage/'.$data->gambar.'" class="img-fluid mb-2" style="max-width:30%"/>';
             })
             ->addColumn('action', function ($data) {
-                return '<a href="#" class="btn btn-warning"><i class="fa-light fa-pen">Edit</i></a>';
+                return '<a href="#" class="btn btn-warning"><i class="fas fa-pen"></i> Edit</a>';
             })
             ->rawColumns(['gambar','action'])
             ->make(true);
+    }
+
+    public function store(Request $request)
+    {
+        Barang::create([
+            'nama_barang' => $request->nama_barang,
+            'harga' => $request->harga,
+            'gambar' => $request->file('gambar')->store('barang-images'),
+        ]);
+
+        return redirect('/databarang');
     }
 }
