@@ -2,31 +2,13 @@
 
 use App\Http\Controllers\DataBarangController;
 use App\Http\Controllers\DataProyekController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
 
 Route::get('/', function () {
     return view('welcome');
 });
-
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// });
-
-// Route::get('/login', function () {
-//     return view('login');
-// })->name('login');
 
 Route::get('/register', function () {
     return view('register');
@@ -46,8 +28,8 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin']], function () {
 
     Route::get('/databarang', [DataBarangController::class, 'index'])->name('databarang');
     Route::get('/tabelbarang', [DataBarangController::class, 'table'])->name('tabelbarang');
-
     Route::get('/dataproyek', [DataProyekController::class, 'index'])->name('dataproyek');
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
 });
 
 // Route::middleware(['auth', 'rolecheck::admin'])->group(function () {
