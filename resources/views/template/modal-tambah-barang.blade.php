@@ -1,4 +1,4 @@
-<div class="modal fade" id="ModalTambahBarang">
+<div class="modal fade" id="ModalTambahBarang" data-backdrop="static">
     <div class="modal-dialog modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -13,7 +13,7 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label for="inputNamaBarang">Nama Barang</label>
-                            <input type="text" class="form-control" id="nama_barang" name="nama_barang"
+                            <input type="text" class="form-control" id="input_nama_barang" name="nama_barang"
                                 placeholder="Masukkan Nama Barang">
                         </div>
                         <div class="form-group">
@@ -24,7 +24,7 @@
                                         <i class="fa-solid fa-rupiah-sign"></i>
                                     </span>
                                 </div>
-                                <input type="number" class="form-control" id="harga" name="harga"
+                                <input type="number" class="form-control" id="input_harga" name="harga"
                                     placeholder="Masukkan Harga Barang">
                             </div>
                         </div>
@@ -32,11 +32,12 @@
                             <label for="inputGambarBarang">Input Gambar</label>
                             <div class="input-group">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="exampleInputFile"
-                                        name="gambar">
-                                    <label class="custom-file-label" for="exampleInputFile">Choose
+                                    <input type="file" class="custom-file-input" id="input_image" name="gambar"
+                                        onchange="previewImage()">
+                                    <label class="custom-file-label" for="input_image">Choose
                                         file</label>
                                 </div>
+                                <img class="img-preview img-fluid mb-3 col-sm-5">
                             </div>
                         </div>
                     </div>

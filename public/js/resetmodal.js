@@ -1,6 +1,9 @@
 const btnClear = document.getElementById('close');
-const inputs = document.querySelectorAll('input');
+const form = document.querySelector('form');
+const imgPreview = document.querySelector('.img-preview');
 
 btnClear.addEventListener('click', () => {
-    inputs.forEach(input => input.value = '');
+    imgPreview.style.display = 'none';
+    form.reset();
 })
+
