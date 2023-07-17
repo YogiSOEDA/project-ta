@@ -80,7 +80,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('laporan') }}" class="nav-link {{ 'laporan' == request()->path() ? 'active' : '' }}">
                         <i class="nav-icon far fa-file-alt"></i>
                         <p>Laporan</p>
                     </a>
