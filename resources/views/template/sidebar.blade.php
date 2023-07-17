@@ -22,22 +22,40 @@
                     </a>
                 </li>
                 <li class="nav-item menu">
+                    <?php
+                    if(request()->path() == 'purchasing' || request()->path() == 'request-material' || request()->path() == 'purchase-order')
+                    {
+                    ?>
+                        <a href="#" class="nav-link active">
+                            <i class="nav-icon fas fa-shopping-cart"></i>
+                            <p>
+                                Purchasing
+                                <i class="right fas fa-angle-down"></i>
+                            </p>
+                        </a>
+                    <ul class="nav">
+                    <?php
+                    } else {
+                    ?>
                     <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-shopping-cart"></i>
-                        <p>
-                            Purchasing
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
+                            <i class="nav-icon fas fa-shopping-cart"></i>
+                            <p>
+                                Purchasing
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
                     <ul class="nav nav-treeview">
+                    <?php
+                    }
+                    ?>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{route('requestMaterial')}}" class="nav-link {{ 'request-material' == request()->path() ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Request Material</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{route('purchaseOrder')}}" class="nav-link {{ 'purchase-order' == request()->path() ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Purchase Order</p>
                             </a>
@@ -45,28 +63,45 @@
                     </ul>
                 </li>
                 <li class="nav-item menu">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-warehouse"></i>
-                        <p>
-                            Gudang
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
+                <?php
+                    if(request()->path() == 'persediaan' || request()->path() == 'barang-masuk' || request()->path() == 'barang-keluar') {
+                        ?>
+                        <a href="#" class="nav-link active">
+                            <i class="nav-icon fas fa-warehouse"></i>
+                            <p>
+                                Gudang
+                                <i class="right fas fa-angle-down"></i>
+                            </p>
+                        </a>
+                        <ul class="nav">
+                        <?php
+                    } else {
+                        ?>
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-warehouse"></i>
+                            <p>
+                                Gudang
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                        <?php
+                    }
+                    ?>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{route('persediaan')}}" class="nav-link {{ 'persediaan' == request()->path() ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Persediaan Barang</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{route('barang-masuk')}}" class="nav-link {{ 'barang-masuk' == request()->path() ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Barang Masuk</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{route('barang-keluar')}}" class="nav-link {{ 'barang-keluar' == request()->path() ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Barang Keluar</p>
                             </a>
@@ -74,13 +109,13 @@
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('prediksi')}}" class="nav-link {{ 'prediksi' == request()->path() ? 'active' : '' }}">
                         <i class="nav-icon far fa-chart-bar"></i>
                         <p>Prediksi</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{ route('laporan') }}" class="nav-link {{ 'laporan' == request()->path() ? 'active' : '' }}">
                         <i class="nav-icon far fa-file-alt"></i>
                         <p>Laporan</p>
                     </a>
