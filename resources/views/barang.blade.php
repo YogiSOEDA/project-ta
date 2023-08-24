@@ -175,38 +175,54 @@
                     $('#id_barang').val(id);
                     $('#input_edit_nama_barang').val(response.result.nama_barang);
                     $('#input_edit_harga').val(response.result.harga);
+                    const imgPreview = document.querySelector('#img-edit-preview');
+
+                    imgPreview.classList.add("col-sm-5");
+                    imgPreview.style.display = 'block';
+                    imgPreview.src = "/storage/" + response.result.gambar;
+                    // $('#img-edit-preview').src = response.result.gambar;
+
                     console.log(response.result);
-                    $('.tombol-simpan-edit').click(function() {
-                        // simpan(id);
-                        $('#databarang').DataTable().ajax.reload();
-                    });
+                    // $('.tombol-simpan-edit').click(function() {
+                    //     simpan(id);
+
+                    //     $('#databarang').DataTable().ajax.reload();
+                    // });
                 }
             });
         });
 
+        // window.addEventListener("load", function () {
+        //     var ajax = new XMLHttpRequest();
+        //     ajax.onreadystatechange = function () {
+        //         if (this.status == 500) {
+        //             console.log(this.responseText);
+        //         }
+        //     }
+        // })
+
         // function simpan(id = '') {
-        //     if (id == '' ) {
+        //     if (id == '') {
         //         var var_url = 'storedatabarang';
-        //         // var var_type = 'POST';
+        //         var var_type = 'POST';
         //     } else {
-        //         var var_url = 'updatebarang/' + id;
-        //         // var var_type = 'PUT';
+        //         var var_url = 'updatebarang';//' + id;
+        //         var var_type = 'PUT';
         //     }
         //     $.ajax({
         //         url: var_url,
         //         type: 'POST',
         //         data: {
-        //             nama_barang: $('#input_nama_barang').val(),
-        //             harga: $('#input_harga').val(),
-        //             gambar: $('#input_image').val()
+        //             id_barang: $('#id_barang').val(),
+        //             nama_barang: $('#input_edit_nama_barang').val(),
+        //             harga: $('#input_edit_harga').val(),
+        //             gambar: $('#input_edit_image').val()
         //         },
         //         success: function(response) {
         //             $('#databarang').DataTable().ajax.reload();
         //         }
         //     })
         // }
-
-
     </script>
 
     <script src="{{ asset('js/resetmodal.js') }}"></script>

@@ -3,11 +3,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Edit Data Barang</h5>
-                <button class="close" type="button" data-dismiss="modal" id="close" aria-label="Close">
+                <button class="close" type="button" data-dismiss="modal" id="close-edit" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{ route('updatebarang') }}" method="post" enctype="multipart/form-data">
+            {{-- <form action="#" method="post" enctype="multipart/form-data"> --}}
+            <form action="{{ route('updatebarang') }}" method="post" enctype="multipart/form-data" id="form-edit-barang">
                 <div class="modal-body">
                     {{ csrf_field() }}
                     <div class="card-body">

@@ -60,6 +60,11 @@ class DataBarangController extends Controller
         //     'gambar' => $request->file('gambar')->store('barang-images'),
         // ];
 
+        // Barang::where('id', $id)->update([
+        //     'nama_barang' => $request->nama_barang,
+        //     'harga' => $request->harga,
+        //     'gambar' => $request->file('gambar')->store('barang-images'),
+        // ]);
 
         Barang::where('id', $request->id_barang)->update([
             'nama_barang' => $request->nama_barang,

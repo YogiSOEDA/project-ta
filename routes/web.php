@@ -35,8 +35,10 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin']], function () {
 
     Route::get('/editbarang/{id}', [DataBarangController::class, 'edit']);
     Route::post('/updatebarang', [DataBarangController::class, 'update'])->name('updatebarang');
-
+    // Route::post('/updatebarang/{id}', [DataBarangController::class, 'update']);//->name('updatebarang');
     Route::get('/dataproyek', [DataProyekController::class, 'index'])->name('dataproyek');
+
+    // Route::resource('/databarang', [DataBarangController::class]);
 
 
 
