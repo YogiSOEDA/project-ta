@@ -38,6 +38,10 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin']], function () {
 
     Route::get('/databarang', [DataBarangController::class, 'index'])->name('databarang');
     Route::get('/tabelbarang', [DataBarangController::class, 'table'])->name('tabelbarang');
+    Route::post('/storedatabarang', [DataBarangController::class, 'store'])->name('storedatabarang');
+    Route::get('/editbarang/{id}', [DataBarangController::class, 'edit']);
+    Route::post('/updatebarang', [DataBarangController::class, 'update'])->name('updatebarang');
+
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
     Route::get('/persediaan', [GudangController::class, 'persediaan'])->name('persediaan');
     Route::get('/barang-masuk', [GudangController::class, 'barangMasuk'])->name('barang-masuk');
