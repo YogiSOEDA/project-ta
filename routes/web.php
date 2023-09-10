@@ -51,4 +51,3 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin']], function () {
 //     Route::get('/dashboard', [UserController::class, 'index']);
 // });
 
-Route::post('/storedatabarang', [DataBarangController::class, 'store'])->name('storedatabarang');

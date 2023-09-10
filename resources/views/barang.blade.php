@@ -65,6 +65,7 @@
             </section>
 
             @include('template.modal-tambah-barang')
+            @include('template.modal-edit-barang')
 
         </div>
 
@@ -131,6 +132,7 @@
             const image = document.querySelector('#input_image');
             const imgPreview = document.querySelector('.img-preview');
 
+            imgPreview.classList.add("col-sm-5");
             imgPreview.style.display = 'block';
 
             const oFReader = new FileReader();
@@ -140,6 +142,87 @@
                 imgPreview.src = oFREvent.target.result;
             }
         }
+
+        function previewImageEdit() {
+            const image = document.querySelector('#input_edit_image');
+            const imgPreview = document.querySelector('#img-edit-preview');
+
+            imgPreview.classList.add("col-sm-5");
+            imgPreview.style.display = 'block';
+
+            const oFReader = new FileReader();
+            oFReader.readAsDataURL(image.files[0]);
+
+            oFReader.onload = function(oFREvent) {
+                imgPreview.src = oFREvent.target.result;
+            }
+        }
+    </script>
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $('body').on('click', '.tombol-edit', function(e) {
+            var id = $(this).data('id');
+            // alert('id isi '+ id);
+            $.ajax({
+                url: 'editbarang/' + id,
+                type: 'GET',
+                success: function(response) {
+                    $('#ModalEditBarang').modal('show');
+                    $('#id_barang').val(id);
+                    $('#input_edit_nama_barang').val(response.result.nama_barang);
+                    $('#input_edit_harga').val(response.result.harga);
+                    const imgPreview = document.querySelector('#img-edit-preview');
+
+                    imgPreview.classList.add("col-sm-5");
+                    imgPreview.style.display = 'block';
+                    imgPreview.src = "/storage/" + response.result.gambar;
+                    // $('#img-edit-preview').src = response.result.gambar;
+
+                    console.log(response.result);
+                    // $('.tombol-simpan-edit').click(function() {
+                    //     simpan(id);
+
+                    //     $('#databarang').DataTable().ajax.reload();
+                    // });
+                }
+            });
+        });
+
+        // window.addEventListener("load", function () {
+        //     var ajax = new XMLHttpRequest();
+        //     ajax.onreadystatechange = function () {
+        //         if (this.status == 500) {
+        //             console.log(this.responseText);
+        //         }
+        //     }
+        // })
+
+        // function simpan(id = '') {
+        //     if (id == '') {
+        //         var var_url = 'storedatabarang';
+        //         var var_type = 'POST';
+        //     } else {
+        //         var var_url = 'updatebarang';//' + id;
+        //         var var_type = 'PUT';
+        //     }
+        //     $.ajax({
+        //         url: var_url,
+        //         type: 'POST',
+        //         data: {
+        //             id_barang: $('#id_barang').val(),
+        //             nama_barang: $('#input_edit_nama_barang').val(),
+        //             harga: $('#input_edit_harga').val(),
+        //             gambar: $('#input_edit_image').val()
+        //         },
+        //         success: function(response) {
+        //             $('#databarang').DataTable().ajax.reload();
+        //         }
+        //     })
+        // }
     </script>
 
     <script src="{{ asset('js/resetmodal.js') }}"></script>
