@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PrediksiController;
+use App\Http\Controllers\PurchaseOrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -42,12 +43,15 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin']], function () {
     Route::get('/editbarang/{id}', [DataBarangController::class, 'edit']);
     Route::post('/updatebarang', [DataBarangController::class, 'update'])->name('updatebarang');
 
+    Route::get('/purchase-order', [PurchaseOrderController::class, 'index'])->name('purchaseOrder');
+    Route::get('/purchase-order/create', [PurchaseOrderController::class, 'create']);
+
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
     Route::get('/persediaan', [GudangController::class, 'persediaan'])->name('persediaan');
     Route::get('/barang-masuk', [GudangController::class, 'barangMasuk'])->name('barang-masuk');
     Route::get('/barang-keluar', [GudangController::class, 'barangKeluar'])->name('barang-keluar');
     Route::get('/request-material', [PurchaseController::class, 'requestMaterial'])->name('requestMaterial');
-    Route::get('/purchase-order', [PurchaseController::class, 'purchase'])->name('purchaseOrder');
+    // Route::get('/purchase-order', [PurchaseController::class, 'purchase'])->name('purchaseOrder');
     Route::get('/prediksi', [PrediksiController::class, 'index'])->name('prediksi');
 });
 

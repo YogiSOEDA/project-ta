@@ -16,5 +16,10 @@ class Proyek extends Model
         'cp_proyek',
     ];
 
+    public function purchaseOrder()
+    {
+        return $this->hasMany(PurchaseOrder::class);
+    }
+
     // protected $hidden;
 }

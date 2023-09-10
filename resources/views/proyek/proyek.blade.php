@@ -5,7 +5,7 @@
     @include('template.head')
 </head>
 
-<body>
+<body class="hold-transition sidebar-mini">
     <div class="wrapper">
         @include('template.navbar')
         @include('template.sidebar')
