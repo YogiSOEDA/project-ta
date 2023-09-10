@@ -7,9 +7,7 @@
 
 <body>
     <div class="wrapper">
-
         @include('template.navbar')
-
         @include('template.sidebar')
 
         <div class="content-wrapper">
@@ -17,12 +15,12 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Data Barang</h1>
+                            <h1 class="m-0">Data Proyek</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Data Barang</li>
+                                <li class="breadcrumb-item active">Data Proyek</li>
                             </ol>
                         </div>
                     </div>
@@ -35,21 +33,19 @@
                             <div class="card card-primary card-outline">
                                 <div class="card-header">
                                     <div class="float-sm-right">
-                                        <a href="#" class="btn btn-success" data-toggle="modal"
-                                            data-target="#ModalTambahBarang">
+                                        <button class="btn btn-success" onclick="create()">
                                             <i class="fa-solid fa-plus"></i>
-                                            Tambah Barang
-                                        </a>
+                                            Tambah Data
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <table id="databarang" class="table table-bordered table-hover" width="100%">
+                                    <table id="dataproyek" class="table table-bordered table-hover" width="100%">
                                         <thead>
                                             <tr>
                                                 <th>No</th>
-                                                <th>Nama</th>
-                                                <th>Harga</th>
-                                                <th class="col-sm-5">Gambar</th>
+                                                <th>Nama Proyek</th>
+                                                <th>CP Proyek</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -64,7 +60,7 @@
                 </div>
             </section>
 
-            @include('template.modal-tambah-barang')
+            @include('proyek.modal-tambah-proyek');
 
         </div>
 
@@ -72,17 +68,21 @@
             @include('template.footer')
         </footer>
     </div>
-    <input type="hidden" id="table-url-barang" value="{{ route('tabelbarang') }}">
     @include('template.script')
 
     <script>
         $(document).ready(function() {
-            $('#databarang').DataTable({
+            table();
+        });
+
+        function table() {
+
+            $('#dataproyek').DataTable({
                 ordering: true,
                 serverSide: true,
                 processing: true,
                 ajax: {
-                    'url': $('#table-url-barang').val()
+                    'url': "{{ url('dataproyek/tabelproyek') }}"//$('#table-url-proyek').val() //"{{ url('dataproyek/tabelproyek') }}"
                 },
                 columns: [{
                         data: 'DT_RowIndex',
@@ -92,16 +92,12 @@
                         searchable: false
                     },
                     {
-                        data: 'nama_barang',
-                        name: 'nama_barang'
+                        data: 'nama_proyek',
+                        name: 'nama_proyek'
                     },
                     {
-                        data: 'harga',
-                        name: 'harga'
-                    },
-                    {
-                        data: 'gambar',
-                        name: 'gambar',
+                        data: 'cp_proyek',
+                        name: 'cp_proyek',
                         orderable: false,
                         searchable: false
                     },
@@ -119,30 +115,54 @@
                     targets: '_all'
                 }],
             });
-        });
-    </script>
+        }
 
-    <script>
-        $(function() {
-            bsCustomFileInput.init();
-        });
+        function create() {
+            $.get("{{ url('dataproyek/create') }}", {}, function(data, status) {
+                $("#modal-page").html(data);
+                $("#ModalProyek").modal('show');
+            });
+        }
 
-        function previewImage() {
-            const image = document.querySelector('#input_image');
-            const imgPreview = document.querySelector('.img-preview');
+        function store() {
+            var nama_proyek = $("#input_nama_proyek").val();
+            var cp_proyek = $("#input_cp_proyek").val();
+            $.ajax({
+                type: "get",
+                url: "{{ url('dataproyek/store') }}",
+                data: "nama_proyek=" + nama_proyek + "&cp_proyek=" + cp_proyek,
+                success: function(data) {
+                    $("#close").click();
+                    $('#dataproyek').DataTable().ajax.reload();
+                }
 
-            imgPreview.style.display = 'block';
+            })
+        }
 
-            const oFReader = new FileReader();
-            oFReader.readAsDataURL(image.files[0]);
+        function show(id) {
+            $.get("{{ url('dataproyek/show') }}/" + id, {}, function(data, status) {
+                $("#modal-page").html(data);
+                $("#modal-title").html('Update Proyek');
+                $("#ModalProyek").modal('show');
+            });
+        }
 
-            oFReader.onload = function(oFREvent) {
-                imgPreview.src = oFREvent.target.result;
-            }
+        function update(id) {
+            var nama_proyek = $("#input_nama_proyek").val();
+            var cp_proyek = $("#input_cp_proyek").val();
+            $.ajax({
+                type: "get",
+                url: "{{ url('dataproyek/update') }}/" + id,
+                data: "nama_proyek=" + nama_proyek + "&cp_proyek=" + cp_proyek,
+                success: function(data) {
+                    $("#close").click();
+                    $('#dataproyek').DataTable().ajax.reload();
+                }
+
+            })
         }
     </script>
 
-    <script src="{{ asset('js/resetmodal.js') }}"></script>
 </body>
 
 </html>

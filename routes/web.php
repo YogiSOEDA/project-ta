@@ -29,9 +29,15 @@ Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 Route::group(['middleware' => ['auth', 'rolecheck:admin']], function () {
     Route::get('/dashboard', [UserController::class, 'index'])->name('dashboard');
 
+    Route::get('/dataproyek', [DataProyekController::class, 'index'])->name('dataproyek');
+    Route::get('/dataproyek/create', [DataProyekController::class, 'create']);
+    Route::get('/dataproyek/store', [DataProyekController::class, 'store']);
+    Route::get('/dataproyek/tabelproyek', [DataProyekController::class, 'table']);
+    Route::get('/dataproyek/show/{id}', [DataProyekController::class, 'show']);
+    Route::get('/dataproyek/update/{id}', [DataProyekController::class, 'update']);
+
     Route::get('/databarang', [DataBarangController::class, 'index'])->name('databarang');
     Route::get('/tabelbarang', [DataBarangController::class, 'table'])->name('tabelbarang');
-    Route::get('/dataproyek', [DataProyekController::class, 'index'])->name('dataproyek');
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
     Route::get('/persediaan', [GudangController::class, 'persediaan'])->name('persediaan');
     Route::get('/barang-masuk', [GudangController::class, 'barangMasuk'])->name('barang-masuk');
