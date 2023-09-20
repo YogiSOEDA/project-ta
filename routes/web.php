@@ -45,6 +45,7 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin']], function () {
 
     Route::get('/purchase-order', [PurchaseOrderController::class, 'index'])->name('purchaseOrder');
     Route::get('/purchase-order/create', [PurchaseOrderController::class, 'create']);
+    Route::get('/purchase-order/store', [PurchaseOrderController::class, 'store']);
 
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
     Route::get('/persediaan', [GudangController::class, 'persediaan'])->name('persediaan');

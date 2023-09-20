@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Proyek;
 use App\Models\PurchaseOrder;
 use Illuminate\Http\Request;
 
@@ -20,7 +21,10 @@ class PurchaseOrderController extends Controller
      */
     public function create()
     {
-        return view('purchase-order.create-po');
+        $data = Proyek::all();
+        return view('purchase-order.create-po')->with([
+            'data' => $data
+        ]);
     }
 
     /**
@@ -28,7 +32,17 @@ class PurchaseOrderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // $stringDate = strtotime($request->tanggal);
+        // $convertDate= date('')
+
+
+        PurchaseOrder::create([
+            'proyek_id' => $request->proyek_id,
+            'tanggal' => $request->tanggal,
+            'acc_direktur' => 'belum divalidasi',
+            'acc_akunting' => 'belum divalidasi',
+            'status' => 'belum diproses',
+        ]);
     }
 
     /**

@@ -54,6 +54,8 @@
                                                 <th>No</th>
                                                 <th>Tanggal</th>
                                                 <th>Proyek</th>
+                                                <th>Validasi Direktur</th>
+                                                <th>Validasi Akunting</th>
                                                 <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
@@ -138,10 +140,69 @@
         //     $('.option-proyek').select2();
         // });
 
+        function table() {
+
+            $("#purchase-order").DataTable({
+                ordering: true,
+                serverSide: true,
+                processing: true,
+                ajax: {
+                    'url': "{{}}",
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex',
+                    width: '10px',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'proyek_id',
+                    name: 'proyek_id'
+                },
+                {
+                    data: 'acc_direktur',
+                    name: 'acc_direktur'
+                },
+                {
+                    data: 'acc_akunting',
+                    name: 'acc_akunting'
+                },
+                {
+                    data: 'status',
+                    name: 'status'
+                },
+                {
+                    data: 'action',
+                    name: 'action'
+                },
+            ],
+            responsive: true,
+            autoWidth: false,
+            columnDefs: [{
+                className: 'dt-center',
+                targets: '_all'
+            }],
+            });
+        }
+
         function create() {
             $.get("{{ url('purchase-order/create') }}", {}, function(data, status) {
                 $("#modal-page").html(data);
                 $("#ModalPO").modal('show');
+            })
+        }
+
+        function store() {
+            var proyek_id = $("#proyek_id").val();
+            var tanggal = $("#input_tanggal").val();
+            $.ajax({
+                type: "get",
+                url: "{{ url('purchase-order/store') }}",
+                data: "proyek_id=" + proyek_id + "&tanggal=" + tanggal,
+                success: function(data) {
+                    $('#close').click();
+                }
             })
         }
     </script>
