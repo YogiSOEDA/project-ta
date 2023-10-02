@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barang;
+use App\Models\DetailPO;
 use App\Models\Proyek;
 use App\Models\PurchaseOrder;
 use Illuminate\Http\Request;
@@ -13,6 +15,12 @@ class PurchaseOrderController extends Controller
      */
     public function index()
     {
+        // $proyek = Proyek::all();
+        // $testing = [
+        //     'ehe' => 'awok awok',
+        //     'aje' => 1,
+        // ];
+        // dd($testing);
         return view('purchase-order.purchase-order');
     }
 
@@ -21,10 +29,7 @@ class PurchaseOrderController extends Controller
      */
     public function create()
     {
-        $data = Proyek::all();
-        return view('purchase-order.create-po')->with([
-            'data' => $data
-        ]);
+        return view('purchase-order.detail-purchase-order');
     }
 
     /**
@@ -32,17 +37,34 @@ class PurchaseOrderController extends Controller
      */
     public function store(Request $request)
     {
-        // $stringDate = strtotime($request->tanggal);
-        // $convertDate= date('')
+        $id_barang = $request->id_barang;
+        $qty = $request->qty;
+        $harga = $request->harga;
 
-
-        PurchaseOrder::create([
+        $id_po = PurchaseOrder::insertGetId([
             'proyek_id' => $request->proyek_id,
-            'tanggal' => $request->tanggal,
+            'tanggal' => $request->input_tanggal,
             'acc_direktur' => 'belum divalidasi',
             'acc_akunting' => 'belum divalidasi',
             'status' => 'belum diproses',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
         ]);
+
+        foreach ($qty as $e=>$qt) {
+            if($qt == 0) {
+                continue;
+            }
+
+            DetailPO::create([
+                'po_id' => $id_po,
+                'barang_id' => $id_barang[$e],
+                'jumlah' => $qty[$e],
+                'harga' => $harga[$e],
+            ]);
+        }
+
+        return redirect('/purchase-order');
     }
 
     /**
@@ -76,4 +98,33 @@ class PurchaseOrderController extends Controller
     {
         //
     }
+
+    public function viewProyek()
+    {
+        $data = Proyek::all();
+        return view('template.select-proyek')->with([
+            'data' => $data
+        ]);
+    }
+
+    public function viewBarang()
+    {
+        $data = Barang::all();
+        return view('template.select-barang')->with([
+            'data' => $data
+        ]);
+    }
+
+    public function addRow(Request $request)
+    {
+        $barang = Barang::findOrFail($request->barang_id);
+        return view('purchase-order.create-row-table-po')->with([
+            'barang' => $barang,
+            'qty' => $request->qty,
+            'harga' => $request->harga,
+            'jumlah' => $request->jumlah,
+            'number' => $request->number,
+        ]);
+    }
+
 }

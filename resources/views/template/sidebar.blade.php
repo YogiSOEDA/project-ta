@@ -22,9 +22,9 @@
                     </a>
                 </li>
                 <li
-                    class="nav-item {{ 'request-material' == request()->path() || 'purchase-order' == request()->path() ? 'menu-open' : 'menu' }}">
+                    class="nav-item {{ 'request-material' == request()->path() || 'purchase-order' == request()->path() || 'purchase-order/create' == request()->path() ? 'menu-open' : 'menu' }}">
                     <a href="#"
-                        class="nav-link {{ 'request-material' == request()->path() || 'purchase-order' == request()->path() ? 'active' : '' }}">
+                        class="nav-link {{ 'request-material' == request()->path() || 'purchase-order' == request()->path() || 'purchase-order/create' == request()->path() ? 'active' : '' }}">
                         <i class="nav-icon fas fa-archive"></i>
                         <p>
                             Purchasing
@@ -41,7 +41,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('purchaseOrder') }}"
-                                class="nav-link {{ 'purchase-order' == request()->path() ? 'active' : '' }}">
+                                class="nav-link {{ 'purchase-order' == request()->path() || 'purchase-order/create' == request()->path() ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Purchase Order</p>
                             </a>
@@ -55,7 +55,7 @@
                         <i class="nav-icon fas fa-warehouse"></i>
                         <p>
                             Gudang
-                            <i class="right fas fa-angle-down"></i>
+                            <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
                     <ul class="nav nav-treeview">

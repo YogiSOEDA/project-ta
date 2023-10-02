@@ -44,8 +44,12 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin']], function () {
     Route::post('/updatebarang', [DataBarangController::class, 'update'])->name('updatebarang');
 
     Route::get('/purchase-order', [PurchaseOrderController::class, 'index'])->name('purchaseOrder');
-    Route::get('/purchase-order/create', [PurchaseOrderController::class, 'create']);
-    Route::get('/purchase-order/store', [PurchaseOrderController::class, 'store']);
+    Route::get('/purchase-order/create', [PurchaseOrderController::class, 'create'])->name('createPO');
+    Route::post('/purchase-order/store', [PurchaseOrderController::class, 'store'])->name('storePO');
+
+    Route::get('/select-proyek', [PurchaseOrderController::class, 'viewProyek']);
+    Route::get('/select-barang', [PurchaseOrderController::class, 'viewBarang']);
+    Route::get('/add-row',[PurchaseOrderController::class, 'addRow']);
 
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
     Route::get('/persediaan', [GudangController::class, 'persediaan'])->name('persediaan');

@@ -35,15 +35,10 @@
                             <div class="card card-primary card-outline">
                                 <div class="card-header">
                                     <div class="float-sm-right">
-                                        <button class="btn btn-success" onclick="create()">
+                                        <a href="{{ route('createPO') }}" class="btn btn-success">
                                             <i class="fa-solid fa-plus"></i>
                                             Tambah Data
-                                        </button>
-                                        {{-- <a href="#" class="btn btn-success" data-toggle="modal"
-                                            data-target="#ModalTambahOrder">
-                                            <i class="fa-solid fa-plus"></i>
-                                            Tambah Data
-                                        </a> --}}
+                                        </a>
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -61,11 +56,6 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {{-- <tr>
-                                                <td>001</td>
-                                                <td>20-10-2022</td>
-                                                <td>RS Sanglah</td>
-                                            </tr> --}}
                                         </tbody>
                                     </table>
                                 </div>
@@ -74,46 +64,7 @@
                     </div>
                 </div>
             </section>
-            {{-- <div class="modal fade" id="ModalTambahOrder">
-                <div class="modal-dialog modal-dialog-scrollable" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Tambah Data Order</h5>
-                            <button class="close" type="button" data-dismiss="modal" id="close" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <form action="{{ route('storedatabarang') }}" method="post" enctype="multipart/form-data">
-                            <div class="modal-body">
-                                {{ csrf_field() }}
-                                <div class="card-body">
-                                    <div class="form-group">
-                                        <label for="inputNamaBarang">Tanggal</label>
-                                        <input type="date" class="form-control" id="tanggal" name="tanggal"
-                                            placeholder="Masukkan Tanggal">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="inputProyek">Proyek</label>
-                                        <input type="text" class="form-control" id="proyek" name="proyek"
-                                            placeholder="Masukkan Nama Proyek">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div> --}}
-            @include('purchase-order.modal-tambah-po');
         </div>
-        {{-- <aside class="control-sidebar control-sidebar-dark">
-            <div class="p-3">
-                <h5>Title</h5>
-                <p>Sidebar content</p>
-            </div>
-        </aside> --}}
 
         <footer class="main-footer">
             @include('template.footer')
@@ -126,65 +77,7 @@
     <script>
         $.fn.modal.Constructor.prototype.enforceFocus = function() {
             $('.select2').select2();
-                // dropdownParent: $('#ModalPO')
-            // });
         };
-        // $('.select2bs4').select2({
-        //     dropdownParent: $('#ModalPO')
-        // });
-
-        // $(document).ready(function() {
-        //     $('.select2bs4').select2({
-        //         theme: 'bootstrap4'
-        //     })
-        //     $('.option-proyek').select2();
-        // });
-
-        function table() {
-
-            $("#purchase-order").DataTable({
-                ordering: true,
-                serverSide: true,
-                processing: true,
-                ajax: {
-                    'url': "{{}}",
-                },
-                columns: [{
-                    data: 'DT_RowIndex',
-                    name: 'DT_RowIndex',
-                    width: '10px',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'proyek_id',
-                    name: 'proyek_id'
-                },
-                {
-                    data: 'acc_direktur',
-                    name: 'acc_direktur'
-                },
-                {
-                    data: 'acc_akunting',
-                    name: 'acc_akunting'
-                },
-                {
-                    data: 'status',
-                    name: 'status'
-                },
-                {
-                    data: 'action',
-                    name: 'action'
-                },
-            ],
-            responsive: true,
-            autoWidth: false,
-            columnDefs: [{
-                className: 'dt-center',
-                targets: '_all'
-            }],
-            });
-        }
 
         function create() {
             $.get("{{ url('purchase-order/create') }}", {}, function(data, status) {
