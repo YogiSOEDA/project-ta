@@ -79,6 +79,62 @@
             $('.select2').select2();
         };
 
+        $(document).ready(function() {
+            table();
+        });
+
+        function table() {
+            $('#purchase-order').DataTable({
+                ordering: true,
+                serverSide: true,
+                processing: true,
+                ajax: {
+                    'url': "{{ url('purchase-order/tabelpo') }}"
+                },
+                columns: [
+                    {
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        width: '10px',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'tanggal',
+                        name: 'tanggal'
+                    },
+                    {
+                        data: 'proyek.nama_proyek',
+                        name: 'proyek.nama_proyek'
+                    },
+                    {
+                        data: 'stat_dir',
+                        name: 'stat_dir'
+                    },
+                    {
+                        data: 'stat_akt',
+                        name: 'stat_akt'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                responsive: true,
+                autoWidth: false,
+                columnDefs: [{
+                    className: 'dt-center',
+                    targets: '_all'
+                }],
+            });
+        }
+
         function create() {
             $.get("{{ url('purchase-order/create') }}", {}, function(data, status) {
                 $("#modal-page").html(data);

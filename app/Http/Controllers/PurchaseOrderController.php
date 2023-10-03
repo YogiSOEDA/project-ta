@@ -7,6 +7,8 @@ use App\Models\DetailPO;
 use App\Models\Proyek;
 use App\Models\PurchaseOrder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
 
 class PurchaseOrderController extends Controller
 {
@@ -15,12 +17,6 @@ class PurchaseOrderController extends Controller
      */
     public function index()
     {
-        // $proyek = Proyek::all();
-        // $testing = [
-        //     'ehe' => 'awok awok',
-        //     'aje' => 1,
-        // ];
-        // dd($testing);
         return view('purchase-order.purchase-order');
     }
 
@@ -51,8 +47,8 @@ class PurchaseOrderController extends Controller
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
-        foreach ($qty as $e=>$qt) {
-            if($qt == 0) {
+        foreach ($qty as $e => $qt) {
+            if ($qt == 0) {
                 continue;
             }
 
@@ -127,4 +123,51 @@ class PurchaseOrderController extends Controller
         ]);
     }
 
+    public function table()
+    {
+        // $po = DB::table('purchase_order')
+        // ->join('proyek', 'purchase_order.proyek_id','=','proyek.id')
+        // ->select('purchase_order.*', 'proyek.nama_proyek')
+        // ->get();
+        $po = PurchaseOrder::query()->with('proyek');
+        return DataTables::of($po)
+            ->addIndexColumn()
+            // ->addColumn('proyek', function ($data) {
+            //     return $data->proyek->nama_proyek;
+            // })
+            ->addColumn('stat_dir', function ($data) {
+                if ($data->acc_direktur == 'belum divalidasi') {
+                    return '<div class="btn bg-danger">' . $data->acc_direktur . '</div>';
+                } elseif ($data->acc_direktur == 'divalidasi') {
+                    return '<div class="btn bg-success">' . $data->acc_direktur . '</div>';
+                }
+            })
+            ->addColumn('stat_akt', function ($data) {
+                if ($data->acc_akunting == 'belum divalidasi') {
+                    return '<div class="btn bg-danger">' . $data->acc_akunting . '</div>';
+                } elseif ($data->acc_akunting == 'divalidasi') {
+                    return '<div class="btn bg-success">' . $data->acc_akunting . '</div>';
+                }
+            })
+            ->addColumn('status', function ($data) {
+                if ($data->status == 'belum diproses') {
+                    return '<div class="btn bg-danger">' . $data->status . '</div>';
+                } elseif ($data->status == 'selesai') {
+                    return '<div class="btn bg-success">' . $data->status . '</div>';
+                } elseif ($data->status == 'diproses') {
+                    return '<div class="btn bg-info">' . $data->status . '</div>';
+                } elseif ($data->status == 'perlu perbaikan') {
+                    return '<div class="btn bg-warning">' . $data->status . '</div>';
+                }
+            })
+            ->addColumn('action', function ($data) {
+                if ($data->acc_direktur == 'divalidasi' || $data->acc_akunting == 'divalidasi') {
+                    return '<button class="btn btn-info" onclick="show(' . $data->id . ')"><i class="fa-solid fa-circle-info"></i> Detail</button>';
+                } else {
+                    return '<button class="btn btn-info" onclick="show(' . $data->id . ')"><i class="fa-solid fa-circle-info"></i> Detail</button> <button class="btn btn-warning" onclick="edit(' . $data->id . ')"><i class="fas fa-pen"></i> Edit</button>';
+                }
+            })
+            ->rawColumns(['stat_dir', 'stat_akt', 'status', 'action'])
+            ->make(true);
+    }
 }

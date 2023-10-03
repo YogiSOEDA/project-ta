@@ -46,6 +46,7 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin']], function () {
     Route::get('/purchase-order', [PurchaseOrderController::class, 'index'])->name('purchaseOrder');
     Route::get('/purchase-order/create', [PurchaseOrderController::class, 'create'])->name('createPO');
     Route::post('/purchase-order/store', [PurchaseOrderController::class, 'store'])->name('storePO');
+    Route::get('/purchase-order/tabelpo', [PurchaseOrderController::class, 'table']);
 
     Route::get('/select-proyek', [PurchaseOrderController::class, 'viewProyek']);
     Route::get('/select-barang', [PurchaseOrderController::class, 'viewBarang']);
