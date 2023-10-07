@@ -17,4 +17,9 @@ class DetailPO extends Model
         'jumlah',
         'harga',
     ];
+
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class);
+    }
 }

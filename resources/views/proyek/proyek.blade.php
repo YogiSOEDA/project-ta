@@ -27,7 +27,7 @@
                 </div>
             </section>
             <section class="content">
-                <div class="container-fuid">
+                <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card card-primary card-outline">
@@ -82,7 +82,7 @@
                 serverSide: true,
                 processing: true,
                 ajax: {
-                    'url': "{{ url('dataproyek/tabelproyek') }}"//$('#table-url-proyek').val() //"{{ url('dataproyek/tabelproyek') }}"
+                    'url': "{{ url('dataproyek/tabelproyek') }}"
                 },
                 columns: [{
                         data: 'DT_RowIndex',

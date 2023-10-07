@@ -47,6 +47,10 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin']], function () {
     Route::get('/purchase-order/create', [PurchaseOrderController::class, 'create'])->name('createPO');
     Route::post('/purchase-order/store', [PurchaseOrderController::class, 'store'])->name('storePO');
     Route::get('/purchase-order/tabelpo', [PurchaseOrderController::class, 'table']);
+    Route::get('/purchase-order/show/{id}', [PurchaseOrderController::class, 'show']);
+    Route::resource('/purchase-order', PurchaseOrderController::class);
+    Route::post('/purchase-order/update', [PurchaseOrderController::class, 'update'])->name('updatePO');
+    // Route::get('/purchase-order/detail-table/{id}', [PurchaseOrderController::class, 'tableDetail']);
 
     Route::get('/select-proyek', [PurchaseOrderController::class, 'viewProyek']);
     Route::get('/select-barang', [PurchaseOrderController::class, 'viewBarang']);

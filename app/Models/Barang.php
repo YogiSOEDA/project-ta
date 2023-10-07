@@ -17,5 +17,9 @@ class Barang extends Model
         'gambar',
     ];
 
+    public function detail()
+    {
+        return $this->hasOne(DetailPO::class);
+    }
     // protected $hidden;
 }

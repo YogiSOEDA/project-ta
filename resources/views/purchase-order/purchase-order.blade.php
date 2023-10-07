@@ -29,13 +29,14 @@
 
             <!-- Main content -->
             <section class="content">
-                <div class="container-fuid">
+                <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card card-primary card-outline">
                                 <div class="card-header">
                                     <div class="float-sm-right">
-                                        <a href="{{ route('createPO') }}" class="btn btn-success">
+                                        <a href="/purchase-order/create" class="btn btn-success">
+                                        {{-- <a href="{{ route('createPO') }}" class="btn btn-success"> --}}
                                             <i class="fa-solid fa-plus"></i>
                                             Tambah Data
                                         </a>
@@ -154,6 +155,7 @@
                 }
             })
         }
+
     </script>
 </body>
 

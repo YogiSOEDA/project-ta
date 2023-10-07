@@ -40,7 +40,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('purchaseOrder') }}"
+                            <a href="/purchase-order"
+                            {{-- <a href="{{ route('purchaseOrder') }}" --}}
                                 class="nav-link {{ 'purchase-order' == request()->path() || 'purchase-order/create' == request()->path() ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Purchase Order</p>

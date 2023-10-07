@@ -25,7 +25,7 @@ class PurchaseOrderController extends Controller
      */
     public function create()
     {
-        return view('purchase-order.detail-purchase-order');
+        return view('purchase-order.create-purchase-order');
     }
 
     /**
@@ -68,7 +68,11 @@ class PurchaseOrderController extends Controller
      */
     public function show(PurchaseOrder $purchaseOrder)
     {
-        //
+        $detail = DetailPO::where('po_id', $purchaseOrder->proyek_id)->with('barang')->get();
+        return view('purchase-order.detail-purchase-order')->with([
+            'po' => $purchaseOrder,
+            'detail' => $detail
+        ]);
     }
 
     /**
@@ -76,7 +80,11 @@ class PurchaseOrderController extends Controller
      */
     public function edit(PurchaseOrder $purchaseOrder)
     {
-        //
+        $detail = DetailPO::where('po_id', $purchaseOrder->proyek_id)->with('barang')->get();
+        return view('purchase-order.edit-purchase-order')->with([
+            'po' => $purchaseOrder,
+            'detail' => $detail
+        ]);
     }
 
     /**
@@ -84,7 +92,19 @@ class PurchaseOrderController extends Controller
      */
     public function update(Request $request, PurchaseOrder $purchaseOrder)
     {
-        //
+        $id_detail_po = $request->id_detail_po;
+        $qty = $request->qty;
+        $harga = $request->harga;
+
+        foreach ($qty as $e => $qt) {
+            DetailPO::where('id', $id_detail_po[$e])
+                ->update([
+                    'jumlah' => $qty[$e],
+                    'harga' => $harga[$e],
+                ]);
+        }
+
+        return redirect('/purchase-order');
     }
 
     /**
@@ -125,16 +145,9 @@ class PurchaseOrderController extends Controller
 
     public function table()
     {
-        // $po = DB::table('purchase_order')
-        // ->join('proyek', 'purchase_order.proyek_id','=','proyek.id')
-        // ->select('purchase_order.*', 'proyek.nama_proyek')
-        // ->get();
         $po = PurchaseOrder::query()->with('proyek');
         return DataTables::of($po)
             ->addIndexColumn()
-            // ->addColumn('proyek', function ($data) {
-            //     return $data->proyek->nama_proyek;
-            // })
             ->addColumn('stat_dir', function ($data) {
                 if ($data->acc_direktur == 'belum divalidasi') {
                     return '<div class="btn bg-danger">' . $data->acc_direktur . '</div>';
@@ -162,12 +175,13 @@ class PurchaseOrderController extends Controller
             })
             ->addColumn('action', function ($data) {
                 if ($data->acc_direktur == 'divalidasi' || $data->acc_akunting == 'divalidasi') {
-                    return '<button class="btn btn-info" onclick="show(' . $data->id . ')"><i class="fa-solid fa-circle-info"></i> Detail</button>';
+                    return '<a href="purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
                 } else {
-                    return '<button class="btn btn-info" onclick="show(' . $data->id . ')"><i class="fa-solid fa-circle-info"></i> Detail</button> <button class="btn btn-warning" onclick="edit(' . $data->id . ')"><i class="fas fa-pen"></i> Edit</button>';
+                    return '<a href="purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a> <a href="purchase-order/' . $data->id . '/edit" class="btn btn-warning"><i class="fas fa-pen"></i> Edit</a>';
                 }
             })
             ->rawColumns(['stat_dir', 'stat_akt', 'status', 'action'])
             ->make(true);
     }
+
 }
