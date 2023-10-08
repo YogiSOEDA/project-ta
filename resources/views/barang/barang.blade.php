@@ -35,11 +35,15 @@
                             <div class="card card-primary card-outline">
                                 <div class="card-header">
                                     <div class="float-sm-right">
-                                        <a href="#" class="btn btn-success" data-toggle="modal"
+                                        <button class="btn btn-success" onclick="create()">
+                                            <i class="fa-solid fa-plus"></i>
+                                            Tambah Barang
+                                        </button>
+                                        {{-- <a href="#" class="btn btn-success" data-toggle="modal"
                                             data-target="#ModalTambahBarang">
                                             <i class="fa-solid fa-plus"></i>
                                             Tambah Barang
-                                        </a>
+                                        </a> --}}
                                     </div>
                                 </div>
                                 <div class="card-body">
@@ -64,8 +68,9 @@
                 </div>
             </section>
 
-            @include('template.modal-tambah-barang')
-            @include('template.modal-edit-barang')
+            @include('barang.modal-tambah-barang')
+            {{-- @include('template.modal-tambah-barang')
+            @include('template.modal-edit-barang') --}}
 
         </div>
 
@@ -121,6 +126,26 @@
                 }],
             });
         });
+
+        function create() {
+            $.get("{{ url('data-barang/create') }}", {}, function(data, status) {
+                $("#modal-page").html(data);
+                $("#ModalBarang").modal('show');
+            });
+        }
+
+        function show(id) {
+            $.get("{{ url('data-barang/edit') }}/" + id, {}, function(data, status) {
+                $("#modal-page").html(data);
+                $("#modal-title").html('Update Barang');
+                $("#ModalBarang").modal('show');
+            });
+            // var nama_barang = $("#input_nama_barang").val();
+            // var harga = $("#input_harga").val();
+            // var gambar = $("#input_image").val();
+
+            // console.log(gambar);
+        }
     </script>
 
     <script>

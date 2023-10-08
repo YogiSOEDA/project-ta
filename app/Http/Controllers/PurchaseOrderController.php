@@ -184,4 +184,18 @@ class PurchaseOrderController extends Controller
             ->make(true);
     }
 
+    public function viewPoAkunting()
+    {
+        return view('purchase-order.akunting.purchase-order');
+    }
+
+    public function viewPoDirektur()
+    {
+        return view('purchase-order.direktur.purchase-order');
+    }
+
+    public function viewPoLogistik()
+    {
+        return view('purchase-order.logistik.purchase-order');
+    }
 }

@@ -168,7 +168,7 @@
             var barang_id = $("#barang_id").val();
             $.ajax({
                 type: "get",
-                url: "{{ url('editbarang') }}/" + barang_id,
+                url: "{{ url('data-barang/show') }}/" + barang_id,
                 success: function(response) {
                     $('#input_harga').val(response.result.harga);
                     $('#input_qty').val(0);

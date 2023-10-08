@@ -24,7 +24,7 @@
                     </div>
                 </div>
             </section>
-            <section class="content-">
+            <section class="content">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-12">

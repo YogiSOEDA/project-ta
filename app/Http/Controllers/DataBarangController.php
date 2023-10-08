@@ -12,7 +12,12 @@ class DataBarangController extends Controller
     //
     public function index()
     {
-        return view('barang');
+        return view('barang.barang');
+    }
+
+    public function create()
+    {
+        return view('barang.create-barang');
     }
 
     public function table()
@@ -20,32 +25,46 @@ class DataBarangController extends Controller
         $barang = Barang::query();
         return DataTables::of($barang)
             ->addIndexColumn()
-            ->editColumn('gambar', function($data) {
-                $awok = 'storage/'.$data->gambar;
-                return '<img src="/storage/'.$data->gambar.'" class="img-fluid mb-2" style="max-width:30%"/>';
+            ->editColumn('gambar', function ($data) {
+                // $awok = 'storage/'.$data->gambar;
+                return '<img src="/storage/' . $data->gambar . '" class="img-fluid mb-2" style="max-width:30%"/>';
             })
             ->addColumn('action', function ($data) {
-                return '<a href="#" data-id="'.$data->id.'" class="btn btn-warning tombol-edit"><i class="fas fa-pen"></i> Edit</a>';// /editbarang/'.$data->id. ' data-toggle="modal" data-target="#ModalTambahBarang"
+                return view('template.btn-action')->with(['data' => $data]);
+                // return '<a href="#" data-id="'.$data->id.'" class="btn btn-warning tombol-edit"><i class="fas fa-pen"></i> Edit</a>';// /editbarang/'.$data->id. ' data-toggle="modal" data-target="#ModalTambahBarang"
             })
-            ->rawColumns(['gambar','action'])
+            ->rawColumns(['gambar', 'action'])
             ->make(true);
     }
 
     public function store(Request $request)
     {
+        // ddd($request);
+        $stok = 0;
         Barang::create([
             'nama_barang' => $request->nama_barang,
             'harga' => $request->harga,
             'gambar' => $request->file('gambar')->store('barang-images'),
+            'stok' => $stok,
         ]);
 
-        return redirect('/databarang');
+        return redirect('/data-barang');
     }
 
-    public function edit($id)
+    public function show(string $id)
     {
         $data = Barang::where('id', $id)->first();
         return response()->json(['result' => $data]);
+    }
+
+    public function edit(string $id)
+    {
+        $data = Barang::findOrFail($id);
+        return view('barang.update-barang')->with([
+            'data' => $data
+        ]);
+        // $data = Barang::where('id', $id)->first();
+        // return response()->json(['result' => $data]);
         // $barang = Barang::findorfail($id);
         // return compact('barang');
     }
@@ -65,13 +84,20 @@ class DataBarangController extends Controller
         //     'harga' => $request->harga,
         //     'gambar' => $request->file('gambar')->store('barang-images'),
         // ]);
+        if ($request->file('gambar') == null) {
+            Barang::where('id', $request->id_barang)->update([
+                'nama_barang' => $request->nama_barang,
+                'harga' => $request->harga,
+            ]);
+        } else {
 
-        Barang::where('id', $request->id_barang)->update([
-            'nama_barang' => $request->nama_barang,
-            'harga' => $request->harga,
-            'gambar' => $request->file('gambar')->store('barang-images'),
-        ]);
-        return redirect('/databarang');
+            Barang::where('id', $request->id_barang)->update([
+                'nama_barang' => $request->nama_barang,
+                'harga' => $request->harga,
+                'gambar' => $request->file('gambar')->store('barang-images'),
+            ]);
+        }
+        return redirect('/data-barang');
         // return response()->json(['success' => "Berhasil melakukan update data"]);
     }
 }

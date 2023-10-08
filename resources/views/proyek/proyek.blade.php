@@ -60,7 +60,7 @@
                 </div>
             </section>
 
-            @include('proyek.modal-tambah-proyek');
+            @include('proyek.modal-tambah-proyek')
 
         </div>
 
