@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barang;
 use App\Models\BarangKeluar;
+use App\Models\DetailBK;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class BarangKeluarController extends Controller
 {
@@ -28,7 +31,38 @@ class BarangKeluarController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $id_barang = $request->id_barang;
+        $qty = $request->qty;
+
+        $id_bk = BarangKeluar::insertGetId([
+            'proyek_id' => $request->proyek_id,
+            'tanggal' => $request->input_tanggal,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        foreach ($qty as $e => $qt) {
+            if ($qt == 0) {
+                continue;
+            }
+
+            $barang = Barang::where('id', $id_barang[$e])->first();
+
+            $jumlah_brg = $barang->stok - $qty[$e];
+
+            DetailBK::create([
+                'bk_id' => $id_bk,
+                'barang_id' => $id_barang[$e],
+                'jumlah' => $qty[$e],
+            ]);
+
+            Barang::where('id', $id_barang[$e])
+                ->update([
+                    'stok' => $jumlah_brg,
+                ]);
+        }
+
+        return redirect('/barang-keluar');
     }
 
     /**
@@ -61,5 +95,17 @@ class BarangKeluarController extends Controller
     public function destroy(BarangKeluar $barangKeluar)
     {
         //
+    }
+
+    public function table()
+    {
+        $bk = BarangKeluar::query();
+        return DataTables::of($bk)
+            ->addIndexColumn()
+            ->addColumn('action', function ($data) {
+                return '<a href="barang-keluar/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 }

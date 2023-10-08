@@ -62,8 +62,8 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin']], function () {
     // Route::get('/barang-keluar', [BarangKeluarController::class, 'index'])->name('barangKeluar');
     // Route::resource('/barang-keluar', BarangKeluarController::class);
 
-    Route::get('/select-proyek', [PurchaseOrderController::class, 'viewProyek']);
-    Route::get('/select-barang', [PurchaseOrderController::class, 'viewBarang']);
+    // Route::get('/select-proyek', [PurchaseOrderController::class, 'viewProyek']);
+    // Route::get('/select-barang', [PurchaseOrderController::class, 'viewBarang']);
     Route::get('/add-row', [PurchaseOrderController::class, 'addRow']);
 
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
@@ -71,6 +71,7 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin']], function () {
     Route::get('/request-material', [PurchaseController::class, 'requestMaterial'])->name('requestMaterial');
     // Route::get('/purchase-order', [PurchaseController::class, 'purchase'])->name('purchaseOrder');
     Route::get('/prediksi', [PrediksiController::class, 'index'])->name('prediksi');
+    
 });
 
 Route::group(['middleware' => ['auth', 'rolecheck:admin,logistik,akunting,direktur,teknisi']], function() {
@@ -81,8 +82,14 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin,logistik']], function ()
     Route::get('/persediaan', [GudangController::class, 'persediaan'])->name('persediaan');
 
     Route::resource('/barang-masuk', BarangMasukController::class);
+    Route::get('/barang-masuk/tablebm', [BarangMasukController::class, 'table']);
+    Route::get('/add-row-bm', [BarangMasukController::class, 'addRow']);
 
     Route::resource('/barang-keluar', BarangKeluarController::class);
+    Route::get('/barang-keluar/tabelbk', [BarangKeluarController::class, 'table']);
+
+    Route::get('/select-proyek', [PurchaseOrderController::class, 'viewProyek']);
+    Route::get('/select-barang', [PurchaseOrderController::class, 'viewBarang']);
 });
 
 Route::group(['middleware' => ['auth', 'rolecheck:logistik']], function () {
@@ -91,6 +98,10 @@ Route::group(['middleware' => ['auth', 'rolecheck:logistik']], function () {
 
 Route::group(['middleware' => ['auth', 'rolecheck:akunting']], function () {
     Route::get('/akunting/purchase-order', [PurchaseOrderController::class, 'viewPoAkunting']);
+    Route::get('/akunting/purchase-order/tabelpo', [PurchaseOrderController::class, 'tablePoAkt']);
+    Route::get('/akunting/purchase-order/tabelpoacc', [PurchaseOrderController::class, 'tablePoAktAcc']);
+    Route::get('/akunting/purchase-order/{purchase_order}', [PurchaseOrderController::class, 'showPoAkt']);
+    Route::get('/akunting/purchase-order/{purchase_order}/acc', [PurchaseOrderController::class, 'accPoAkt']);
 });
 
 Route::group(['middleware' => ['auth', 'rolecheck:admin,akunting']], function () {
@@ -99,6 +110,10 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin,akunting']], function ()
 
 Route::group(['middleware' => ['auth', 'rolecheck:direktur']], function () {
     Route::get('/direktur/purchase-order', [PurchaseOrderController::class, 'viewPoDirektur']);
+    Route::get('/direktur/purchase-order/tabelpo', [PurchaseOrderController::class, 'tablePoDir']);
+    Route::get('/direktur/purchase-order/tabelpoacc', [PurchaseOrderController::class, 'tablePoDirAcc']);
+    Route::get('/direktur/purchase-order/{purchase_order}', [PurchaseOrderController::class, 'showPoDir']);
+    Route::get('/direktur/purchase-order/{purchase_order}/acc', [PurchaseOrderController::class, 'accPoDir']);
 });
 
 // Route::middleware(['auth', 'rolecheck::admin'])->group(function () {

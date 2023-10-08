@@ -37,7 +37,7 @@ class PurchaseOrderController extends Controller
         $qty = $request->qty;
         $harga = $request->harga;
 
-        $id_po = PurchaseOrder::insertGetId([
+        $id_po = PurchaseOrder::c([
             'proyek_id' => $request->proyek_id,
             'tanggal' => $request->input_tanggal,
             'acc_direktur' => 'belum divalidasi',
@@ -194,8 +194,168 @@ class PurchaseOrderController extends Controller
         return view('purchase-order.direktur.purchase-order');
     }
 
+    public function tablePoDir()
+    {
+        $po = PurchaseOrder::where('acc_direktur', 'belum divalidasi')->with('proyek');
+        return DataTables::of($po)
+            ->addIndexColumn()
+            ->addColumn('stat_dir', function ($data) {
+                if ($data->acc_direktur == 'belum divalidasi') {
+                    return '<div class="btn bg-danger">' . $data->acc_direktur . '</div>';
+                } elseif ($data->acc_direktur == 'divalidasi') {
+                    return '<div class="btn bg-success">' . $data->acc_direktur . '</div>';
+                }
+            })
+            ->addColumn('stat_akt', function ($data) {
+                if ($data->acc_akunting == 'belum divalidasi') {
+                    return '<div class="btn bg-danger">' . $data->acc_akunting . '</div>';
+                } elseif ($data->acc_akunting == 'divalidasi') {
+                    return '<div class="btn bg-success">' . $data->acc_akunting . '</div>';
+                }
+            })
+            ->addColumn('action', function ($data) {
+                // if ($data->acc_direktur == 'divalidasi' || $data->acc_akunting == 'divalidasi') {
+                //     return '<a href="purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
+                // } else {
+                return '<a href="/direktur/purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a> <a href="/direktur/purchase-order/' . $data->id . '/acc" class="btn btn-success"><i class="fa-solid fa-check"></i> Accept</a> <a href="/direktur/purchase-order/' . $data->id . '/decline" class="btn btn-danger"><i class="fa-solid fa-x"></i> Decline</a>';
+                // }
+            })
+            ->rawColumns(['stat_dir', 'stat_akt', 'status', 'action'])
+            ->make(true);
+    }
+
+    public function tablePoDirAcc()
+    {
+        $po = PurchaseOrder::where('acc_direktur', 'divalidasi')->with('proyek');
+        return DataTables::of($po)
+            ->addIndexColumn()
+            ->addColumn('stat_dir', function ($data) {
+                if ($data->acc_direktur == 'belum divalidasi') {
+                    return '<div class="btn bg-danger">' . $data->acc_direktur . '</div>';
+                } elseif ($data->acc_direktur == 'divalidasi') {
+                    return '<div class="btn bg-success">' . $data->acc_direktur . '</div>';
+                }
+            })
+            ->addColumn('stat_akt', function ($data) {
+                if ($data->acc_akunting == 'belum divalidasi') {
+                    return '<div class="btn bg-danger">' . $data->acc_akunting . '</div>';
+                } elseif ($data->acc_akunting == 'divalidasi') {
+                    return '<div class="btn bg-success">' . $data->acc_akunting . '</div>';
+                }
+            })
+            ->addColumn('action', function ($data) {
+                // if ($data->acc_direktur == 'divalidasi' || $data->acc_akunting == 'divalidasi') {
+                return '<a href="/direktur/purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
+                // } else {
+                //     return '<a href="purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a> <a href="purchase-order/' . $data->id . '/edit" class="btn btn-warning"><i class="fas fa-pen"></i> Edit</a>';
+                // }
+            })
+            ->rawColumns(['stat_dir', 'stat_akt', 'status', 'action'])
+            ->make(true);
+    }
+
+    public function showPoDir(PurchaseOrder $purchaseOrder)
+    {
+        // $po = PurchaseOrder::where('id', $id)->with('proyek')->get();
+        $detail = DetailPO::where('po_id', $purchaseOrder->proyek_id)->with('barang')->get();
+        return view('purchase-order.direktur.detail-purchase-order')->with([
+            'po' => $purchaseOrder,
+            'detail' => $detail
+        ]);
+    }
+
+    public function accPoDir(PurchaseOrder $purchaseOrder)
+    {
+        PurchaseOrder::where('id', $purchaseOrder->id)
+            ->update([
+                'acc_direktur' => 'divalidasi'
+            ]);
+
+        return redirect('/direktur/purchase-order');
+    }
+
     public function viewPoLogistik()
     {
         return view('purchase-order.logistik.purchase-order');
+    }
+
+    public function tablePoAkt()
+    {
+        $po = PurchaseOrder::where('acc_akunting', 'belum divalidasi')->with('proyek');
+        return DataTables::of($po)
+            ->addIndexColumn()
+            ->addColumn('stat_dir', function ($data) {
+                if ($data->acc_direktur == 'belum divalidasi') {
+                    return '<div class="btn bg-danger">' . $data->acc_direktur . '</div>';
+                } elseif ($data->acc_direktur == 'divalidasi') {
+                    return '<div class="btn bg-success">' . $data->acc_direktur . '</div>';
+                }
+            })
+            ->addColumn('stat_akt', function ($data) {
+                if ($data->acc_akunting == 'belum divalidasi') {
+                    return '<div class="btn bg-danger">' . $data->acc_akunting . '</div>';
+                } elseif ($data->acc_akunting == 'divalidasi') {
+                    return '<div class="btn bg-success">' . $data->acc_akunting . '</div>';
+                }
+            })
+            ->addColumn('action', function ($data) {
+                // if ($data->acc_direktur == 'divalidasi' || $data->acc_akunting == 'divalidasi') {
+                //     return '<a href="purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
+                // } else {
+                return '<a href="/akunting/purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a> <a href="/akunting/purchase-order/' . $data->id . '/acc" class="btn btn-success"><i class="fa-solid fa-check"></i> Accept</a> <a href="/akunting/purchase-order/' . $data->id . '/decline" class="btn btn-danger"><i class="fa-solid fa-x"></i> Decline</a>';
+                // }
+            })
+            ->rawColumns(['stat_dir', 'stat_akt', 'status', 'action'])
+            ->make(true);
+    }
+
+    public function tablePoAktAcc()
+    {
+        $po = PurchaseOrder::where('acc_akunting', 'divalidasi')->with('proyek');
+        return DataTables::of($po)
+            ->addIndexColumn()
+            ->addColumn('stat_dir', function ($data) {
+                if ($data->acc_direktur == 'belum divalidasi') {
+                    return '<div class="btn bg-danger">' . $data->acc_direktur . '</div>';
+                } elseif ($data->acc_direktur == 'divalidasi') {
+                    return '<div class="btn bg-success">' . $data->acc_direktur . '</div>';
+                }
+            })
+            ->addColumn('stat_akt', function ($data) {
+                if ($data->acc_akunting == 'belum divalidasi') {
+                    return '<div class="btn bg-danger">' . $data->acc_akunting . '</div>';
+                } elseif ($data->acc_akunting == 'divalidasi') {
+                    return '<div class="btn bg-success">' . $data->acc_akunting . '</div>';
+                }
+            })
+            ->addColumn('action', function ($data) {
+                // if ($data->acc_direktur == 'divalidasi' || $data->acc_akunting == 'divalidasi') {
+                return '<a href="/akunting/purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
+                // } else {
+                //     return '<a href="purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a> <a href="purchase-order/' . $data->id . '/edit" class="btn btn-warning"><i class="fas fa-pen"></i> Edit</a>';
+                // }
+            })
+            ->rawColumns(['stat_dir', 'stat_akt', 'status', 'action'])
+            ->make(true);
+    }
+
+    public function showPoAkt(PurchaseOrder $purchaseOrder)
+    {
+        // $po = PurchaseOrder::where('id', $id)->with('proyek')->get();
+        $detail = DetailPO::where('po_id', $purchaseOrder->proyek_id)->with('barang')->get();
+        return view('purchase-order.akunting.detail-purchase-order')->with([
+            'po' => $purchaseOrder,
+            'detail' => $detail
+        ]);
+    }
+
+    public function accPoAkt(PurchaseOrder $purchaseOrder)
+    {
+        PurchaseOrder::where('id', $purchaseOrder->id)
+            ->update([
+                'acc_akunting' => 'divalidasi'
+            ]);
+
+        return redirect('/akunting/purchase-order');
     }
 }

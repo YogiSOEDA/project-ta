@@ -57,22 +57,6 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {{-- <tr>
-                                                <td>001</td>
-                                                <td>20-10-2022</td>
-                                                <td>RS Sanglah</td>
-                                                <td>
-                                                    <div class="btn-group">
-                                                        <button class="btn btn-info">Details</button>
-                                                        <button class="btn btn-success">
-                                                            <i class="fa fa-edit"></i>
-                                                        </button>
-                                                        <button class="btn btn-danger text-white">
-                                                            <i class="fa fa-trash"></i>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr> --}}
                                         </tbody>
                                     </table>
                                 </div>
@@ -98,6 +82,46 @@
     <!-- REQUIRED SCRIPTS -->
     @include('template.script')
 
+    <script>
+        $(document).ready(function() {
+            table();
+        });
+
+        function table() {
+            $('#barang-masuk').DataTable({
+                ordering: true,
+                serverSide: true,
+                processing: true,
+                ajax: {
+                    'url': "{{ url('barang-masuk/tabelbm') }}"
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        width: '10px',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'tanggal',
+                        name: 'tanggal'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                responsive: true,
+                autoWidth: false,
+                columnDefs: [{
+                    className: 'dt-center',
+                    targets: '_all'
+                }],
+            });
+        }
+    </script>
 
 </body>
 

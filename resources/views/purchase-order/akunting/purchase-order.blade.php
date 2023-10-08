@@ -54,6 +54,30 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-lg-12">
+                            <div class="card card-primary card-outline">
+                                <div class="card-header">
+                                    {{-- <div class="float-sm-right">
+                                        <a href="#" class="btn btn-success"><i class="fa-solid fa-plus"></i>Tambah Data</a>
+                                    </div> --}}
+                                </div>
+                                <div class="card-body">
+                                    <table id="purchase-order-acc" class="table table-bordered table-hover text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Tanggal</th>
+                                                <th>Proyek</th>
+                                                <th>Validasi Direktur</th>
+                                                <th>Validasi Akunting</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -65,6 +89,108 @@
     </div>
 
     @include('template.script')
+
+    <script>
+        $(document).ready(function() {
+            table();
+            table2();
+        });
+
+        function table() {
+            $('#purchase-order').DataTable({
+                ordering: true,
+                serverSide: true,
+                processing: true,
+                ajax: {
+                    'url': "{{ url('akunting/purchase-order/tabelpo') }}"
+                },
+                columns: [
+                    {
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        width: '10px',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'tanggal',
+                        name: 'tanggal'
+                    },
+                    {
+                        data: 'proyek.nama_proyek',
+                        name: 'proyek.name_proyek'
+                    },
+                    {
+                        data: 'stat_dir',
+                        name: 'stat_dir'
+                    },
+                    {
+                        data: 'stat_akt',
+                        name: 'stat_akt'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                responsive: true,
+                autoWidth: false,
+                columnDefs: [{
+                    className: 'dt-center',
+                    targets: '_all'
+                }],
+            });
+        }
+        function table2() {
+            $('#purchase-order-acc').DataTable({
+                ordering: true,
+                serverSide: true,
+                processing: true,
+                ajax: {
+                    'url': "{{ url('akunting/purchase-order/tabelpoacc') }}"
+                },
+                columns: [
+                    {
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        width: '10px',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'tanggal',
+                        name: 'tanggal'
+                    },
+                    {
+                        data: 'proyek.nama_proyek',
+                        name: 'proyek.name_proyek'
+                    },
+                    {
+                        data: 'stat_dir',
+                        name: 'stat_dir'
+                    },
+                    {
+                        data: 'stat_akt',
+                        name: 'stat_akt'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                responsive: true,
+                autoWidth: false,
+                columnDefs: [{
+                    className: 'dt-center',
+                    targets: '_all'
+                }],
+            });
+        }
+    </script>
 </body>
 
 </html>

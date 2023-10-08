@@ -100,6 +100,45 @@
     @include('template.script')
 
 
+    <script>
+        $(document).ready(function() {
+            table();
+        });
+
+        function table() {
+            $('#barang-keluar').DataTable({
+                ordering: true,
+                serverSide: true,
+                processing: true,
+                ajax: {
+                    'url': "{{ url('barang-keluar/tabelbk') }}"
+                },
+                columns: [
+                    {
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        width: '10px',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'proyek_id',
+                        name: 'proyek_id'
+                    },
+                    {
+                        data: 'tanggal',
+                        name: 'tanggal'
+                    }
+                ],
+                responsive: true,
+                autoWidth: false,
+                columnDefs: [{
+                    className: 'dt-center',
+                    targets: '_all'
+                }],
+            });
+        }
+    </script>
 </body>
 
 </html>

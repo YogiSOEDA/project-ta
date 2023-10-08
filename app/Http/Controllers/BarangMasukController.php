@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\BarangMasuk;
 use App\Http\Requests\StoreBarangMasukRequest;
 use App\Http\Requests\UpdateBarangMasukRequest;
+use App\Models\Barang;
+use App\Models\DetailBM;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class BarangMasukController extends Controller
 {
@@ -14,6 +17,8 @@ class BarangMasukController extends Controller
      */
     public function index()
     {
+        // $awok = BarangMasuk::query();
+        // dd($awok);
         return view('barang-masuk.barang-masuk');
     }
 
@@ -30,7 +35,38 @@ class BarangMasukController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $id_barang = $request->id_barang;
+        $qty = $request->qty;
+
+        $id_bm = BarangMasuk::insertGetId([
+            'tanggal' => $request->input_tanggal,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        foreach ($qty as $e => $qt) {
+            if ($qt == 0) {
+                continue;
+            }
+
+            $barang = Barang::where('id', $id_barang[$e])->first();
+
+            $jumlah_brg = $barang->stok + $qty[$e];
+
+            DetailBM::create([
+                'bm_id' => $id_bm,
+                'barang_id' => $id_barang[$e],
+                'jumlah' => $qty[$e],
+            ]);
+
+            Barang::where('id', $id_barang[$e])
+                ->update([
+                    'stok' => $jumlah_brg,
+                ]);
+        }
+
+        return redirect('/barang-masuk');
+        // ddd($jumlah_brg);
     }
 
     /**
@@ -63,5 +99,34 @@ class BarangMasukController extends Controller
     public function destroy(BarangMasuk $barangMasuk)
     {
         //
+    }
+
+    public function addRow(Request $request)
+    {
+        // ddd($request);
+        $barang = Barang::findOrFail($request->barang_id);
+        // return view('barang-masuk.create-row-table-barang-masuk');
+        return view('barang-masuk.create-row-table-barang-masuk')->with([
+            'barang' => $barang,
+            'qty' => $request->qty,
+            'number' => $request->number,
+        ]);
+        // return view('barang-masuk.create-row-table-barang-masuk')->with([
+        //     'barang' => $barang,
+        //     'qty' => $request->qty,
+        //     'number' => $request->number,
+        // ]);
+    }
+
+    public function table()
+    {
+        $bm = BarangMasuk::query()->get();
+        return DataTables::of($bm)
+            ->addIndexColumn()
+            ->addColumn('action', function ($data) {
+                return '<a href="barang-masuk/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 }
