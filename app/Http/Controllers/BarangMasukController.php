@@ -118,9 +118,9 @@ class BarangMasukController extends Controller
         // ]);
     }
 
-    public function table()
+    public function tableBm()
     {
-        $bm = BarangMasuk::query()->get();
+        $bm = BarangMasuk::query();
         return DataTables::of($bm)
             ->addIndexColumn()
             ->addColumn('action', function ($data) {

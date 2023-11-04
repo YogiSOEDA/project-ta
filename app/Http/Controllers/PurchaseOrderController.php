@@ -37,7 +37,7 @@ class PurchaseOrderController extends Controller
         $qty = $request->qty;
         $harga = $request->harga;
 
-        $id_po = PurchaseOrder::c([
+        $id_po = PurchaseOrder::insertGetId([
             'proyek_id' => $request->proyek_id,
             'tanggal' => $request->input_tanggal,
             'acc_direktur' => 'belum divalidasi',

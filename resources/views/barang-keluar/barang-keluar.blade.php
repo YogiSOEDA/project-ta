@@ -128,6 +128,12 @@
                     {
                         data: 'tanggal',
                         name: 'tanggal'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
                     }
                 ],
                 responsive: true,

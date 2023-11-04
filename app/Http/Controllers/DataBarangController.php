@@ -100,4 +100,20 @@ class DataBarangController extends Controller
         return redirect('/data-barang');
         // return response()->json(['success' => "Berhasil melakukan update data"]);
     }
+
+    public function addRowType(Request $request)
+    {
+        return view('barang.create-row-table-type-barang')->with([
+            'number' => $request->number,
+            'jenis_barang' => $request->jenis_barang,
+        ]);
+    }
+
+    public function addRowUkuran(Request $request)
+    {
+        return view('barang.create-row-table-ukuran-barang')->with([
+            'number' => $request->number,
+            'ukuran_barang' => $request->ukuran_barang,
+        ]);
+    }
 }

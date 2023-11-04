@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('purchase_order', function (Blueprint $table) {
             $table->id();
             $table->foreignId('proyek_id')->constrained('proyek')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('jenis_request');
             $table->date('tanggal');
             $table->string('acc_direktur');
             $table->string('acc_akunting');

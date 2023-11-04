@@ -23,9 +23,9 @@
                 </li>
                 {{-- @if (auth()->user()->role == 'admin' || auth()->user()->role == 'akunting' || auth()->user()->role == 'direktur' || auth()->user()->role == 'teknisi') --}}
                 <li
-                    class="nav-item {{ 'request-material' == request()->path() || 'purchase-order' == request()->path() || 'purchase-order/create' == request()->path() || 'direktur/purchase-order' == request()->path() ? 'menu-open' : 'menu' }}">
+                    class="nav-item {{ 'request-material' == request()->path() || 'purchase-order' == request()->path() || 'purchase-order/create' == request()->path() || 'direktur/purchase-order' == request()->path() || 'teknisi/request-material' == request()->path() || 'teknisi/request-material/create' == request()->path() ? 'menu-open' : 'menu' }}">
                     <a href="#"
-                        class="nav-link {{ 'request-material' == request()->path() || 'purchase-order' == request()->path() || 'purchase-order/create' == request()->path() || 'direktur/purchase-order' == request()->path() ? 'active' : '' }}">
+                        class="nav-link {{ 'request-material' == request()->path() || 'purchase-order' == request()->path() || 'purchase-order/create' == request()->path() || 'direktur/purchase-order' == request()->path() || 'teknisi/request-material' == request()->path() || 'teknisi/request-material/create' == request()->path() ? 'active' : '' }}">
                         <i class="nav-icon fas fa-archive"></i>
                         <p>
                             Purchasing
@@ -73,6 +73,15 @@
                                     class="nav-link {{ 'purchase-order' == request()->path() || 'purchase-order/create' == request()->path() ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Purchase Order</p>
+                                </a>
+                            </li>
+                        @endif
+                        @if (auth()->user()->role == 'teknisi')
+                            <li class="nav-item">
+                                <a href="/teknisi/request-material"
+                                    class="nav-link {{ 'teknisi/request-material' == request()->path() || 'teknisi/request-material/create' == request()->path() ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Request Material</p>
                                 </a>
                             </li>
                         @endif

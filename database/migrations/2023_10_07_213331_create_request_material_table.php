@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('request_material', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onUpdate('cascade');
+            $table->string('jenis_request');
             $table->date('tanggal_request');
             $table->date('tanggal_kebutuhan');
             $table->foreignId('proyek_id')->constrained('proyek')->onUpdate('cascade')->onDelete('cascade');
