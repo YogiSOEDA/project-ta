@@ -17,4 +17,14 @@ class RequestMaterial extends Model
         'proyek_id',
         'status',
     ];
+
+    public function proyek()
+    {
+        return $this->belongsTo(Proyek::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

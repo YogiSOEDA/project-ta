@@ -6,6 +6,8 @@ use App\Models\Barang;
 use App\Models\DetailRM;
 use App\Models\RequestMaterial;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\DataTables;
 
 class RequestMaterialController extends Controller
 {
@@ -14,6 +16,7 @@ class RequestMaterialController extends Controller
      */
     public function index()
     {
+        // dd(Auth::id());
         return view('request-material.teknisi.request-material');
     }
 
@@ -102,5 +105,33 @@ class RequestMaterialController extends Controller
             'qty' => $request->qty,
             'number' => $request->number,
         ]);
+    }
+
+    public function table()
+    {
+        $rm = RequestMaterial::where('user_id', Auth::id())->with('proyek')->with('user');
+        return DataTables::of($rm)
+            ->addIndexColumn()
+            ->editColumn('jenis_request', function ($data) {
+                return '<span style= "text-transform:capitalize">' . $data->jenis_request . '</span>';
+            })
+            ->addColumn('status', function ($data) {
+                if ($data->status == 'belum diproses') {
+                    return '<div class="btn bg-danger">' . $data->status . '</div>';
+                } elseif ($data->status == 'diproses') {
+                    return '<div class="btn bg-warning">' . $data->status . '</div>';
+                } elseif ($data->status == 'selesai') {
+                    return '<div class="btn bg-success">' . $data->status . '</div>';
+                }
+            })
+            ->addColumn('action', function ($data) {
+                if ($data->status == 'belum diproses') {
+                    return '<a href="/teknisi/request-material/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a> <a href="/teknisi/request-material/' . $data->id . '/edit" class="btn btn-warning"><i class="fas fa-pen"></i> Edit</a>';
+                } else {
+                    return '<a href="/teknisi/request-material/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
+                }
+            })
+            ->rawColumns(['jenis_request','status', 'action'])
+            ->make(true);
     }
 }

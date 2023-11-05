@@ -21,5 +21,10 @@ class Proyek extends Model
         return $this->hasMany(PurchaseOrder::class);
     }
 
+    public function requestMaterial()
+    {
+        return $this->hasMany(RequestMaterial::class);
+    }
+
     // protected $hidden;
 }

@@ -70,8 +70,61 @@
 
     <script>
         $(document).ready(function() {
-            $('ul').Treeview(options)
+            // $('ul').Treeview(options);
+            table();
         });
+
+        function table() {
+            $('#request-material').DataTable({
+                ordering: true,
+                serverSide: true,
+                processing: true,
+                ajax: {
+                    'url': "{{ url('teknisi/request-material/tabel') }}"
+                },
+                columns: [
+                    {
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        width: '10px',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'jenis_request',
+                        name: 'jenis_request'
+                    },
+                    {
+                        data: 'proyek.nama_proyek',
+                        name: 'proyek.nama_proyek'
+                    },
+                    {
+                        data: 'tanggal_request',
+                        name: 'tanggal_request'
+                    },
+                    {
+                        data: 'tanggal_kebutuhan',
+                        name: 'tanggal_kebutuhan'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                responsive: true,
+                autoWidth: false,
+                columnDefs: [{
+                    className: 'dt-center',
+                    targets: '_all'
+                }],
+            })
+        }
     </script>
 </body>
 

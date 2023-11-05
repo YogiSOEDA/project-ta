@@ -76,10 +76,6 @@
     @include('template.script')
 
     <script>
-        $.fn.modal.Constructor.prototype.enforceFocus = function() {
-            $('.select2').select2();
-        };
-
         $(document).ready(function() {
             table();
         });
