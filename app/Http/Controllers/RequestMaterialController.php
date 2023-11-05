@@ -70,7 +70,12 @@ class RequestMaterialController extends Controller
      */
     public function show(RequestMaterial $requestMaterial)
     {
-        //
+        // dd($requestMaterial);
+        $detail = DetailRM::where('rm_id', $requestMaterial->id)->with('barang')->get();
+        return view('request-material.teknisi.detail-request-material')->with([
+            'rm' => $requestMaterial,
+            'detail' => $detail,
+        ]);
     }
 
     /**
@@ -109,7 +114,7 @@ class RequestMaterialController extends Controller
 
     public function table()
     {
-        $rm = RequestMaterial::where('user_id', Auth::id())->with('proyek')->with('user');
+        $rm = RequestMaterial::where('user_id', Auth::id())->with('proyek');
         return DataTables::of($rm)
             ->addIndexColumn()
             ->editColumn('jenis_request', function ($data) {

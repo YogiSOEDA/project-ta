@@ -68,7 +68,7 @@ class PurchaseOrderController extends Controller
      */
     public function show(PurchaseOrder $purchaseOrder)
     {
-        $detail = DetailPO::where('po_id', $purchaseOrder->proyek_id)->with('barang')->get();
+        $detail = DetailPO::where('po_id', $purchaseOrder->po_id)->with('barang')->get();
         return view('purchase-order.detail-purchase-order')->with([
             'po' => $purchaseOrder,
             'detail' => $detail
@@ -80,7 +80,7 @@ class PurchaseOrderController extends Controller
      */
     public function edit(PurchaseOrder $purchaseOrder)
     {
-        $detail = DetailPO::where('po_id', $purchaseOrder->proyek_id)->with('barang')->get();
+        $detail = DetailPO::where('po_id', $purchaseOrder->po_id)->with('barang')->get();
         return view('purchase-order.edit-purchase-order')->with([
             'po' => $purchaseOrder,
             'detail' => $detail
