@@ -7,6 +7,7 @@ use App\Models\DetailRM;
 use App\Models\RequestMaterial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Mockery\Undefined;
 use Yajra\DataTables\DataTables;
 
 class RequestMaterialController extends Controller
@@ -83,7 +84,11 @@ class RequestMaterialController extends Controller
      */
     public function edit(RequestMaterial $requestMaterial)
     {
-        //
+        $detail = DetailRM::where('rm_id', $requestMaterial->id)->where('jumlah','>',0)->with('barang')->get();
+        return view('request-material.teknisi.edit-request-material')->with([
+            'rm' => $requestMaterial,
+            'detail' => $detail,
+        ]);
     }
 
     /**
@@ -91,7 +96,33 @@ class RequestMaterialController extends Controller
      */
     public function update(Request $request, RequestMaterial $requestMaterial)
     {
-        //
+        $id_detail_rm = $request->id_detail_rm;
+        $qty = $request->qty;
+        $id_barang = $request->id_barang;
+
+        foreach ($qty as $e => $qt) {
+            if ($id_detail_rm[$e] != 0) {
+                DetailRM::where('id', $id_detail_rm[$e])
+                ->update([
+                    'jumlah' => $qty[$e],
+                ]);
+            } elseif ($id_detail_rm[$e] == 0) {
+                if ($qt == 0) {
+                    continue;
+                }
+
+                DetailRM::create([
+                    'rm_id' => $requestMaterial->id,
+                    'barang_id' => $id_barang[$e],
+                    'jumlah' => $qty[$e],
+                ]);
+            }
+            // return $id_detail_rm[$e];
+            // dd($id_barang[$e]);
+        }
+
+        return redirect('/teknisi/request-material');
+        // ddd($request);
     }
 
     /**
@@ -136,7 +167,17 @@ class RequestMaterialController extends Controller
                     return '<a href="/teknisi/request-material/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
                 }
             })
-            ->rawColumns(['jenis_request','status', 'action'])
+            ->rawColumns(['jenis_request', 'status', 'action'])
             ->make(true);
+    }
+
+    public function deleteItem($id)
+    {
+        DetailRM::where('id', $id)->update([
+            'jumlah' => 0,
+        ]);
+        // dd($requestMaterial->id);
+        // $detailRM->id;
+        // return response()->json(['result' => $detailRM]);
     }
 }

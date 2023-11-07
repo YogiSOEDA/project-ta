@@ -131,6 +131,9 @@ Route::group(['middleware' => ['auth', 'rolecheck:teknisi']], function () {
     Route::post('/teknisi/request-material/store', [RequestMaterialController::class, 'store'])->name('storeRM');
     Route::get('/teknisi/request-material/tabel', [RequestMaterialController::class, 'table']);
     Route::get('/teknisi/request-material/{request_material}', [RequestMaterialController::class, 'show']);
+    Route::get('/teknisi/request-material/{request_material}/edit', [RequestMaterialController::class, 'edit']);
+    Route::get('/teknisi/request-material/{id}/delete-row', [RequestMaterialController::class, 'deleteItem']);
+    Route::post('/teknisi/request-material/{request_material}/update', [RequestMaterialController::class, 'update']);
 });
 
 // Route::middleware(['auth', 'rolecheck::admin'])->group(function () {
