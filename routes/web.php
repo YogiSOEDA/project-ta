@@ -75,6 +75,8 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin']], function () {
     Route::get('/request-material/tabel-rm', [RequestMaterialController::class, 'tableRMAdmin']);
     Route::get('/request-material/tabel-rm-done', [RequestMaterialController::class, 'tableRMAdminDone']);
     Route::get('/request-material/{request_material}', [RequestMaterialController::class, 'showRM']);
+    Route::get('/request-material/{request_material}/proses', [RequestMaterialController::class, 'prosesRM']);
+    Route::post('/request-material/store-po', [RequestMaterialController::class, 'storePO'])->name('storeRMtoPO');
     // Route::get('/purchase-order', [PurchaseController::class, 'purchase'])->name('purchaseOrder');
     Route::get('/prediksi', [PrediksiController::class, 'index'])->name('prediksi');
 

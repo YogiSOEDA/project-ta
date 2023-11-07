@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
+use App\Models\DetailPO;
 use App\Models\DetailRM;
+use App\Models\PurchaseOrder;
 use App\Models\RequestMaterial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -241,5 +243,53 @@ class RequestMaterialController extends Controller
             'rm' => $requestMaterial,
             'detail' => $detail,
         ]);
+    }
+
+    public function prosesRM(RequestMaterial $requestMaterial)
+    {
+        $detail = DetailRM::where('rm_id', $requestMaterial->id)->where('jumlah', '>', 0)->with('barang')->get();
+        return view('request-material.proses-request-material')->with([
+                'rm' => $requestMaterial,
+                'detail' => $detail,
+            ]
+        );;
+    }
+
+    public function storePO(Request $request, RequestMaterial $requestMaterial)
+    {
+        // ddd($requestMaterial);
+        $id_barang = $request->id_barang;
+        $qty = $request->qty;
+        $harga = $request->harga;
+
+        $id_po = PurchaseOrder::insertGetId([
+            'proyek_id' => $request->proyek_id,
+            'jenis_request' => $request->jenis_request,
+            'tanggal' => $request->input_tanggal,
+            'acc_direktur' => 'belum divalidasi',
+            'acc_akunting' => 'belum divalidasi',
+            'status' => 'belum diproses',
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        foreach ($qty as $e => $qt) {
+            if ($qt == 0) {
+                continue;
+            }
+
+            DetailPO::create([
+                'po_id' => $id_po,
+                'barang_id' => $id_barang[$e],
+                'jumlah' => $qty[$e],
+                'harga' => $harga[$e],
+            ]);
+        }
+
+        RequestMaterial::where('id', $request->id_rm)->update([
+            'status' => 'diproses',
+        ]);
+
+        return redirect('/request-material');
     }
 }
