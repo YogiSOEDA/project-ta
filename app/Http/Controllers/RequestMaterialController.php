@@ -72,7 +72,7 @@ class RequestMaterialController extends Controller
     public function show(RequestMaterial $requestMaterial)
     {
         // dd($requestMaterial);
-        $detail = DetailRM::where('rm_id', $requestMaterial->id)->with('barang')->get();
+        $detail = DetailRM::where('rm_id', $requestMaterial->id)->where('jumlah', '>', 0)->with('barang')->get();
         return view('request-material.teknisi.detail-request-material')->with([
             'rm' => $requestMaterial,
             'detail' => $detail,
@@ -84,7 +84,7 @@ class RequestMaterialController extends Controller
      */
     public function edit(RequestMaterial $requestMaterial)
     {
-        $detail = DetailRM::where('rm_id', $requestMaterial->id)->where('jumlah','>',0)->with('barang')->get();
+        $detail = DetailRM::where('rm_id', $requestMaterial->id)->where('jumlah', '>', 0)->with('barang')->get();
         return view('request-material.teknisi.edit-request-material')->with([
             'rm' => $requestMaterial,
             'detail' => $detail,
@@ -103,9 +103,9 @@ class RequestMaterialController extends Controller
         foreach ($qty as $e => $qt) {
             if ($id_detail_rm[$e] != 0) {
                 DetailRM::where('id', $id_detail_rm[$e])
-                ->update([
-                    'jumlah' => $qty[$e],
-                ]);
+                    ->update([
+                        'jumlah' => $qty[$e],
+                    ]);
             } elseif ($id_detail_rm[$e] == 0) {
                 if ($qt == 0) {
                     continue;
@@ -179,5 +179,67 @@ class RequestMaterialController extends Controller
         // dd($requestMaterial->id);
         // $detailRM->id;
         // return response()->json(['result' => $detailRM]);
+    }
+
+    public function viewRMAdmin()
+    {
+        return view('request-material.request-material');
+    }
+
+    public function tableRMAdmin()
+    {
+        $rm = RequestMaterial::where('status', 'belum diproses')->with('proyek');
+        return DataTables::of($rm)
+            ->addIndexColumn()
+            ->editColumn('jenis_request', function ($data) {
+                return '<span style= "text-transform:capitalize">' . $data->jenis_request . '</span>';
+            })
+            ->editColumn('status', function ($data) {
+                if ($data->status == 'belum diproses') {
+                    return '<div class="btn bg-danger">' . $data->status . '</div>';
+                } elseif ($data->status == 'diproses') {
+                    return '<div class="btn bg-warning">' . $data->status . '</div>';
+                } elseif ($data->status == 'selesai') {
+                    return '<div class="btn bg-success">' . $data->status . '</div>';
+                }
+            })
+            ->addColumn('action', function ($data) {
+                return '<a href="/request-material/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a> <a href="/request-material/' . $data->id . '/proses" class="btn btn-success"><i class="fa-regular fa-square-check"></i> Proses</a>';
+            })
+            ->rawColumns(['status', 'action', 'jenis_request'])
+            ->make(true);
+    }
+
+    public function tableRMAdminDone()
+    {
+        $rm = RequestMaterial::where('status', '!=', 'belum diproses')->with('proyek');
+        return DataTables::of($rm)
+            ->addIndexColumn()
+            ->editColumn('jenis_request', function ($data) {
+                return '<span style= "text-transform:capitalize">' . $data->jenis_request . '</span>';
+            })
+            ->editColumn('status', function ($data) {
+                if ($data->status == 'belum diproses') {
+                    return '<div class="btn bg-danger">' . $data->status . '</div>';
+                } elseif ($data->status == 'diproses') {
+                    return '<div class="btn bg-warning">' . $data->status . '</div>';
+                } elseif ($data->status == 'selesai') {
+                    return '<div class="btn bg-success">' . $data->status . '</div>';
+                }
+            })
+            ->addColumn('action', function ($data) {
+                return '<a href="/request-material/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
+            })
+            ->rawColumns(['status', 'action', 'jenis_request'])
+            ->make(true);
+    }
+
+    public function showRM(RequestMaterial $requestMaterial)
+    {
+        $detail = DetailRM::where('rm_id', $requestMaterial->id)->where('jumlah', '>', 0)->with('barang')->get();
+        return view('request-material.detail-request-material')->with([
+            'rm' => $requestMaterial,
+            'detail' => $detail,
+        ]);
     }
 }
