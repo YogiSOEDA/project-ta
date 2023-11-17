@@ -49,6 +49,7 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Tanggal</th>
+                                                <th>Jenis Task</th>
                                                 <th>Proyek</th>
                                                 <th>Validasi Direktur</th>
                                                 <th>Validasi Akunting</th>
@@ -99,6 +100,10 @@
                     {
                         data: 'tanggal',
                         name: 'tanggal'
+                    },
+                    {
+                        data: 'jenis_request',
+                        name: 'jenis_request'
                     },
                     {
                         data: 'proyek.nama_proyek',

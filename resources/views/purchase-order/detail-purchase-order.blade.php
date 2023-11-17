@@ -48,6 +48,11 @@
                                                 <td>:</td>
                                                 <td>{{ $po->proyek->nama_proyek }}</td>
                                             </tr>
+                                            <tr>
+                                                <td>Jenis Task</td>
+                                                <td>:</td>
+                                                <td style="text-transform:capitalize">{{ $po->jenis_request }}</td>
+                                            </tr>
                                         </table>
                                     </div>
 

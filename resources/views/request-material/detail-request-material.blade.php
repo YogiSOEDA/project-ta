@@ -63,7 +63,7 @@
                                             <tr>
                                                 <td>User</td>
                                                 <td>:</td>
-                                                <td>{{ $rm->user->name }}</td>
+                                                <td>{{ $rm->user->name }} ({{$rm->user->role}})</td>
                                             </tr>
                                         </table>
                                     </div>

@@ -37,6 +37,15 @@
                                 <div class="card card-primary card-outline">
                                     <div class="card-header"></div>
                                     <div class="card-body">
+                                        <div class="form-group">
+                                            <label for="">Jenis Request</label>
+                                            <select id="jenis_request" class="form-control" name="jenis_request">
+                                                <option selected disabled>--Pilih Task--</option>
+                                                <option value="maintenance">Maintenance</option>
+                                                <option value="project">Project</option>
+                                                <option value="retail">Retail</option>
+                                            </select>
+                                        </div>
                                         <div class="form-group" id="select-proyek">
                                             <label>Nama Proyek</label>
                                             <select class="form-control select2" id="proyek_id" name="proyek_id"

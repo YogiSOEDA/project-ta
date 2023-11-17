@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('komentar_po', function (Blueprint $table) {
             $table->id();
             $table->foreignId('po_id')->constrained('purchase_order')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onDelete('cascade');
             $table->string('komentar');
             $table->timestamps();
         });

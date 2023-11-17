@@ -43,6 +43,7 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Tanggal</th>
+                                                <th>Jenis Task</th>
                                                 <th>Proyek</th>
                                                 <th>Validasi Direktur</th>
                                                 <th>Validasi Akunting</th>
@@ -67,6 +68,7 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Tanggal</th>
+                                                <th>Jenis Task</th>
                                                 <th>Proyek</th>
                                                 <th>Validasi Direktur</th>
                                                 <th>Validasi Akunting</th>
@@ -117,6 +119,10 @@
                         name: 'tanggal'
                     },
                     {
+                        data: 'jenis_request',
+                        name: 'jenis_request'
+                    },
+                    {
                         data: 'proyek.nama_proyek',
                         name: 'proyek.name_proyek'
                     },
@@ -162,6 +168,10 @@
                     {
                         data: 'tanggal',
                         name: 'tanggal'
+                    },
+                    {
+                        data: 'jenis_request',
+                        name: 'jenis_request'
                     },
                     {
                         data: 'proyek.nama_proyek',
