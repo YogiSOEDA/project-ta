@@ -8,6 +8,6 @@ class PrediksiController extends Controller
 {
     public function index()
     {
-        return view('prediksi');
+        return view('prediksi.prediksi');
     }
 }

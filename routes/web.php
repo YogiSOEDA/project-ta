@@ -7,6 +7,7 @@ use App\Http\Controllers\DataProyekController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\GudangController;
+use App\Http\Controllers\PersediaanBarangController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PrediksiController;
 use App\Http\Controllers\PurchaseOrderController;
@@ -89,7 +90,8 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin,logistik,akunting,direkt
 });
 
 Route::group(['middleware' => ['auth', 'rolecheck:admin,logistik']], function () {
-    Route::get('/persediaan', [GudangController::class, 'persediaan'])->name('persediaan');
+    Route::get('/persediaan', [PersediaanBarangController::class, 'index'])->name('persediaan');
+    Route::get('/persediaan-barang/tabel', [PersediaanBarangController::class, 'table']);
 
     Route::resource('/barang-masuk', BarangMasukController::class);
     Route::get('/barang-masuk/tabelbm', [BarangMasukController::class, 'tableBm']);

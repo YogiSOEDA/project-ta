@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('rm_id')->constrained('request_material')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('barang_id')->constrained('barang')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('jumlah');
+            $table->double('jumlah',8,2);
             $table->timestamps();
         });
     }

@@ -25,6 +25,9 @@ class DataBarangController extends Controller
         $barang = Barang::query();
         return DataTables::of($barang)
             ->addIndexColumn()
+            ->editColumn('harga', function ($data) {
+                return number_format($data->harga);
+            })
             ->editColumn('gambar', function ($data) {
                 // $awok = 'storage/'.$data->gambar;
                 return '<img src="/storage/' . $data->gambar . '" class="img-fluid mb-2" style="max-width:30%"/>';
@@ -33,7 +36,7 @@ class DataBarangController extends Controller
                 return view('template.btn-action')->with(['data' => $data]);
                 // return '<a href="#" data-id="'.$data->id.'" class="btn btn-warning tombol-edit"><i class="fas fa-pen"></i> Edit</a>';// /editbarang/'.$data->id. ' data-toggle="modal" data-target="#ModalTambahBarang"
             })
-            ->rawColumns(['gambar', 'action'])
+            ->rawColumns(['harga','gambar', 'action'])
             ->make(true);
     }
 

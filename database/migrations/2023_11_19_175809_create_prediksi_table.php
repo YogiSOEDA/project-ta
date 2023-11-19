@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('detail_purchase_order', function (Blueprint $table) {
+        Schema::create('prediksi', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('po_id')->constrained('purchase_order')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('barang_id')->constrained('barang')->onUpdate('cascade')->onDelete('cascade');
-            $table->double('jumlah',8,2);
-            $table->integer('harga');
+            $table->integer('bulan');
+            $table->year('tahun');
+            $table->double('total_pengeluaran',8,2);
+            $table->double('wma',8,2);
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('detail_purchase_order');
+        Schema::dropIfExists('prediksi');
     }
 };

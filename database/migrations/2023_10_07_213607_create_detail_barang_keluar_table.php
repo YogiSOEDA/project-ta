@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('bk_id')->constrained('barang_keluar')->onUpdate('cascade')->onDelete('cascade');
             $table->foreignId('barang_id')->constrained('barang')->onUpdate('cascade')->onDelete('cascade');
-            $table->integer('jumlah');
+            $table->double('jumlah',8,2);
             $table->timestamps();
         });
     }

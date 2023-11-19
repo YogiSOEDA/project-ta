@@ -146,9 +146,7 @@
 
             // console.log(gambar);
         }
-    </script>
 
-    <script>
         $(function() {
             bsCustomFileInput.init();
         });
@@ -182,8 +180,7 @@
                 imgPreview.src = oFREvent.target.result;
             }
         }
-    </script>
-    <script>
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -216,6 +213,8 @@
                 }
             });
         });
+
+        
 
         // window.addEventListener("load", function () {
         //     var ajax = new XMLHttpRequest();

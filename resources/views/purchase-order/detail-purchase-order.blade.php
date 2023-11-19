@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     @include('template.head')
 </head>
+
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
         @include('template.navbar')
@@ -72,15 +74,18 @@
                                                     <td class="no-table"></td>
                                                     <td>{{ $dtl->barang->nama_barang }}</td>
                                                     <td>{{ $dtl->jumlah }}</td>
-                                                    <td>{{ $dtl->harga }}</td>
-                                                    <td></td>
+                                                    <td>
+                                                        {{-- {{ $dtl->harga }} --}}
+                                                        {{ number_format($dtl->harga) }}
+                                                    </td>
+                                                    <td class="money"></td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                         <tfoot>
                                             <tr>
                                                 <td colspan="4">Total</td>
-                                                <td class="totalSum"></td>
+                                                <td class="money totalSum"></td>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -104,6 +109,8 @@
             numberingTable();
             totalHarga();
             totalSum();
+
+            $(".money").simpleMoneyFormat();
         });
 
         function numberingTable() {
@@ -120,6 +127,8 @@
             $('#detail-po tbody tr').each(function(index, no) {
                 qty = $(this).children().eq(2).text();
                 harga = $(this).children().eq(3).text();
+                harga = harga.replace(/[^0-9\.]+/g,"");
+                // console.log(harga);
                 total = qty * harga;
                 $(this).children().eq(4).text(total);
             });
@@ -128,6 +137,8 @@
         function totalSum() {
             var totalBiaya = 0;
             $('#detail-po tbody tr').each(function(index) {
+
+                // console.log($(this).children().eq(4).text());
                 totalBiaya += $(this).children().eq(4).text() * 1;
             });
 
@@ -135,4 +146,5 @@
         }
     </script>
 </body>
+
 </html>

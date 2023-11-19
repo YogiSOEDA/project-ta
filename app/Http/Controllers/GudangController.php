@@ -12,7 +12,7 @@ class GudangController extends Controller
     }
     public function persediaan()
     {
-        return view('persediaan-barang');
+        return view('persediaan-barang.persediaan-barang');
     }
     public function barangMasuk()
     {

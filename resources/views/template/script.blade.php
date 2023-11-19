@@ -28,3 +28,5 @@
 <!-- Bootstrap4 Duallistbox -->
 <script src="{{ asset('AdminLTE/plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js') }}"></script>
 
+<script src="{{ asset('js/simple.money.format.js') }}"></script>
+
