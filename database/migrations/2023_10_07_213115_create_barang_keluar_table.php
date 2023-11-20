@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('barang_keluar', function (Blueprint $table) {
             $table->id();
             $table->foreignId('proyek_id')->constrained('proyek')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onUpdate('cascade');
             $table->date('tanggal');
             $table->timestamps();
         });

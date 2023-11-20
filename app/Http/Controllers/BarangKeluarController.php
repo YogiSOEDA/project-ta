@@ -37,6 +37,7 @@ class BarangKeluarController extends Controller
         $id_bk = BarangKeluar::insertGetId([
             'proyek_id' => $request->proyek_id,
             'tanggal' => $request->input_tanggal,
+            'user_id' => $request->user()->id,
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
@@ -99,7 +100,7 @@ class BarangKeluarController extends Controller
 
     public function table()
     {
-        $bk = BarangKeluar::query();
+        $bk = BarangKeluar::query()->with('proyek');
         return DataTables::of($bk)
             ->addIndexColumn()
             ->addColumn('action', function ($data) {

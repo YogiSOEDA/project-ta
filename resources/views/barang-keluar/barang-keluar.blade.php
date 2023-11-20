@@ -122,12 +122,12 @@
                         searchable: false
                     },
                     {
-                        data: 'proyek_id',
-                        name: 'proyek_id'
-                    },
-                    {
                         data: 'tanggal',
                         name: 'tanggal'
+                    },
+                    {
+                        data: 'proyek.nama_proyek',
+                        name: 'proyek.nama_proyek'
                     },
                     {
                         data: 'action',

@@ -80,9 +80,12 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin']], function () {
     Route::post('/request-material/store-po', [RequestMaterialController::class, 'storePO'])->name('storeRMtoPO');
     // Route::get('/purchase-order', [PurchaseController::class, 'purchase'])->name('purchaseOrder');
     Route::get('/prediksi', [PrediksiController::class, 'index'])->name('prediksi');
+    Route::post('/prediksi/hasil', [PrediksiController::class, 'store'])->name('hasilPrediksi');
 
     Route::get('/barang-masuk/tabelbm', [BarangMasukController::class, 'tableBm']);
     Route::get('/barang-keluar/tabelbk', [BarangKeluarController::class, 'table']);
+
+    Route::get('/select-years', [PrediksiController::class, 'viewYears']);
 });
 
 Route::group(['middleware' => ['auth', 'rolecheck:admin,logistik,akunting,direktur,teknisi']], function() {

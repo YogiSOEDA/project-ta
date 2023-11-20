@@ -48,42 +48,57 @@
                             </div> --}}
                             <div class="card card-primary card-outline">
                                 <div class="card-body">
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="barang_id">Nama Barang Diramal</label>
-                                                <select class="select2 form-control" id="barang_id" style="width: 100%">
-                                                </select>
+                                    <form action="{{ route('hasilPrediksi') }}" method="post"
+                                        enctype="multipart/form-data">
+                                        {{ csrf_field() }}
+
+                                        <div class="row">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="barang_id">Nama Barang Diramal</label>
+                                                    <select class="select2 form-control" id="barang_id" name="barang"
+                                                        style="width: 100%">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="bulan_ramal">Bulan Diramal</label>
+                                                    <select class="select2 form-control" name="bulan_ramal"
+                                                        id="bulan_ramal">
+                                                        <option selected disabled>Pilih Bulan</option>
+                                                        <option value="1">Januari</option>
+                                                        <option value="2">Februari</option>
+                                                        <option value="3">Maret</option>
+                                                        <option value="4">April</option>
+                                                        <option value="5">Mei</option>
+                                                        <option value="6">Juni</option>
+                                                        <option value="7">Juli</option>
+                                                        <option value="8">Agustus</option>
+                                                        <option value="9">September</option>
+                                                        <option value="10">Oktober</option>
+                                                        <option value="11">November</option>
+                                                        <option value="12">Desember</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="tahun_ramal">Tahun Diramal</label>
+                                                    <select class="select2 form-control" name="tahun_ramal"
+                                                        id="tahun_ramal"></select>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <label for="tombol">Prediksi</label>
+                                                    <button class="btn btn-success btn-block" type="submit" id="tombol">
+                                                        Prediksi
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="bulan_ramal">Bulan Diramal</label>
-                                                <select class="select2 form-control" name="bulan_ramal" id="bulan_ramal">
-                                                    <option selected disabled>Pilih Bulan</option>
-                                                    <option value="1">Januari</option>
-                                                    <option value="2">Februari</option>
-                                                    <option value="3">Maret</option>
-                                                    <option value="4">April</option>
-                                                    <option value="5">Mei</option>
-                                                    <option value="6">Juni</option>
-                                                    <option value="7">Juli</option>
-                                                    <option value="8">Agustus</option>
-                                                    <option value="9">September</option>
-                                                    <option value="10">Oktober</option>
-                                                    <option value="11">November</option>
-                                                    <option value="12">Desember</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="form-group">
-                                                <label for="tahun_ramal">Tahun Diramal</label>
-                                                <select class="select2 form-control" name="tahun_ramal" id="tahun_ramal"></select>
-                                            </div>
-                                        </div>
-                                        <div class="col"></div>
-                                    </div>
+                                    </form>
                                     {{-- <table id="databarang" class="table table-bordered table-hover text-center" width="100%">
                                         <thead>
                                             <tr>
@@ -119,12 +134,19 @@
     <script>
         $(document).ready(function() {
             selectBarang();
+            selectYears();
             select2();
         });
 
         function selectBarang() {
             $.get("{{ url('select-barang') }}", {}, function(data, status) {
                 $("#barang_id").html(data);
+            })
+        }
+
+        function selectYears() {
+            $.get("{{ url('select-years') }}", {}, function(data, status) {
+                $("#tahun_ramal").html(data);
             })
         }
 

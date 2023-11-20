@@ -26,5 +26,10 @@ class Proyek extends Model
         return $this->hasMany(RequestMaterial::class);
     }
 
+    public function barangKeluar()
+    {
+        return $this->hasMany(BarangKeluar::class);
+    }
+
     // protected $hidden;
 }

@@ -29,8 +29,12 @@ class DataBarangController extends Controller
                 return number_format($data->harga);
             })
             ->editColumn('gambar', function ($data) {
+                if($data->gambar) {
+                    return '<img src="/storage/' . $data->gambar . '" class="img-fluid mb-2" style="max-width:30%"/>';
+                }
+                return
+            '<img src="/img/logo.png" class="img-fluid mb-2" style="max-width:30%"/>';
                 // $awok = 'storage/'.$data->gambar;
-                return '<img src="/storage/' . $data->gambar . '" class="img-fluid mb-2" style="max-width:30%"/>';
             })
             ->addColumn('action', function ($data) {
                 return view('template.btn-action')->with(['data' => $data]);
@@ -44,12 +48,22 @@ class DataBarangController extends Controller
     {
         // ddd($request);
         $stok = 0;
-        Barang::create([
-            'nama_barang' => $request->nama_barang,
-            'harga' => $request->harga,
-            'gambar' => $request->file('gambar')->store('barang-images'),
-            'stok' => $stok,
-        ]);
+
+        if($request->file('gambar')){
+            Barang::create([
+                'nama_barang' => $request->nama_barang,
+                'harga' => $request->harga,
+                'gambar' => $request->file('gambar')->store('barang-images'),
+                'stok' => $stok,
+            ]);
+        } else {
+            Barang::create([
+                'nama_barang' => $request->nama_barang,
+                'harga' => $request->harga,
+                'stok' => $stok,
+            ]);
+        }
+
 
         return redirect('/data-barang');
     }
@@ -87,13 +101,12 @@ class DataBarangController extends Controller
         //     'harga' => $request->harga,
         //     'gambar' => $request->file('gambar')->store('barang-images'),
         // ]);
-        if ($request->file('gambar') == null) {
+        if ($request->file('gambar')) {
             Barang::where('id', $request->id_barang)->update([
                 'nama_barang' => $request->nama_barang,
                 'harga' => $request->harga,
             ]);
         } else {
-
             Barang::where('id', $request->id_barang)->update([
                 'nama_barang' => $request->nama_barang,
                 'harga' => $request->harga,

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('barang_masuk', function (Blueprint $table) {
             $table->id();
             $table->date('tanggal');
+            $table->foreignId('user_id')->constrained('users')->onUpdate('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

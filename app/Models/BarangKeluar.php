@@ -15,4 +15,9 @@ class BarangKeluar extends Model
         'proyek_id',
         'tanggal',
     ];
+
+    public function proyek()
+    {
+        return $this->belongsTo(Proyek::class);
+    }
 }
