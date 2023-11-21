@@ -82,6 +82,8 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin']], function () {
     Route::get('/prediksi', [PrediksiController::class, 'index'])->name('prediksi');
     Route::post('/prediksi/hasil', [PrediksiController::class, 'store'])->name('hasilPrediksi');
     Route::get('/prediksi/tabel', [PrediksiController::class, 'table']);
+    Route::get('/prediksi/{barang}', [PrediksiController::class, 'show']);
+    Route::get('/prediksi/tabel-histori/{barang}', [PrediksiController::class, 'tableHistory']);
 
     Route::get('/barang-masuk/tabelbm', [BarangMasukController::class, 'tableBm']);
     Route::get('/barang-keluar/tabelbk', [BarangKeluarController::class, 'table']);

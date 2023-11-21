@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Barang;
 use App\Models\BarangKeluar;
+use App\Models\Prediksi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -19,26 +20,28 @@ class PrediksiController extends Controller
 
         // dd($years);
 
-        $dateS = Carbon::now()->startOfMonth();
-        $dateS->month = 10;
-        $dateS->year = 2022;
-        $dateE = Carbon::now();
-        $dateE->month = 10;
-        $dateE->year = 2022;
-        $dateE->endOfMonth();
+        // $dateS = Carbon::now()->startOfMonth();
+        // $dateS->month = 10;
+        // $dateS->year = 2022;
+        // $dateE = Carbon::now();
+        // $dateE->month = 10;
+        // $dateE->year = 2022;
+        // $dateE->endOfMonth();
 
-        $date1m = Carbon::now();
-        $date1m->month = 10;
-        $date1m->year = 2022;
-        $date1m->startOfMonth()->subMonth();
+        // $date1m = Carbon::now();
+        // $date1m->month = 10;
+        // $date1m->year = 2022;
+        // $date1m->startOfMonth()->subMonth();
+
+
         // $date = $dateS->endOfMonth();
         // $date1m = $date->subMonth(2);
 
-        $bk = BarangKeluar::join('detail_barang_keluar', 'barang_keluar.id', '=', 'detail_barang_keluar.bk_id')
-            ->whereBetween('tanggal', [$dateS, $dateE])
-            ->where('detail_barang_keluar.barang_id', '=', 1)
-            ->select('detail_barang_keluar.jumlah')
-            ->sum('detail_barang_keluar.jumlah');
+        // $bk = BarangKeluar::join('detail_barang_keluar', 'barang_keluar.id', '=', 'detail_barang_keluar.bk_id')
+        //     ->whereBetween('tanggal', [$dateS, $dateE])
+        //     ->where('detail_barang_keluar.barang_id', '=', 1)
+        //     ->select('detail_barang_keluar.jumlah')
+        //     ->sum('detail_barang_keluar.jumlah');
 
 
         // $bk = BarangKeluar::whereBetween('tanggal',[$dateS,$dateE])->get();
@@ -131,17 +134,17 @@ class PrediksiController extends Controller
             ->select('detail_barang_keluar.jumlah')
             ->sum('detail_barang_keluar.jumlah');
 
-        $wma = (($total_pemakaian_1_bulan_lalu*3)+($total_pemakaian_2_bulan_lalu*2)+($total_pemakaian_3_bulan_lalu*1))/6;
+        $wma = (($total_pemakaian_1_bulan_lalu * 3) + ($total_pemakaian_2_bulan_lalu * 2) + ($total_pemakaian_3_bulan_lalu * 1)) / 6;
 
-        $error = $total_pemakaian_aktual-$wma;
+        $error = $total_pemakaian_aktual - $wma;
 
         $mad = abs($error);
 
-        $mse = $mad*$mad;
+        $mse = $mad * $mad;
 
-        $mape = $mad/$total_pemakaian_aktual*100;
+        $mape = $mad / $total_pemakaian_aktual * 100;
 
-        if($request->bulan_ramal == 1) {
+        if ($request->bulan_ramal == 1) {
             $bulan = "JANUARI";
         } elseif ($request->bulan_ramal == 2) {
             $bulan = "FEBRUARI";
@@ -167,6 +170,13 @@ class PrediksiController extends Controller
             $bulan = "DESEMBER";
         }
 
+        Prediksi::create([
+            'barang_id' => $request->barang,
+            'bulan' => $request->bulan_ramal,
+            'tahun' => $request->tahun_ramal,
+            'total_pengeluaran' => $total_pemakaian_aktual,
+            'wma' => $wma,
+        ]);
 
         // dd($mape);
         return view('prediksi.hasil-prediksi')->with([
@@ -186,13 +196,92 @@ class PrediksiController extends Controller
 
     public function table()
     {
-        $barang = Barang::select('id','nama_barang')->get();
+        $barang = Barang::select('id', 'nama_barang')->get();
         return DataTables::of($barang)
-        ->addIndexColumn()
-        ->addColumn('action', function ($data) {
+            ->addIndexColumn()
+            ->addColumn('action', function ($data) {
+                return '<a href="/prediksi/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a></a>';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
+    public function show(Barang $barang)
+    {
+        // dd($barang);
+        return view('prediksi.history-prediksi')->with([
+            'id_barang' => $barang->id
+        ]);
+    }
+
+    public function tableHistory(Barang $barang)
+    {
+        // dd($barang);
+        $history = Prediksi::where('barang_id', $barang->id)->get();
+        return DataTables::of($history)
+            ->addIndexColumn()
+            ->addColumn('bulan_tahun', function ($data) {
+                if ($data->bulan == 1) {
+                    return
+                        'JANUARI ' . $data->tahun;
+                } elseif ($data->bulan == 2) {
+                    return
+                        "FEBRUARI " . $data->tahun;
+                } elseif ($data->bulan == 3) {
+                    return
+                        "MARET " . $data->tahun;
+                } elseif ($data->bulan == 4) {
+                    return
+                        "APRIL " . $data->tahun;
+                } elseif ($data->bulan == 5) {
+                    return
+                        "MEI " . $data->tahun;
+                } elseif ($data->bulan == 6) {
+                    return
+                        "JUNI " . $data->tahun;
+                } elseif ($data->bulan == 7) {
+                    return
+                        "JULI " . $data->tahun;
+                } elseif ($data->bulan == 8) {
+                    return
+                        "AGUSTUS " . $data->tahun;
+                } elseif ($data->bulan == 9) {
+                    return
+                        "SEPTEMBER " . $data->tahun;
+                } elseif ($data->bulan == 10) {
+                    return
+                        "OKTOBER " . $data->tahun;
+                } elseif ($data->bulan == 11) {
+                    return
+                        "NOVEMBER " . $data->tahun;
+                } elseif ($data->bulan == 12) {
+                    return
+                        "DESEMBER " . $data->tahun;
+                }
+            })
+            ->addColumn('total_error', function ($data) {
+                return $data->total_pengeluaran - $data->wma;
+            })
+            ->addColumn('total_mad', function ($data) {
+                $mad = $data->total_pengeluaran - $data->wma;
+                return abs($mad);
+            })
+            ->addColumn('total_mse', function ($data) {
+                $mad = $data->total_pengeluaran - $data->wma;
+                return $mad*$mad;
+            })
+            ->addColumn('total_mape', function ($data) {
+                $error = $data->total_pengeluaran - $data->wma;
+                $mad = abs($error);
+                return $mad/ $data->total_pengeluaran*100;
+            })
+            ->editColumn('created_at', function ($data) {
+                return $data->created_at->format('d-m-Y');
+            })
+            ->addColumn('action', function ($data) {
             return '<a href="#" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a></a>';
-        })
-        ->rawColumns(['action'])
-        ->make(true);
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 }
