@@ -118,6 +118,26 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-lg-12">
+                            <div class="card card-primary card-outline">
+                                <div class="card-header">
+                                    <h5 class="m-0">Daftar Barang</h5>
+                                </div>
+                                <div class="card-body">
+                                    <table id="barang" class="table table-bordered hover text-center" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nama Barang</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -136,6 +156,7 @@
             selectBarang();
             selectYears();
             select2();
+            table();
         });
 
         function selectBarang() {
@@ -157,6 +178,42 @@
             barangSelect2.data('select2').$selection.css('height', '1%');
             bulanSelect2.data('select2').$selection.css('height', '1%');
             tahunSelect2.data('select2').$selection.css('height', '1%');
+        }
+
+        function table() {
+            $('#barang').DataTable({
+                ordering: true,
+                serverSide: true,
+                processing: true,
+                ajax: {
+                    'url': "{{ url('prediksi/tabel') }}"
+                },
+                columns: [
+                    {
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        width: '10px',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'nama_barang',
+                        name: 'nama_barang'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                responsive: true,
+                autoWidth: false,
+                columnDefs: [{
+                    className: 'dt-center',
+                    targets: '_all'
+                }],
+            });
         }
     </script>
 </body>

@@ -71,7 +71,11 @@ class BarangKeluarController extends Controller
      */
     public function show(BarangKeluar $barangKeluar)
     {
-        //
+        $detail = DetailBK::where('bk_id', $barangKeluar->id)->with('barang')->get();
+        return view('barang-keluar.detail-barang-keluar')->with([
+            'bk' => $barangKeluar,
+            'detail' => $detail
+        ]);
     }
 
     /**

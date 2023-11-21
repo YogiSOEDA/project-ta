@@ -20,4 +20,9 @@ class BarangKeluar extends Model
     {
         return $this->belongsTo(Proyek::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

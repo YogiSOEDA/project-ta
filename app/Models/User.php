@@ -48,4 +48,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(RequestMaterial::class);
     }
+
+    public function barangKeluar()
+    {
+        return $this->hasMany(BarangKeluar::class);
+    }
 }

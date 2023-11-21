@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Barang;
 use App\Models\BarangKeluar;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class PrediksiController extends Controller
 {
@@ -180,5 +182,17 @@ class PrediksiController extends Controller
             'tahun' => $request->tahun_ramal,
             'bulan' => $bulan
         ]);
+    }
+
+    public function table()
+    {
+        $barang = Barang::select('id','nama_barang')->get();
+        return DataTables::of($barang)
+        ->addIndexColumn()
+        ->addColumn('action', function ($data) {
+            return '<a href="#" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a></a>';
+        })
+        ->rawColumns(['action'])
+        ->make(true);
     }
 }

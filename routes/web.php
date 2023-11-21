@@ -81,6 +81,7 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin']], function () {
     // Route::get('/purchase-order', [PurchaseController::class, 'purchase'])->name('purchaseOrder');
     Route::get('/prediksi', [PrediksiController::class, 'index'])->name('prediksi');
     Route::post('/prediksi/hasil', [PrediksiController::class, 'store'])->name('hasilPrediksi');
+    Route::get('/prediksi/tabel', [PrediksiController::class, 'table']);
 
     Route::get('/barang-masuk/tabelbm', [BarangMasukController::class, 'tableBm']);
     Route::get('/barang-keluar/tabelbk', [BarangKeluarController::class, 'table']);
@@ -103,6 +104,7 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin,logistik']], function ()
 
     Route::resource('/barang-keluar', BarangKeluarController::class);
     Route::get('/barang-keluar/tabelbk', [BarangKeluarController::class, 'table']);
+    Route::get('/barang-keluar/{barang_keluar}', [BarangKeluarController::class, 'show']);
 
     Route::get('/select-proyek', [PurchaseOrderController::class, 'viewProyek']);
     Route::get('/select-barang', [PurchaseOrderController::class, 'viewBarang']);

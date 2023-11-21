@@ -16,4 +16,9 @@ class DetailBK extends Model
         'barang_id',
         'jumlah',
     ];
+
+    public function barang()
+    {
+        return $this->belongsTo(Barang::class);
+    }
 }

@@ -27,5 +27,10 @@ class Barang extends Model
     {
         return $this->hasOne(DetailRM::class);
     }
+
+    public function detailBK()
+    {
+        return $this->hasOne(DetailBK::class);
+    }
     // protected $hidden;
 }
