@@ -32,5 +32,10 @@ class Barang extends Model
     {
         return $this->hasOne(DetailBK::class);
     }
+
+    public function satuan()
+    {
+        return $this->belongsTo(Satuan::class);
+    }
     // protected $hidden;
 }

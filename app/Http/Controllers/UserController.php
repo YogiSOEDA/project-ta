@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PurchaseOrder;
+use App\Models\RequestMaterial;
 use App\Models\User;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
@@ -12,7 +14,46 @@ class UserController extends Controller
     //
     public function index()
     {
-        return view('dashboard');
+        $user = Auth::user()->role;
+        if ($user == 'admin') {
+            $po = PurchaseOrder::where('status', '!=', 'selesai')->count();
+            $rm = RequestMaterial::where('status', '!=', 'selesai')->count();
+
+            return view('dashboard')->with([
+                'po' => $po,
+                'rm' => $rm
+            ]);
+        } elseif ($user == 'teknisi') {
+            $rm = RequestMaterial::where('status', '!=', 'selesai')->count();
+
+            return view('dashboard')->with([
+                'rm' => $rm
+            ]);
+        } elseif ($user == 'direktur') {
+            $po = PurchaseOrder::where('acc_direktur', '!=', 'divalidasi')->count();
+
+            return view('dashboard')->with([
+                'po' => $po
+            ]);
+        } elseif ($user == 'akunting') {
+            $po = PurchaseOrder::where('acc_akunting', '!=', 'divalidasi')->count();
+
+            return view('dashboard')->with([
+                'po' => $po
+            ]);
+        } elseif ($user == 'logistik') {
+            $po = PurchaseOrder::where('status', '!=', 'selesai')
+                ->where('acc_direktur', 'divalidasi')
+                ->where('acc_akunting', 'divalidasi')
+                ->count();
+            $rm = RequestMaterial::where('status', 'diproses')->count();
+
+            return view('dashboard')->with([
+                'po' => $po,
+                'rm' => $rm
+            ]);
+        }
+        // dd($user);
     }
 
     public function login()

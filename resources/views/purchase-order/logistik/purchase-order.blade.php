@@ -43,9 +43,11 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Tanggal</th>
+                                                <th>Jenis Task</th>
                                                 <th>Proyek</th>
                                                 <th>Validasi Direktur</th>
                                                 <th>Validasi Akunting</th>
+                                                <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -65,6 +67,68 @@
     </div>
 
     @include('template.script')
+
+    <script>
+        $(document).ready(function() {
+            table();
+        });
+
+        function table() {
+            $('#purchase-order').DataTable({
+                ordering: true,
+                serverSide: true,
+                processing: true,
+                ajax: {
+                    'url': "{{ url('logistik/purchase-order/tabel') }}"
+                },
+                columns: [
+                    {
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        width: '10px',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'tanggal',
+                        name: 'tanggal'
+                    },
+                    {
+                        data: 'jenis_request',
+                        name: 'jenis_request'
+                    },
+                    {
+                        data: 'proyek.nama_proyek',
+                        name: 'proyek.nama_proyek'
+                    },
+                    {
+                        data: 'stat_dir',
+                        name: 'stat_dir'
+                    },
+                    {
+                        data: 'stat_akt',
+                        name: 'stat_akt'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                responsive: true,
+                autoWidth: false,
+                columnDefs: [{
+                    className: 'dt-center',
+                    targets: '_all'
+                }],
+            });
+        }
+    </script>
 </body>
 
 </html>

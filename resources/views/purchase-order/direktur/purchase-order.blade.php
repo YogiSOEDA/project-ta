@@ -83,6 +83,8 @@
                     </div>
                 </div>
             </section>
+
+            @include('template.modal-komentar')
         </div>
 
         <footer class="main-footer">
@@ -199,6 +201,10 @@
                     targets: '_all'
                 }],
             });
+        }
+
+        function decline() {
+            $("#ModalKomentar").modal('show');
         }
     </script>
 </body>

@@ -212,6 +212,10 @@
                 success: function(data) {
                     $("table tbody").append(data);
                     totalSum();
+
+                    selectBarang();
+                    $("#input_qty").val('');
+                    $("#input_harga").val('');
                 }
             })
         }

@@ -15,12 +15,12 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">Barang Keluar</h1>
+                            <h1 class="m-0">Barang Masuk</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
-                                <li class="breadcrumb-item active">Barang Keluar</li>
+                                <li class="breadcrumb-item active">Barang Masuk</li>
                             </ol>
                         </div>
                     </div>
@@ -36,30 +36,24 @@
                                     <div class="col-lg-6">
                                         <table class="text-left" width="50%">
                                             <tr>
-                                                <td>Barang Keluar No.</td>
+                                                <td>Barang Masuk No.</td>
                                                 <td>:</td>
-                                                <td id="id_bk">{{ $bk->id }}</td>
+                                                <td id="id_bm">{{ $bm->id }}</td>
                                             </tr>
                                             <tr>
                                                 <td>Tanggal</td>
                                                 <td>:</td>
-                                                <td>{{ $bk->tanggal }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Poyek</td>
-                                                <td>:</td>
-                                                <td>{{ $bk->proyek->nama_proyek }}</td>
+                                                <td>{{ $tgl }}</td>
                                             </tr>
                                             <tr>
                                                 <td>Diproses Oleh</td>
                                                 <td>:</td>
-                                                <td>{{ $bk->user->name }} ({{ $bk->user->role }})</td>
+                                                <td>{{ $bm->user->name }} ({{ $bm->user->role }})</td>
                                             </tr>
                                         </table>
-
                                     </div>
-                                    <table id="detail-bk"
-                                        class="table table-bordered table-hover text-center mt-md-4">
+
+                                    <table id="detail-bm" class="table table-bordered table-hover text-center mt-md-4">
                                         <thead>
                                             <tr>
                                                 <th width='5%'>No</th>
@@ -99,7 +93,7 @@
 
         function numberingTable() {
             var number = 0;
-            $('#detail-bk tbody tr').each(function(index, no) {
+            $('#detail-bm tbody tr').each(function(index, no) {
                 $(no).find('.no-table').text(++number);
             });
         }

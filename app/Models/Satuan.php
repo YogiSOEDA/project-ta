@@ -5,18 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BarangMasuk extends Model
+class Satuan extends Model
 {
     use HasFactory;
 
-    protected $table = 'barang_masuk';
+    protected $table = 'satuan';
 
     protected $fillable = [
-        'tanggal',
+        'satuan',
     ];
 
-    public function user()
+    public function barang()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasOne(Barang::class);
     }
 }

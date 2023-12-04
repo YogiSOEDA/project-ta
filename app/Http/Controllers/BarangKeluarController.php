@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Barang;
 use App\Models\BarangKeluar;
 use App\Models\DetailBK;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -107,6 +108,11 @@ class BarangKeluarController extends Controller
         $bk = BarangKeluar::query()->with('proyek');
         return DataTables::of($bk)
             ->addIndexColumn()
+            ->editColumn('tanggal', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tanggal)->format('d-m-Y');
+                // return $data->tanggal->format('d-m-Y');
+                // return $data->tanggal->format('d-m-Y');
+            })
             ->addColumn('action', function ($data) {
                 return '<a href="barang-keluar/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
             })

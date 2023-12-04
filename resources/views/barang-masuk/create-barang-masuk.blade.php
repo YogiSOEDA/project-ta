@@ -101,7 +101,7 @@
                                         <div class="float-sm-right">
                                             <button class="btn btn-success" type="submit">
                                                 {{-- <button class="btn btn-success" type="submit"> --}}
-                                                SIMPAN PO
+                                                SIMPAN BARANG MASUK
                                             </button>
                                         </div>
                                     </div>
@@ -157,6 +157,9 @@
                 data: "barang_id=" + barang_id + "&qty=" + qty + "&number=" + rawCount,
                 success: function(data) {
                     $("table tbody").append(data);
+
+                    selectBarang();
+                    var qty = $("#input_qty").val('');
                 }
             })
         }
@@ -188,7 +191,7 @@
             // })
         }
 
-        
+
     </script>
 </body>
 

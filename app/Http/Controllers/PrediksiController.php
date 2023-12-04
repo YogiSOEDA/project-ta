@@ -64,11 +64,13 @@ class PrediksiController extends Controller
 
     public function store(Request $request)
     {
+        // ddd($request->barang);
+
         $dateAwal = Carbon::now()->startOfMonth();
         $dateAwal->month = $request->bulan_ramal;
         $dateAwal->year = $request->tahun_ramal;
 
-        $dateAkhir = Carbon::now();
+        $dateAkhir = Carbon::now()->startOfMonth();
         $dateAkhir->month = $request->bulan_ramal;
         $dateAkhir->year = $request->tahun_ramal;
         $dateAkhir->endOfMonth();
@@ -85,7 +87,7 @@ class PrediksiController extends Controller
         $dateAwal1BulanLalu->year = $request->tahun_ramal;
         $dateAwal1BulanLalu->subMonth();
 
-        $dateAkhir1BulanLalu = Carbon::now();
+        $dateAkhir1BulanLalu = Carbon::now()->startOfMonth();
         $dateAkhir1BulanLalu->month = $request->bulan_ramal;
         $dateAkhir1BulanLalu->year = $request->tahun_ramal;
         $dateAkhir1BulanLalu->subMonth();
@@ -103,7 +105,7 @@ class PrediksiController extends Controller
         $dateAwal2BulanLalu->year = $request->tahun_ramal;
         $dateAwal2BulanLalu->subMonth(2);
 
-        $dateAkhir2BulanLalu = Carbon::now();
+        $dateAkhir2BulanLalu = Carbon::now()->startOfMonth();
         $dateAkhir2BulanLalu->month = $request->bulan_ramal;
         $dateAkhir2BulanLalu->year = $request->tahun_ramal;
         $dateAkhir2BulanLalu->subMonth(2);
@@ -121,11 +123,13 @@ class PrediksiController extends Controller
         $dateAwal3BulanLalu->year = $request->tahun_ramal;
         $dateAwal3BulanLalu->subMonth(3);
 
-        $dateAkhir3BulanLalu = Carbon::now();
+        $dateAkhir3BulanLalu = Carbon::now()->startOfMonth();
         $dateAkhir3BulanLalu->month = $request->bulan_ramal;
         $dateAkhir3BulanLalu->year = $request->tahun_ramal;
         $dateAkhir3BulanLalu->subMonth(3);
         $dateAkhir3BulanLalu->endOfMonth();
+
+        // dd($dateAkhir3BulanLalu);
 
         $total_pemakaian_3_bulan_lalu =
             BarangKeluar::join('detail_barang_keluar', 'barang_keluar.id', '=', 'detail_barang_keluar.bk_id')
@@ -170,27 +174,41 @@ class PrediksiController extends Controller
             $bulan = "DESEMBER";
         }
 
-        Prediksi::create([
+        $prediksi_hasil = Prediksi::insertGetId([
             'barang_id' => $request->barang,
             'bulan' => $request->bulan_ramal,
             'tahun' => $request->tahun_ramal,
             'total_pengeluaran' => $total_pemakaian_aktual,
             'wma' => $wma,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
         // dd($mape);
-        return view('prediksi.hasil-prediksi')->with([
-            'satu_bulan_lalu' => $total_pemakaian_1_bulan_lalu,
-            'dua_bulan_lalu' => $total_pemakaian_2_bulan_lalu,
-            'tiga_bulan_lalu' => $total_pemakaian_3_bulan_lalu,
-            'nilai_aktual' => $total_pemakaian_aktual,
+        // return view('prediksi.hasil-prediksi')->with([
+        //     'satu_bulan_lalu' => $total_pemakaian_1_bulan_lalu,
+        //     'dua_bulan_lalu' => $total_pemakaian_2_bulan_lalu,
+        //     'tiga_bulan_lalu' => $total_pemakaian_3_bulan_lalu,
+        //     'nilai_aktual' => $total_pemakaian_aktual,
+        //     'wma' => $wma,
+        //     'error' => $error,
+        //     'mad' => $mad,
+        //     'mse' => $mse,
+        //     'mape' => $mape,
+        //     'tahun' => $request->tahun_ramal,
+        //     'bulan' => $bulan
+        // ]);
+
+        $barang = Barang::findOrFail($request->barang);
+        // $barang = Barang::findOrFail($request->barang)->with('satuan');
+        // ddd($barang);
+
+        return view('prediksi.modal-body-hasil-prediksi')->with([
             'wma' => $wma,
-            'error' => $error,
-            'mad' => $mad,
-            'mse' => $mse,
-            'mape' => $mape,
             'tahun' => $request->tahun_ramal,
-            'bulan' => $bulan
+            'bulan' => $bulan,
+            'barang' => $barang,
+            'prediksi_hasil' => $prediksi_hasil,
         ]);
     }
 
@@ -210,7 +228,8 @@ class PrediksiController extends Controller
     {
         // dd($barang);
         return view('prediksi.history-prediksi')->with([
-            'id_barang' => $barang->id
+            'id_barang' => $barang->id,
+            'nama_barang' => $barang->nama_barang
         ]);
     }
 
@@ -279,9 +298,117 @@ class PrediksiController extends Controller
                 return $data->created_at->format('d-m-Y');
             })
             ->addColumn('action', function ($data) {
-            return '<a href="#" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a></a>';
+            return '<a href="/prediksi/detail/'.$data->id.'" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a></a>';
             })
             ->rawColumns(['action'])
             ->make(true);
+    }
+
+    public function showDetailPerhitungan(Prediksi $prediksi)
+    {
+        if ($prediksi->bulan == 1) {
+            $bulan = "JANUARI";
+        } elseif ($prediksi->bulan == 2) {
+            $bulan = "FEBRUARI";
+        } elseif ($prediksi->bulan == 3) {
+            $bulan = "MARET";
+        } elseif ($prediksi->bulan == 4) {
+            $bulan = "APRIL";
+        } elseif ($prediksi->bulan == 5) {
+            $bulan = "MEI";
+        } elseif ($prediksi->bulan == 6) {
+            $bulan = "JUNI";
+        } elseif ($prediksi->bulan == 7) {
+            $bulan = "JULI";
+        } elseif ($prediksi->bulan == 8) {
+            $bulan = "AGUSTUS";
+        } elseif ($prediksi->bulan == 9) {
+            $bulan = "SEPTEMBER";
+        } elseif ($prediksi->bulan == 10) {
+            $bulan = "OKTOBER";
+        } elseif ($prediksi->bulan == 11) {
+            $bulan = "NOVEMBER";
+        } elseif ($prediksi->bulan == 12) {
+            $bulan = "DESEMBER";
+        }
+
+        $dateAwal1BulanLalu = Carbon::now()->startOfMonth();
+        $dateAwal1BulanLalu->month = $prediksi->bulan;
+        $dateAwal1BulanLalu->year = $prediksi->tahun;
+        $dateAwal1BulanLalu->subMonth();
+
+        $dateAkhir1BulanLalu = Carbon::now()->startOfMonth();
+        $dateAkhir1BulanLalu->month = $prediksi->bulan;
+        $dateAkhir1BulanLalu->year = $prediksi->tahun;
+        $dateAkhir1BulanLalu->subMonth();
+        $dateAkhir1BulanLalu->endOfMonth();
+
+        $total_pemakaian_1_bulan_lalu =
+            BarangKeluar::join('detail_barang_keluar', 'barang_keluar.id', '=', 'detail_barang_keluar.bk_id')
+            ->whereBetween('tanggal', [$dateAwal1BulanLalu, $dateAkhir1BulanLalu])
+            ->where('detail_barang_keluar.barang_id', '=', $prediksi->barang_id)
+            ->select('detail_barang_keluar.jumlah')
+            ->sum('detail_barang_keluar.jumlah');
+
+        $dateAwal2BulanLalu = Carbon::now()->startOfMonth();
+        $dateAwal2BulanLalu->month = $prediksi->bulan;
+        $dateAwal2BulanLalu->year = $prediksi->tahun;
+        $dateAwal2BulanLalu->subMonth(2);
+
+        $dateAkhir2BulanLalu = Carbon::now()->startOfMonth();
+        $dateAkhir2BulanLalu->month = $prediksi->bulan;
+        $dateAkhir2BulanLalu->year = $prediksi->tahun;
+        $dateAkhir2BulanLalu->subMonth(2);
+        $dateAkhir2BulanLalu->endOfMonth();
+
+        $total_pemakaian_2_bulan_lalu =
+            BarangKeluar::join('detail_barang_keluar', 'barang_keluar.id', '=', 'detail_barang_keluar.bk_id')
+            ->whereBetween('tanggal', [$dateAwal2BulanLalu, $dateAkhir2BulanLalu])
+            ->where('detail_barang_keluar.barang_id', '=', $prediksi->barang_id)
+            ->select('detail_barang_keluar.jumlah')
+            ->sum('detail_barang_keluar.jumlah');
+
+        $dateAwal3BulanLalu = Carbon::now()->startOfMonth();
+        $dateAwal3BulanLalu->month = $prediksi->bulan;
+        $dateAwal3BulanLalu->year = $prediksi->tahun;
+        $dateAwal3BulanLalu->subMonth(3);
+
+        $dateAkhir3BulanLalu = Carbon::now()->startOfMonth();
+        $dateAkhir3BulanLalu->month = $prediksi->bulan;
+        $dateAkhir3BulanLalu->year = $prediksi->tahun;
+        $dateAkhir3BulanLalu->subMonth(3);
+        $dateAkhir3BulanLalu->endOfMonth();
+
+        $total_pemakaian_3_bulan_lalu =
+            BarangKeluar::join('detail_barang_keluar', 'barang_keluar.id', '=', 'detail_barang_keluar.bk_id')
+            ->whereBetween('tanggal', [$dateAwal3BulanLalu, $dateAkhir3BulanLalu])
+            ->where('detail_barang_keluar.barang_id', '=', $prediksi->barang_id)
+            ->select('detail_barang_keluar.jumlah')
+            ->sum('detail_barang_keluar.jumlah');
+
+        $error = $prediksi->total_pengeluaran - $prediksi->wma;
+
+        $mad = abs($error);
+
+        $mse = $mad * $mad;
+
+        $mape = $mad / $prediksi->total_pengeluaran * 100;
+
+        $barang = Barang::findOrFail($prediksi->barang_id);
+
+        return view('prediksi.detail-prediksi')->with([
+            'bulan' => $bulan,
+            'tahun' => $prediksi->tahun,
+            'wma' => $prediksi->wma,
+            'satu_bulan_lalu' => $total_pemakaian_1_bulan_lalu,
+            'dua_bulan_lalu' => $total_pemakaian_2_bulan_lalu,
+            'tiga_bulan_lalu' => $total_pemakaian_3_bulan_lalu,
+            'nilai_aktual' => $prediksi->total_pengeluaran,
+            'error' => $error,
+            'mad' => $mad,
+            'mse' => $mse,
+            'mape' => $mape,
+            'barang' => $barang,
+        ]);
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\StoreBarangMasukRequest;
 use App\Http\Requests\UpdateBarangMasukRequest;
 use App\Models\Barang;
 use App\Models\DetailBM;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 
@@ -40,6 +41,7 @@ class BarangMasukController extends Controller
 
         $id_bm = BarangMasuk::insertGetId([
             'tanggal' => $request->input_tanggal,
+            'user_id' => $request->user()->id,
             'created_at' => date('Y-m-d H:i:s'),
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
@@ -74,7 +76,16 @@ class BarangMasukController extends Controller
      */
     public function show(BarangMasuk $barangMasuk)
     {
-        //
+        $detail = DetailBM::where('bm_id', $barangMasuk->id)->with('barang')->get();
+
+        $tgl = Carbon::createFromFormat('Y-m-d', $barangMasuk->tanggal)->format('d-m-Y');
+
+        // dd($tgl);
+        return view('barang-masuk.detail-barang-masuk')->with([
+            'bm' => $barangMasuk,
+            'detail' => $detail,
+            'tgl' => $tgl
+        ]);
     }
 
     /**

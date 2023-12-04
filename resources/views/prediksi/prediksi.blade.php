@@ -29,7 +29,7 @@
 
             <!-- Main content -->
             <section class="content">
-                <div class="container-fuid">
+                <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-12">
                             {{-- <div class="px-2 py-2">
@@ -48,57 +48,59 @@
                             </div> --}}
                             <div class="card card-primary card-outline">
                                 <div class="card-body">
-                                    <form action="{{ route('hasilPrediksi') }}" method="post"
+                                    {{-- <form action="{{ route('hasilPrediksi') }}" method="post"
                                         enctype="multipart/form-data">
-                                        {{ csrf_field() }}
+                                        {{ csrf_field() }} --}}
 
-                                        <div class="row">
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label for="barang_id">Nama Barang Diramal</label>
-                                                    <select class="select2 form-control" id="barang_id" name="barang"
-                                                        style="width: 100%">
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label for="bulan_ramal">Bulan Diramal</label>
-                                                    <select class="select2 form-control" name="bulan_ramal"
-                                                        id="bulan_ramal">
-                                                        <option selected disabled>Pilih Bulan</option>
-                                                        <option value="1">Januari</option>
-                                                        <option value="2">Februari</option>
-                                                        <option value="3">Maret</option>
-                                                        <option value="4">April</option>
-                                                        <option value="5">Mei</option>
-                                                        <option value="6">Juni</option>
-                                                        <option value="7">Juli</option>
-                                                        <option value="8">Agustus</option>
-                                                        <option value="9">September</option>
-                                                        <option value="10">Oktober</option>
-                                                        <option value="11">November</option>
-                                                        <option value="12">Desember</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label for="tahun_ramal">Tahun Diramal</label>
-                                                    <select class="select2 form-control" name="tahun_ramal"
-                                                        id="tahun_ramal"></select>
-                                                </div>
-                                            </div>
-                                            <div class="col">
-                                                <div class="form-group">
-                                                    <label for="tombol">Prediksi</label>
-                                                    <button class="btn btn-success btn-block" type="submit" id="tombol">
-                                                        Prediksi
-                                                    </button>
-                                                </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="barang_id">Nama Barang Diramal</label>
+                                                <select class="select2 form-control" id="barang_id" name="barang"
+                                                    style="width: 100%">
+                                                </select>
                                             </div>
                                         </div>
-                                    </form>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="bulan_ramal">Bulan Diramal</label>
+                                                <select class="select2 form-control" name="bulan_ramal"
+                                                    id="bulan_ramal">
+                                                    <option selected disabled>Pilih Bulan</option>
+                                                    <option value="1">Januari</option>
+                                                    <option value="2">Februari</option>
+                                                    <option value="3">Maret</option>
+                                                    <option value="4">April</option>
+                                                    <option value="5">Mei</option>
+                                                    <option value="6">Juni</option>
+                                                    <option value="7">Juli</option>
+                                                    <option value="8">Agustus</option>
+                                                    <option value="9">September</option>
+                                                    <option value="10">Oktober</option>
+                                                    <option value="11">November</option>
+                                                    <option value="12">Desember</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="tahun_ramal">Tahun Diramal</label>
+                                                <select class="select2 form-control" name="tahun_ramal"
+                                                    id="tahun_ramal"></select>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="tombol">Prediksi</label>
+                                                <button class="btn btn-success btn-block" id="tombol"
+                                                    onclick="prediksi()">
+                                                    {{-- <button class="btn btn-success btn-block" type="submit" id="tombol"> --}}
+                                                    Prediksi
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- </form> --}}
                                     {{-- <table id="databarang" class="table table-bordered table-hover text-center" width="100%">
                                         <thead>
                                             <tr>
@@ -141,6 +143,8 @@
                     </div>
                 </div>
             </section>
+
+            @include('prediksi.modal-hasil-prediksi')
         </div>
 
         <footer class="main-footer">
@@ -188,8 +192,7 @@
                 ajax: {
                     'url': "{{ url('prediksi/tabel') }}"
                 },
-                columns: [
-                    {
+                columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
                         width: '10px',
@@ -214,6 +217,24 @@
                     targets: '_all'
                 }],
             });
+        }
+
+        function prediksi() {
+            var barang = $('#barang_id').val();
+            var bulan_ramal = $('#bulan_ramal').val();
+            var tahun_ramal = $('#tahun_ramal').val();
+            // $("#ModalPrediksi").modal('show');
+
+
+            $.ajax({
+                type: "get",
+                url: "{{ url('prediksi/hasil') }}",
+                data: "barang=" + barang + "&bulan_ramal=" + bulan_ramal + "&tahun_ramal=" + tahun_ramal,
+                success: function(data) {
+                    $("#modal-page").html(data);
+                    $("#ModalPrediksi").modal('show');
+                }
+            })
         }
     </script>
 </body>

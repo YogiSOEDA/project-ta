@@ -12,15 +12,17 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PrediksiController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\RequestMaterialController;
+use App\Http\Controllers\SatuanController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Route::get('/register', function () {
     return view('register');
 });
+Route::get('/', [UserController::class, 'login']);
 Route::get('/login', [UserController::class, 'login'])->name('login');
 Route::post('/postlogin', [UserController::class, 'postlogin'])->name('postlogin');
 Route::post('/saveregister', [UserController::class, 'register'])->name('saveregister');
@@ -80,15 +82,29 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin']], function () {
     Route::post('/request-material/store-po', [RequestMaterialController::class, 'storePO'])->name('storeRMtoPO');
     // Route::get('/purchase-order', [PurchaseController::class, 'purchase'])->name('purchaseOrder');
     Route::get('/prediksi', [PrediksiController::class, 'index'])->name('prediksi');
-    Route::post('/prediksi/hasil', [PrediksiController::class, 'store'])->name('hasilPrediksi');
+    Route::get('/prediksi/hasil', [PrediksiController::class, 'store']);
     Route::get('/prediksi/tabel', [PrediksiController::class, 'table']);
     Route::get('/prediksi/{barang}', [PrediksiController::class, 'show']);
     Route::get('/prediksi/tabel-histori/{barang}', [PrediksiController::class, 'tableHistory']);
+    Route::get('/prediksi/detail/{prediksi}', [PrediksiController::class, 'showDetailPerhitungan']);
 
     Route::get('/barang-masuk/tabelbm', [BarangMasukController::class, 'tableBm']);
     Route::get('/barang-keluar/tabelbk', [BarangKeluarController::class, 'table']);
 
     Route::get('/select-years', [PrediksiController::class, 'viewYears']);
+
+    // Route::get('/laporan/tabel-histori/{proyek}', [LaporanController::class, 'tableHistory']);
+    // Route::get('/laporan/tabel-histori-search', [LaporanController::class, 'tableHistoryFilter']);
+
+    Route::get('/satuan', [SatuanController::class, 'index'])->name('satuan');
+    Route::get('/satuan/create', [SatuanController::class, 'create']);
+    Route::get('/satuan/store', [SatuanController::class, 'store']);
+    Route::get('/satuan/tabel', [SatuanController::class, 'table']);
+    Route::get('/satuan/show/{satuan}', [SatuanController::class, 'show']);
+    Route::get('/satuan/update/{satuan}', [SatuanController::class, 'update']);
+
+    Route::get('/select-satuan', [SatuanController::class, 'selectSatuan']);
+
 });
 
 Route::group(['middleware' => ['auth', 'rolecheck:admin,logistik,akunting,direktur,teknisi']], function() {
@@ -101,6 +117,7 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin,logistik']], function ()
 
     Route::resource('/barang-masuk', BarangMasukController::class);
     Route::get('/barang-masuk/tabelbm', [BarangMasukController::class, 'tableBm']);
+    Route::get('/barang-masuk/{barang_masuk}', [BarangMasukController::class, 'show']);
     // Route::get('/barang-masuk/tabelbm', [BarangMasukController::class, 'tableBm']);
     Route::get('/add-row-bm', [BarangMasukController::class, 'addRow']);
 
@@ -114,6 +131,11 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin,logistik']], function ()
 
 Route::group(['middleware' => ['auth', 'rolecheck:logistik']], function () {
     Route::get('/logistik/purchase-order', [PurchaseOrderController::class, 'viewPoLogistik']);
+    Route::get('/logistik/purchase-order/tabel', [PurchaseOrderController::class, 'tablePoLogistik']);
+    Route::get('/logistik/purchase-order/{purchase_order}', [PurchaseOrderController::class, 'viewDetailPOLogistik']);
+    Route::get('/logistik/request-material', [RequestMaterialController::class, 'viewRMLogistik']);
+    Route::get('/logistik/request-material/tabel', [RequestMaterialController::class, 'tableRMLogistik']);
+    Route::get('/logistik/request-material/{request_material}', [RequestMaterialController::class, 'viewDetailRMLogistik']);
 });
 
 Route::group(['middleware' => ['auth', 'rolecheck:akunting']], function () {
@@ -126,6 +148,12 @@ Route::group(['middleware' => ['auth', 'rolecheck:akunting']], function () {
 
 Route::group(['middleware' => ['auth', 'rolecheck:admin,akunting']], function () {
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
+    Route::get('/laporan/tabel', [LaporanController::class, 'table']);
+    Route::get('/laporan/{proyek}', [LaporanController::class, 'show']);
+    Route::get('/laporan/tabel-histori/{proyek}', [LaporanController::class, 'tableHistory']);
+    Route::get('/laporan/tabel-histori-search', [LaporanController::class, 'tableHistoryFilter']);
+
+    // Route::get('/laporan/tabel-histori-search', [LaporanController::class, 'awok']);
 });
 
 Route::group(['middleware' => ['auth', 'rolecheck:direktur']], function () {

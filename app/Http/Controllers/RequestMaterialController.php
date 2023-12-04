@@ -252,7 +252,7 @@ class RequestMaterialController extends Controller
                 'rm' => $requestMaterial,
                 'detail' => $detail,
             ]
-        );;
+        );
     }
 
     public function storePO(Request $request, RequestMaterial $requestMaterial)
@@ -291,5 +291,43 @@ class RequestMaterialController extends Controller
         ]);
 
         return redirect('/request-material');
+    }
+
+    public function viewRMLogistik()
+    {
+        return view('request-material.logistik.request-material');
+    }
+
+    public function tableRMLogistik()
+    {
+        $rm = RequestMaterial::where('status', 'diproses')->with('proyek');
+        return DataTables::of($rm)
+            ->addIndexColumn()
+            ->editColumn('jenis_request', function ($data) {
+                return '<span style= "text-transform:capitalize">' . $data->jenis_request . '</span>';
+            })
+            ->editColumn('status', function ($data) {
+                if ($data->status == 'belum diproses') {
+                    return '<div class="btn bg-danger">' . $data->status . '</div>';
+                } elseif ($data->status == 'diproses') {
+                    return '<div class="btn bg-warning">' . $data->status . '</div>';
+                } elseif ($data->status == 'selesai') {
+                    return '<div class="btn bg-success">' . $data->status . '</div>';
+                }
+            })
+            ->addColumn('action', function ($data) {
+                return '<a href="/logistik/request-material/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
+            })
+            ->rawColumns(['status', 'action', 'jenis_request'])
+            ->make(true);
+    }
+
+    public function viewDetailRMLogistik(RequestMaterial $requestMaterial)
+    {
+        $detail = DetailRM::where('rm_id', $requestMaterial->id)->where('jumlah', '>', 0)->with('barang')->get();
+        return view('request-material.logistik.detail-request-material')->with([
+            'rm' => $requestMaterial,
+            'detail' => $detail
+        ]);
     }
 }

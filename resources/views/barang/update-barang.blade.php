@@ -5,6 +5,11 @@
         <input type="text" class="form-control" id="input_nama_barang" name="nama_barang"
             placeholder="Masukkan Nama Barang" value="{{ $data->nama_barang }}">
     </div>
+    <div class="form-group" id="select-satuan">
+        <label>Nama Satuan</label>
+        <select class="form-control select2" id="satuan_id" name="satuan_id" style="width: 100%">
+        </select>
+    </div>
     <div class="form-group">
         <label for="inputHargaBarang">Harga Barang</label>
         <div class="input-group mb-2">

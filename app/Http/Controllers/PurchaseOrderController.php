@@ -224,7 +224,7 @@ class PurchaseOrderController extends Controller
                 // if ($data->acc_direktur == 'divalidasi' || $data->acc_akunting == 'divalidasi') {
                 //     return '<a href="purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
                 // } else {
-                return '<a href="/direktur/purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a> <a href="/direktur/purchase-order/' . $data->id . '/acc" class="btn btn-success"><i class="fa-solid fa-check"></i> Accept</a> <a href="/direktur/purchase-order/' . $data->id . '/decline" class="btn btn-danger"><i class="fa-solid fa-x"></i> Decline</a>';
+                return '<a href="/direktur/purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a> <a href="/direktur/purchase-order/' . $data->id . '/acc" class="btn btn-success"><i class="fa-solid fa-check"></i> Accept</a> <button class="btn btn-danger" onclick="decline()"><i class="fa-solid fa-x"></i> Decline</button>'; //<a href="/direktur/purchase-order/' . $data->id . '/decline" class="btn btn-danger"><i class="fa-solid fa-x"></i> Decline</a>';
                 // }
             })
             ->rawColumns(['stat_dir', 'stat_akt', 'status', 'action', 'jenis_request'])
@@ -373,5 +373,61 @@ class PurchaseOrderController extends Controller
             ]);
 
         return redirect('/akunting/purchase-order');
+    }
+
+    public function tablePoLogistik()
+    {
+        $po = PurchaseOrder::where('acc_direktur', 'divalidasi')
+            ->where('acc_akunting', 'divalidasi')
+            ->with('proyek');
+        return DataTables::of($po)
+            ->addIndexColumn()
+            ->editColumn('jenis_request', function ($data) {
+                return '<span style= "text-transform:capitalize">' . $data->jenis_request . '</span>';
+            })
+            ->addColumn('stat_dir', function ($data) {
+                if ($data->acc_direktur == 'belum divalidasi') {
+                    return '<div class="btn bg-danger">' . $data->acc_direktur . '</div>';
+                } elseif ($data->acc_direktur == 'divalidasi') {
+                    return '<div class="btn bg-success">' . $data->acc_direktur . '</div>';
+                }
+            })
+            ->addColumn('stat_akt', function ($data) {
+                if ($data->acc_akunting == 'belum divalidasi') {
+                    return '<div class="btn bg-danger">' . $data->acc_akunting . '</div>';
+                } elseif ($data->acc_akunting == 'divalidasi') {
+                    return '<div class="btn bg-success">' . $data->acc_akunting . '</div>';
+                }
+            })
+            ->addColumn('status', function ($data) {
+                if ($data->status == 'belum diproses') {
+                    return '<div class="btn bg-danger">' . $data->status . '</div>';
+                } elseif ($data->status == 'selesai') {
+                    return '<div class="btn bg-success">' . $data->status . '</div>';
+                } elseif ($data->status == 'diproses') {
+                    return '<div class="btn bg-info">' . $data->status . '</div>';
+                } elseif ($data->status == 'perlu perbaikan') {
+                    return '<div class="btn bg-warning">' . $data->status . '</div>';
+                }
+            })
+            ->addColumn('action', function ($data) {
+                // if ($data->acc_direktur == 'divalidasi' || $data->acc_akunting == 'divalidasi') {
+                return '<a href="/logistik/purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
+                // } else {
+                //     return '<a href="purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a> <a href="purchase-order/' . $data->id . '/edit" class="btn btn-warning"><i class="fas fa-pen"></i> Edit</a>';
+                // }
+            })
+            ->rawColumns(['stat_dir', 'stat_akt', 'status', 'action', 'jenis_request'])
+            ->make(true);
+
+    }
+
+    public function viewDetailPOLogistik(PurchaseOrder $purchaseOrder)
+    {
+        $detail = DetailPO::where('po_id', $purchaseOrder->id)->with('barang')->get();
+        return view('purchase-order.logistik.detail-purchase-order')->with([
+            'po' => $purchaseOrder,
+            'detail' => $detail
+        ]);
     }
 }

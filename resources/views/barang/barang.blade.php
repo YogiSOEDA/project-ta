@@ -83,6 +83,55 @@
 
     <script>
         $(document).ready(function() {
+            // select2();
+            table();
+            select2();
+
+            // $('#databarang').DataTable({
+            //     ordering: true,
+            //     serverSide: true,
+            //     processing: true,
+            //     ajax: {
+            //         'url': $('#table-url-barang').val()
+            //     },
+            //     columns: [{
+            //             data: 'DT_RowIndex',
+            //             name: 'DT_RowIndex',
+            //             width: '10px',
+            //             orderable: false,
+            //             searchable: false
+            //         },
+            //         {
+            //             data: 'nama_barang',
+            //             name: 'nama_barang'
+            //         },
+            //         {
+            //             data: 'harga',
+            //             name: 'harga'
+            //         },
+            //         {
+            //             data: 'gambar',
+            //             name: 'gambar',
+            //             orderable: false,
+            //             searchable: false
+            //         },
+            //         {
+            //             data: 'action',
+            //             name: 'action',
+            //             orderable: false,
+            //             searchable: false
+            //         },
+            //     ],
+            //     responsive: true,
+            //     autoWidth: false,
+            //     columnDefs: [{
+            //         className: 'dt-center',
+            //         targets: '_all'
+            //     }],
+            // });
+        });
+
+        function table() {
             $('#databarang').DataTable({
                 ordering: true,
                 serverSide: true,
@@ -125,17 +174,21 @@
                     targets: '_all'
                 }],
             });
-        });
+        }
 
         function create() {
             $.get("{{ url('data-barang/create') }}", {}, function(data, status) {
+                selectSatuan();
                 $("#modal-page").html(data);
+                // select2();
                 $("#ModalBarang").modal('show');
             });
         }
 
         function show(id) {
             $.get("{{ url('data-barang/edit') }}/" + id, {}, function(data, status) {
+                // select2();
+                selectSatuan();
                 $("#modal-page").html(data);
                 $("#modal-title").html('Update Barang');
                 $("#ModalBarang").modal('show');
@@ -214,7 +267,18 @@
             });
         });
 
-        
+        function select2() {
+            var satuanSelect2 = $('#satuan_id').select2();
+            satuanSelect2.data('select2').$selection.css('height', '1%');
+        }
+
+        function selectSatuan() {
+            $.get("{{ url('select-satuan') }}", {}, function(data, status) {
+                $("#satuan_id").html(data);
+            })
+        }
+
+
 
         // window.addEventListener("load", function () {
         //     var ajax = new XMLHttpRequest();

@@ -23,9 +23,9 @@
                 </li>
                 {{-- @if (auth()->user()->role == 'admin' || auth()->user()->role == 'akunting' || auth()->user()->role == 'direktur' || auth()->user()->role == 'teknisi') --}}
                 <li
-                    class="nav-item {{ 'request-material' == request()->path() || 'purchase-order' == request()->path() || 'purchase-order/create' == request()->path() || 'direktur/purchase-order' == request()->path() || 'teknisi/request-material' == request()->path() || 'teknisi/request-material/create' == request()->path() ? 'menu-open' : 'menu' }}">
+                    class="nav-item {{ 'request-material' == request()->path() || 'purchase-order' == request()->path() || 'purchase-order/create' == request()->path() || 'direktur/purchase-order' == request()->path() || 'teknisi/request-material' == request()->path() || 'teknisi/request-material/create' == request()->path() || 'logistik/purchase-order' == request()->path() || 'logistik/request-material' == request()->path() ? 'menu-open' : 'menu' }}">
                     <a href="#"
-                        class="nav-link {{ 'request-material' == request()->path() || 'purchase-order' == request()->path() || 'purchase-order/create' == request()->path() || 'direktur/purchase-order' == request()->path() || 'teknisi/request-material' == request()->path() || 'teknisi/request-material/create' == request()->path() ? 'active' : '' }}">
+                        class="nav-link {{ 'request-material' == request()->path() || 'purchase-order' == request()->path() || 'purchase-order/create' == request()->path() || 'direktur/purchase-order' == request()->path() || 'teknisi/request-material' == request()->path() || 'teknisi/request-material/create' == request()->path() || 'logistik/purchase-order' == request()->path() || 'logistik/request-material' == request()->path() ? 'active' : '' }}">
                         <i class="nav-icon fas fa-archive"></i>
                         <p>
                             Purchasing
@@ -69,8 +69,15 @@
                         @endif
                         @if (auth()->user()->role == 'logistik')
                             <li class="nav-item">
+                                <a href="/logistik/request-material"
+                                    class="nav-link {{ 'logistik/request-material' == request()->path() ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Request Material</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="/logistik/purchase-order" {{-- <a href="{{ route('purchaseOrder') }}" --}}
-                                    class="nav-link {{ 'purchase-order' == request()->path() || 'purchase-order/create' == request()->path() ? 'active' : '' }}">
+                                    class="nav-link {{ 'logistik/purchase-order' == request()->path() || 'purchase-order/create' == request()->path() ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Purchase Order</p>
                                 </a>
@@ -144,9 +151,9 @@
                 @endif
                 @if (auth()->user()->role == 'admin')
                     <li
-                        class="nav-item {{ 'dataproyek' == request()->path() || 'data-barang' == request()->path() ? 'menu-open' : 'menu' }}">
+                        class="nav-item {{ 'dataproyek' == request()->path() || 'data-barang' == request()->path() || 'satuan' == request()->path() ? 'menu-open' : 'menu' }}">
                         <a href="#"
-                            class="nav-link {{ 'dataproyek' == request()->path() || 'data-barang' == request()->path() ? 'active' : '' }}">
+                            class="nav-link {{ 'dataproyek' == request()->path() || 'data-barang' == request()->path() || 'satuan' == request()->path() ? 'active' : '' }}">
                             <i class="nav-icon fas fa-archive"></i>
                             <p>
                                 Master Data
@@ -166,6 +173,13 @@
                                     class="nav-link {{ 'dataproyek' == request()->path() ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Data Proyek</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('satuan') }}"
+                                    class="nav-link {{ 'satuan' == request()->path() ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Data Satuan</p>
                                 </a>
                             </li>
                         </ul>
