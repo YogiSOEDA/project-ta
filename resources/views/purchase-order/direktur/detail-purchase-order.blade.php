@@ -94,10 +94,14 @@
                                                 class="btn btn-success">
                                                 <i class="fa-solid fa-check"></i> Accept
                                             </a>
-                                            <a href="/direktur/purchase-order/{{ $po->id }}/decline"
+                                            {{-- <a href="/direktur/purchase-order/{{ $po->id }}/decline"
                                                 class="btn btn-danger">
                                                 <i class="fa-solid fa-x"></i> Decline
-                                            </a>
+                                            </a> --}}
+                                            <button class="btn btn-danger" onclick="decline()">
+                                                <i class="fa-solid fa x"></i>
+                                                 Decline
+                                            </button>
                                         </div>
                                     </div>
                                 @endif
@@ -106,6 +110,7 @@
                     </div>
                 </div>
             </section>
+            @include('template.modal-komentar')
         </div>
 
         <footer class="main-footer">
@@ -148,6 +153,10 @@
             });
 
             $('.totalSum').text(totalBiaya);
+        }
+
+        function decline() {
+            $("#ModalKomentar").modal('show');
         }
     </script>
 </body>

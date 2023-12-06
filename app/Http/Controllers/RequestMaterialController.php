@@ -7,6 +7,7 @@ use App\Models\DetailPO;
 use App\Models\DetailRM;
 use App\Models\PurchaseOrder;
 use App\Models\RequestMaterial;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Mockery\Undefined;
@@ -153,6 +154,9 @@ class RequestMaterialController extends Controller
             ->editColumn('jenis_request', function ($data) {
                 return '<span style= "text-transform:capitalize">' . $data->jenis_request . '</span>';
             })
+            ->editColumn('tanggal_request', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tanggal_request)->format('d-m-Y');
+            })
             ->addColumn('status', function ($data) {
                 if ($data->status == 'belum diproses') {
                     return '<div class="btn bg-danger">' . $data->status . '</div>';
@@ -196,6 +200,12 @@ class RequestMaterialController extends Controller
             ->editColumn('jenis_request', function ($data) {
                 return '<span style= "text-transform:capitalize">' . $data->jenis_request . '</span>';
             })
+            ->editColumn('tanggal_request', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tanggal_request)->format('d-m-Y');
+            })
+            ->editColumn('tanggal_kebutuhan', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tanggal_kebutuhan)->format('d-m-Y');
+            })
             ->editColumn('status', function ($data) {
                 if ($data->status == 'belum diproses') {
                     return '<div class="btn bg-danger">' . $data->status . '</div>';
@@ -220,6 +230,12 @@ class RequestMaterialController extends Controller
             ->editColumn('jenis_request', function ($data) {
                 return '<span style= "text-transform:capitalize">' . $data->jenis_request . '</span>';
             })
+            ->editColumn('tanggal_request', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tanggal_request)->format('d-m-Y');
+            })
+            ->editColumn('tanggal_kebutuhan', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tanggal_kebutuhan)->format('d-m-Y');
+            })
             ->editColumn('status', function ($data) {
                 if ($data->status == 'belum diproses') {
                     return '<div class="btn bg-danger">' . $data->status . '</div>';
@@ -238,19 +254,27 @@ class RequestMaterialController extends Controller
 
     public function showRM(RequestMaterial $requestMaterial)
     {
+        $tgl_req = Carbon::createFromFormat('Y-m-d', $requestMaterial->tanggal_request)->format('d-m-Y');
+        $tgl_kbt = Carbon::createFromFormat('Y-m-d', $requestMaterial->tanggal_kebutuhan)->format('d-m-Y');
         $detail = DetailRM::where('rm_id', $requestMaterial->id)->where('jumlah', '>', 0)->with('barang')->get();
         return view('request-material.detail-request-material')->with([
             'rm' => $requestMaterial,
             'detail' => $detail,
+            'tgl_req' => $tgl_req,
+            'tgl_kbt' => $tgl_kbt
         ]);
     }
 
     public function prosesRM(RequestMaterial $requestMaterial)
     {
+        $tgl_req = Carbon::createFromFormat('Y-m-d', $requestMaterial->tanggal_request)->format('d-m-Y');
+        $tgl_kbt = Carbon::createFromFormat('Y-m-d', $requestMaterial->tanggal_kebutuhan)->format('d-m-Y');
         $detail = DetailRM::where('rm_id', $requestMaterial->id)->where('jumlah', '>', 0)->with('barang')->get();
         return view('request-material.proses-request-material')->with([
                 'rm' => $requestMaterial,
                 'detail' => $detail,
+                'tgl_req' => $tgl_req,
+                'tgl_kbt' => $tgl_kbt
             ]
         );
     }

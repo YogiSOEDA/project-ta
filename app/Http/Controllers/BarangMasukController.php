@@ -134,6 +134,9 @@ class BarangMasukController extends Controller
         $bm = BarangMasuk::query();
         return DataTables::of($bm)
             ->addIndexColumn()
+            ->editColumn('tanggal', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tanggal)->format('d-m-Y');
+            })
             ->addColumn('action', function ($data) {
                 return '<a href="barang-masuk/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
             })

@@ -61,7 +61,7 @@
                                                     <td>Tanggal Request</td>
                                                     <td>:</td>
                                                     <td>
-                                                        {{ $rm->tanggal_request }}
+                                                        {{ $tgl_req }}
                                                         <input type="hidden" class="form-control datetimepicker-input"
                                                             data-target="#reservationdate" id="input_tanggal"
                                                             name="input_tanggal" />
@@ -70,7 +70,7 @@
                                                 <tr>
                                                     <td>Tanggal Kebutuhan</td>
                                                     <td>:</td>
-                                                    <td>{{ $rm->tanggal_kebutuhan }}</td>
+                                                    <td>{{ $tgl_kbt }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td>Proyek</td>

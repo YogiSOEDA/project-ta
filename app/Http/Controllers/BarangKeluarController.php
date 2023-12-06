@@ -72,10 +72,13 @@ class BarangKeluarController extends Controller
      */
     public function show(BarangKeluar $barangKeluar)
     {
+        $tgl = Carbon::createFromFormat('Y-m-d', $barangKeluar->tanggal)->format('d-m-Y');
+
         $detail = DetailBK::where('bk_id', $barangKeluar->id)->with('barang')->get();
         return view('barang-keluar.detail-barang-keluar')->with([
             'bk' => $barangKeluar,
-            'detail' => $detail
+            'detail' => $detail,
+            'tgl' => $tgl
         ]);
     }
 

@@ -43,7 +43,7 @@
                                             <tr>
                                                 <td>Tanggal</td>
                                                 <td>:</td>
-                                                <td>{{ $bk->tanggal }}</td>
+                                                <td>{{ $tgl }}</td>
                                             </tr>
                                             <tr>
                                                 <td>Poyek</td>

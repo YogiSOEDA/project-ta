@@ -6,6 +6,7 @@ use App\Models\Barang;
 use App\Models\DetailPO;
 use App\Models\Proyek;
 use App\Models\PurchaseOrder;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
@@ -69,10 +70,14 @@ class PurchaseOrderController extends Controller
      */
     public function show(PurchaseOrder $purchaseOrder)
     {
-        $detail = DetailPO::where('po_id', $purchaseOrder->id)->with('barang')->get();
+        $tgl = Carbon::createFromFormat('Y-m-d', $purchaseOrder->tanggal)->format('d-m-Y');
+        $detail = DetailPO::where('po_id', $purchaseOrder->id)
+            ->with('barang')
+            ->get();
         return view('purchase-order.detail-purchase-order')->with([
             'po' => $purchaseOrder,
-            'detail' => $detail
+            'detail' => $detail,
+            'tgl' => $tgl,
         ]);
     }
 
@@ -81,10 +86,12 @@ class PurchaseOrderController extends Controller
      */
     public function edit(PurchaseOrder $purchaseOrder)
     {
-        $detail = DetailPO::where('po_id', $purchaseOrder->id)->with('barang')->get();
+        $detail = DetailPO::where('po_id', $purchaseOrder->id)
+            ->with('barang')
+            ->get();
         return view('purchase-order.edit-purchase-order')->with([
             'po' => $purchaseOrder,
-            'detail' => $detail
+            'detail' => $detail,
         ]);
     }
 
@@ -98,11 +105,10 @@ class PurchaseOrderController extends Controller
         $harga = $request->harga;
 
         foreach ($qty as $e => $qt) {
-            DetailPO::where('id', $id_detail_po[$e])
-                ->update([
-                    'jumlah' => $qty[$e],
-                    'harga' => $harga[$e],
-                ]);
+            DetailPO::where('id', $id_detail_po[$e])->update([
+                'jumlah' => $qty[$e],
+                'harga' => $harga[$e],
+            ]);
         }
 
         return redirect('/purchase-order');
@@ -120,7 +126,7 @@ class PurchaseOrderController extends Controller
     {
         $data = Proyek::all();
         return view('template.select-proyek')->with([
-            'data' => $data
+            'data' => $data,
         ]);
     }
 
@@ -128,7 +134,7 @@ class PurchaseOrderController extends Controller
     {
         $data = Barang::all();
         return view('template.select-barang')->with([
-            'data' => $data
+            'data' => $data,
         ]);
     }
 
@@ -151,6 +157,9 @@ class PurchaseOrderController extends Controller
             ->addIndexColumn()
             ->editColumn('jenis_request', function ($data) {
                 return '<span style= "text-transform:capitalize">' . $data->jenis_request . '</span>';
+            })
+            ->editColumn('tanggal', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tanggal)->format('d-m-Y');
             })
             ->addColumn('stat_dir', function ($data) {
                 if ($data->acc_direktur == 'belum divalidasi') {
@@ -267,19 +276,20 @@ class PurchaseOrderController extends Controller
     public function showPoDir(PurchaseOrder $purchaseOrder)
     {
         // $po = PurchaseOrder::where('id', $id)->with('proyek')->get();
-        $detail = DetailPO::where('po_id', $purchaseOrder->id)->with('barang')->get();
+        $detail = DetailPO::where('po_id', $purchaseOrder->id)
+            ->with('barang')
+            ->get();
         return view('purchase-order.direktur.detail-purchase-order')->with([
             'po' => $purchaseOrder,
-            'detail' => $detail
+            'detail' => $detail,
         ]);
     }
 
     public function accPoDir(PurchaseOrder $purchaseOrder)
     {
-        PurchaseOrder::where('id', $purchaseOrder->id)
-            ->update([
-                'acc_direktur' => 'divalidasi'
-            ]);
+        PurchaseOrder::where('id', $purchaseOrder->id)->update([
+            'acc_direktur' => 'divalidasi',
+        ]);
 
         return redirect('/direktur/purchase-order');
     }
@@ -358,19 +368,20 @@ class PurchaseOrderController extends Controller
     public function showPoAkt(PurchaseOrder $purchaseOrder)
     {
         // $po = PurchaseOrder::where('id', $id)->with('proyek')->get();
-        $detail = DetailPO::where('po_id', $purchaseOrder->id)->with('barang')->get();
+        $detail = DetailPO::where('po_id', $purchaseOrder->id)
+            ->with('barang')
+            ->get();
         return view('purchase-order.akunting.detail-purchase-order')->with([
             'po' => $purchaseOrder,
-            'detail' => $detail
+            'detail' => $detail,
         ]);
     }
 
     public function accPoAkt(PurchaseOrder $purchaseOrder)
     {
-        PurchaseOrder::where('id', $purchaseOrder->id)
-            ->update([
-                'acc_akunting' => 'divalidasi'
-            ]);
+        PurchaseOrder::where('id', $purchaseOrder->id)->update([
+            'acc_akunting' => 'divalidasi',
+        ]);
 
         return redirect('/akunting/purchase-order');
     }
@@ -419,15 +430,16 @@ class PurchaseOrderController extends Controller
             })
             ->rawColumns(['stat_dir', 'stat_akt', 'status', 'action', 'jenis_request'])
             ->make(true);
-
     }
 
     public function viewDetailPOLogistik(PurchaseOrder $purchaseOrder)
     {
-        $detail = DetailPO::where('po_id', $purchaseOrder->id)->with('barang')->get();
+        $detail = DetailPO::where('po_id', $purchaseOrder->id)
+            ->with('barang')
+            ->get();
         return view('purchase-order.logistik.detail-purchase-order')->with([
             'po' => $purchaseOrder,
-            'detail' => $detail
+            'detail' => $detail,
         ]);
     }
 }

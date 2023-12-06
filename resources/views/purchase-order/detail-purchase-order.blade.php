@@ -43,7 +43,7 @@
                                             <tr>
                                                 <td>Tanggal</td>
                                                 <td>:</td>
-                                                <td>{{ $po->tanggal }}</td>
+                                                <td>{{ $tgl }}</td>
                                             </tr>
                                             <tr>
                                                 <td>Poyek</td>
@@ -127,7 +127,7 @@
             $('#detail-po tbody tr').each(function(index, no) {
                 qty = $(this).children().eq(2).text();
                 harga = $(this).children().eq(3).text();
-                harga = harga.replace(/[^0-9\.]+/g,"");
+                harga = harga.replace(/[^0-9\.]+/g, "");
                 // console.log(harga);
                 total = qty * harga;
                 $(this).children().eq(4).text(total);
