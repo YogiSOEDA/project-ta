@@ -48,12 +48,12 @@
                                             <tr>
                                                 <td>Tanggal Request</td>
                                                 <td>:</td>
-                                                <td>{{ $rm->tanggal_request }}</td>
+                                                <td>{{ $tgl_req }}</td>
                                             </tr>
                                             <tr>
                                                 <td>Tanggal Kebutuhan</td>
                                                 <td>:</td>
-                                                <td>{{ $rm->tanggal_kebutuhan }}</td>
+                                                <td>{{ $tgl_kbt }}</td>
                                             </tr>
                                             <tr>
                                                 <td>Proyek</td>
@@ -81,7 +81,7 @@
                                                 <tr>
                                                     <td class="no-table"></td>
                                                     <td>{{ $item->barang->nama_barang }}</td>
-                                                    <td>{{ $item->jumlah }}</td>
+                                                    <td>{{ $item->jumlah }} {{ $item->barang->satuan->satuan }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

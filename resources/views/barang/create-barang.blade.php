@@ -3,11 +3,11 @@
     <div class="form-group">
         <label for="inputNamaBarang">Nama Barang</label>
         <input type="text" class="form-control" id="input_nama_barang" name="nama_barang"
-            placeholder="Masukkan Nama Barang">
+            placeholder="Masukkan Nama Barang" required>
     </div>
     <div class="form-group" id="select-satuan">
         <label>Nama Satuan</label>
-        <select class="form-control select2" id="satuan_id" name="satuan_id" style="width: 100%">
+        <select class="form-control select2" id="satuan_id" name="satuan_id" style="width: 100%" required>
         </select>
     </div>
     <div class="form-group">
@@ -19,7 +19,7 @@
                 </span>
             </div>
             <input type="number" class="form-control" id="input_harga" name="harga"
-                placeholder="Masukkan Harga Barang">
+                placeholder="Masukkan Harga Barang" required>
         </div>
     </div>
     <div class="form-group">

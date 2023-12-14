@@ -77,7 +77,7 @@
                                                 <tr>
                                                     <td class="no-table"></td>
                                                     <td>{{ $item->barang->nama_barang }}</td>
-                                                    <td>{{ $item->jumlah }}</td>
+                                                    <td>{{ $item->jumlah }} {{ $item->barang->satuan->satuan }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

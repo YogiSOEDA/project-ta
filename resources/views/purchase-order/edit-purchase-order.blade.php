@@ -26,7 +26,8 @@
                     </div>
                 </div>
             </section>
-            <form action="{{ route('updatePO') }}" method="post" enctype="multipart/form-data">
+            <form action="/purchase-order/update/{{ $po->id }}" method="post" enctype="multipart/form-data">
+            {{-- <form action="{{ route('updatePO') }}" method="post" enctype="multipart/form-data"> --}}
                 {{ csrf_field() }}
                 <section class="content">
                     <div class="container-fluid">

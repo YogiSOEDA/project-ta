@@ -7,21 +7,24 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div id="modal-page" class="card-body">
-                    <div class="form-group">
-                        <label for="">Keterangan</label>
-                        <textarea class="form-control" name="keterangan" id="keterangan" rows="3"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <div class="float-sm-right">
-                            <button class="btn btn-danger">Cancel</button>
-                            <button class="btn btn-success">Simpan</button>
-
+            <form action="/purchase-order/decline" method="post" enctype="multipart/form-data">
+                {{ csrf_field() }}
+                <div class="modal-body">
+                    <div id="modal-page" class="card-body">
+                        <div class="form-group">
+                            <label for="">Keterangan</label>
+                            <textarea class="form-control" name="keterangan" id="keterangan" rows="3"></textarea>
+                            <input type="hidden" name="id_po" id="id_po">
+                        </div>
+                        <div class="form-group">
+                            <div class="float-sm-right">
+                                <a href="#" class="btn btn-danger" onclick="cancel()">Cancel</a>
+                                <button class="btn btn-success" type="submit">Simpan</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </div>

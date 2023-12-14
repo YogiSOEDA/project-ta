@@ -78,6 +78,9 @@
             @include('template.footer')
         </footer>
     </div>
+
+    @include('sweetalert::alert')
+    
     <input type="hidden" id="table-url-barang" value="{{ route('tabelbarang') }}">
     @include('template.script')
 
@@ -177,6 +180,11 @@
         }
 
         function create() {
+            // Swal.fire({
+            //     icon: 'success',
+            //     title: 'Data Berhasil Disimpan'
+            // })
+
             $.get("{{ url('data-barang/create') }}", {}, function(data, status) {
                 selectSatuan();
                 $("#modal-page").html(data);

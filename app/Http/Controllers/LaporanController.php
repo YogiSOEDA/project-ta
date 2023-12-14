@@ -35,7 +35,7 @@ class LaporanController extends Controller
         ]);
     }
 
-    public function tableHistory(Proyek $proyek)
+    public function tableHistory(Request $request, Proyek $proyek)
     {
         $barang = BarangKeluar::join('detail_barang_keluar', 'barang_keluar.id', '=', 'detail_barang_keluar.bk_id')
             ->where('barang_keluar.proyek_id', '=', $proyek->id)
@@ -43,6 +43,14 @@ class LaporanController extends Controller
             ->join('satuan', 'barang.satuan_id', '=', 'satuan.id')
             ->select('barang_keluar.tanggal', 'detail_barang_keluar.jumlah', 'barang.nama_barang', 'satuan.satuan')
             ->get();
+
+            if($request->ajax())
+            {
+                if($request->filled('tgl_awal') && $request->filled('tgl_akhir'))
+                {
+                    $barang = $barang->whereBetween('tanggal',[$request->tgl_awal, $request->tgl_akhir]);
+                }
+            }
 
         return DataTables::of($barang)
             ->addIndexColumn()

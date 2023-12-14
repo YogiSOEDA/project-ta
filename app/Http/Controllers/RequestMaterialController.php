@@ -286,6 +286,12 @@ class RequestMaterialController extends Controller
         $qty = $request->qty;
         $harga = $request->harga;
 
+        // foreach ($qty as $e => $qt) {
+        //     $awok = str_replace(",","",$harga) ;
+        // }
+
+        // dd($awok);
+
         $id_po = PurchaseOrder::insertGetId([
             'proyek_id' => $request->proyek_id,
             'jenis_request' => $request->jenis_request,
@@ -306,7 +312,7 @@ class RequestMaterialController extends Controller
                 'po_id' => $id_po,
                 'barang_id' => $id_barang[$e],
                 'jumlah' => $qty[$e],
-                'harga' => $harga[$e],
+                'harga' => str_replace(",", "",$harga[$e]),
             ]);
         }
 
@@ -330,6 +336,12 @@ class RequestMaterialController extends Controller
             ->editColumn('jenis_request', function ($data) {
                 return '<span style= "text-transform:capitalize">' . $data->jenis_request . '</span>';
             })
+            ->editColumn('tanggal_request', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tanggal_request)->format('d-m-Y');
+            })
+            ->editColumn('tanggal_kebutuhan', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tanggal_kebutuhan)->format('d-m-Y');
+            })
             ->editColumn('status', function ($data) {
                 if ($data->status == 'belum diproses') {
                     return '<div class="btn bg-danger">' . $data->status . '</div>';
@@ -348,10 +360,14 @@ class RequestMaterialController extends Controller
 
     public function viewDetailRMLogistik(RequestMaterial $requestMaterial)
     {
+        $tgl_req = Carbon::createFromFormat('Y-m-d', $requestMaterial->tanggal_request)->format('d-m-Y');
+        $tgl_kbt = Carbon::createFromFormat('Y-m-d', $requestMaterial->tanggal_kebutuhan)->format('d-m-Y');
         $detail = DetailRM::where('rm_id', $requestMaterial->id)->where('jumlah', '>', 0)->with('barang')->get();
         return view('request-material.logistik.detail-request-material')->with([
             'rm' => $requestMaterial,
-            'detail' => $detail
+            'detail' => $detail,
+            'tgl_req' => $tgl_req,
+            'tgl_kbt' => $tgl_kbt
         ]);
     }
 }

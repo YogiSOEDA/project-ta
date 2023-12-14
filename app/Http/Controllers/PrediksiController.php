@@ -203,6 +203,7 @@ class PrediksiController extends Controller
         // $barang = Barang::findOrFail($request->barang)->with('satuan');
         // ddd($barang);
 
+        $wma = round($wma,2);
         return view('prediksi.modal-body-hasil-prediksi')->with([
             'wma' => $wma,
             'tahun' => $request->tahun_ramal,
@@ -279,20 +280,21 @@ class PrediksiController extends Controller
                 }
             })
             ->addColumn('total_error', function ($data) {
-                return $data->total_pengeluaran - $data->wma;
+                $error = $data->total_pengeluaran - $data->wma;
+                return round($error,2);
             })
             ->addColumn('total_mad', function ($data) {
                 $mad = $data->total_pengeluaran - $data->wma;
-                return abs($mad);
+                return round(abs($mad),2);
             })
             ->addColumn('total_mse', function ($data) {
                 $mad = $data->total_pengeluaran - $data->wma;
-                return $mad*$mad;
+                return round($mad * $mad,2) ;
             })
             ->addColumn('total_mape', function ($data) {
                 $error = $data->total_pengeluaran - $data->wma;
                 $mad = abs($error);
-                return $mad/ $data->total_pengeluaran*100;
+                return round($mad / $data->total_pengeluaran * 100,2) ;
             })
             ->editColumn('created_at', function ($data) {
                 return $data->created_at->format('d-m-Y');
@@ -395,6 +397,12 @@ class PrediksiController extends Controller
         $mape = $mad / $prediksi->total_pengeluaran * 100;
 
         $barang = Barang::findOrFail($prediksi->barang_id);
+
+        $error = round($error,2);
+        $mad = round($mad,2);
+        $mse = round($mse,2);
+        $mape = round($mape,2);
+
 
         return view('prediksi.detail-prediksi')->with([
             'bulan' => $bulan,

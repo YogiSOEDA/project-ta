@@ -23,6 +23,7 @@ class User extends Authenticatable
         'role',
         // 'email',
         'password',
+        'is_active',
     ];
 
     /**
@@ -57,5 +58,10 @@ class User extends Authenticatable
     public function barangMasuk()
     {
         return $this->hasMany(BarangMasuk::class);
+    }
+
+    public function komentar()
+    {
+        return $this->hasMany(Komentar::class);
     }
 }

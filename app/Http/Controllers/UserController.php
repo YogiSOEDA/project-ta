@@ -8,6 +8,7 @@ use App\Models\User;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\DataTables;
 
 class UserController extends Controller
 {
@@ -63,15 +64,37 @@ class UserController extends Controller
 
     public function postlogin(Request $request)
     {
-        if (Auth::attempt($request->only('username', 'password'))) {
-            return redirect('/dashboard');
+        $credentials = $request->validate([
+            'username' => 'required',
+            'password' => 'required'
+        ]);
+
+        $is_active = 'is_active';
+
+        $credentials[$is_active] = 1;
+        // dd($credentials);
+
+        if (Auth::attempt($credentials)) {
+            // if (Auth::attempt($request->only('username', 'password'))) {
+            $request->session()->regenerate();
+            // return redirect('/dashboard');
+            return redirect()->intended('/dashboard');
+            // return redirect()->intended('/dashboard')->with('success', 'Login Berhasil');
+            // return alert()->success
         }
-        return redirect('/login');
+        // return redirect('/login');
+
+        return back()->with('error', 'Login Gagal!');
     }
 
     public function logout()
     {
         Auth::logout();
+
+        request()->session()->invalidate();
+
+        request()->session()->regenerateToken();
+
         return redirect('/login');
     }
 
@@ -82,8 +105,88 @@ class UserController extends Controller
             'username' => $request->username,
             'role' => $request->role,
             'password' => bcrypt($request->password),
+            'is_active' => 1,
         ]);
 
         return view('login');
+    }
+
+    public function viewDataUser()
+    {
+        return view('user.user');
+    }
+
+    public function table()
+    {
+        $user = User::query();
+        return DataTables::of($user)
+            ->addIndexColumn()
+            ->addColumn('status', function ($data) {
+                if ($data->is_active == 1) {
+                    return '<p class="badge badge-success">Aktif</p>';
+                }
+                return '<p class="badge badge-danger">Nonaktif</p>';
+            })
+            ->addColumn('action', function ($data) {
+                if ($data->is_active == 0) {
+                    return '<button class="btn btn-success" onclick="status(' . $data->id . ')"> Aktifkan</button> <button class="btn btn-warning" onclick="show(' . $data->id . ')"><i class="fas fa-pen"></i> Edit</button>';
+                }
+                return '<button class="btn btn-danger" onclick="status(' . $data->id . ')"> Nonaktifkan</button> <button class="btn btn-warning" onclick="show(' . $data->id . ')"><i class="fas fa-pen"></i> Edit</button>';
+                // return view('template.btn-action')->with(['data' => $data]); //'<button class="btn btn-warning" onclick="show('.$data->id.')"><i class="fas fa-pen"></i> Edit</button>';  //'<a href="#" class="btn btn-warning"><i class="fas fa-pen"></i> Edit</a>';
+            })
+            ->rawColumns(['status', 'action'])
+            ->make(true);
+    }
+
+    public function create()
+    {
+        return view('user.create-user');
+    }
+
+    public function show(User $user)
+    {
+        return view('user.update-user')->with([
+            'data' => $user
+        ]);
+    }
+
+    public function updateStatus(User $user)
+    {
+        if ($user->is_active == 0) {
+            User::where('id', $user->id)
+                ->update([
+                    'is_active' => 1,
+                ]);
+        } else {
+            User::where('id', $user->id)
+                ->update([
+                    'is_active' => 0,
+                ]);
+        }
+    }
+
+    public function update(Request $request, User $user)
+    {
+        User::where('id', $user->id)
+            ->update([
+                'name' => $request->name,
+                'username' => $request->username,
+                'role' => $request->role,
+            ]);
+    }
+
+    public function store(Request $request)
+    {
+        // return $request;
+        // dd($request);
+        User::create([
+            'name' => $request->name,
+            'username' => $request->username,
+            'role' => $request->role,
+            'password' => bcrypt($request->password),
+            'is_active' => 1,
+        ]);
+
+        return redirect('/data-user')->withSuccess('Data Berhasil Disimpan');
     }
 }

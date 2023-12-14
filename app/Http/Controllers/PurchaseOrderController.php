@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Barang;
 use App\Models\DetailPO;
+use App\Models\Komentar;
 use App\Models\Proyek;
 use App\Models\PurchaseOrder;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 
@@ -104,6 +106,10 @@ class PurchaseOrderController extends Controller
         $qty = $request->qty;
         $harga = $request->harga;
 
+        PurchaseOrder::where('id', $purchaseOrder->id)->update([
+            'status' => 'belum diproses',
+        ]);
+
         foreach ($qty as $e => $qt) {
             DetailPO::where('id', $id_detail_po[$e])->update([
                 'jumlah' => $qty[$e],
@@ -187,7 +193,9 @@ class PurchaseOrderController extends Controller
                 }
             })
             ->addColumn('action', function ($data) {
-                if ($data->acc_direktur == 'divalidasi' || $data->acc_akunting == 'divalidasi') {
+                if ($data->status == 'perlu perbaikan') {
+                    return '<a href="purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a> <a href="purchase-order/' . $data->id . '/edit" class="btn btn-warning"><i class="fas fa-pen"></i> Edit</a>';
+                } elseif ($data->acc_direktur == 'divalidasi' || $data->acc_akunting == 'divalidasi') {
                     return '<a href="purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
                 } else {
                     return '<a href="purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a> <a href="purchase-order/' . $data->id . '/edit" class="btn btn-warning"><i class="fas fa-pen"></i> Edit</a>';
@@ -215,6 +223,9 @@ class PurchaseOrderController extends Controller
             ->editColumn('jenis_request', function ($data) {
                 return '<span style= "text-transform:capitalize">' . $data->jenis_request . '</span>';
             })
+            ->editColumn('tanggal', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tanggal)->format('d-m-Y');
+            })
             ->addColumn('stat_dir', function ($data) {
                 if ($data->acc_direktur == 'belum divalidasi') {
                     return '<div class="btn bg-danger">' . $data->acc_direktur . '</div>';
@@ -230,10 +241,17 @@ class PurchaseOrderController extends Controller
                 }
             })
             ->addColumn('action', function ($data) {
+                if ($data->status == 'perlu perbaikan') {
+                    $komen = Komentar::where('po_id', $data->id)->where('user_id', Auth::user()->id)->where('komentar', '!=', 'Acc')->count();
+
+                    if ($komen >= 1) {
+                        return '<a href="/direktur/purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
+                    }
+                }
                 // if ($data->acc_direktur == 'divalidasi' || $data->acc_akunting == 'divalidasi') {
                 //     return '<a href="purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
                 // } else {
-                return '<a href="/direktur/purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a> <a href="/direktur/purchase-order/' . $data->id . '/acc" class="btn btn-success"><i class="fa-solid fa-check"></i> Accept</a> <button class="btn btn-danger" onclick="decline()"><i class="fa-solid fa-x"></i> Decline</button>'; //<a href="/direktur/purchase-order/' . $data->id . '/decline" class="btn btn-danger"><i class="fa-solid fa-x"></i> Decline</a>';
+                return '<a href="/direktur/purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a> <a href="/direktur/purchase-order/' . $data->id . '/acc" class="btn btn-success"><i class="fa-solid fa-check"></i> Accept</a> <button class="btn btn-danger" onclick="decline(' . $data->id . ')"><i class="fa-solid fa-x"></i> Decline</button>'; //<a href="/direktur/purchase-order/' . $data->id . '/decline" class="btn btn-danger"><i class="fa-solid fa-x"></i> Decline</a>';
                 // }
             })
             ->rawColumns(['stat_dir', 'stat_akt', 'status', 'action', 'jenis_request'])
@@ -247,6 +265,9 @@ class PurchaseOrderController extends Controller
             ->addIndexColumn()
             ->editColumn('jenis_request', function ($data) {
                 return '<span style= "text-transform:capitalize">' . $data->jenis_request . '</span>';
+            })
+            ->editColumn('tanggal', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tanggal)->format('d-m-Y');
             })
             ->addColumn('stat_dir', function ($data) {
                 if ($data->acc_direktur == 'belum divalidasi') {
@@ -279,16 +300,35 @@ class PurchaseOrderController extends Controller
         $detail = DetailPO::where('po_id', $purchaseOrder->id)
             ->with('barang')
             ->get();
+
+        $komen = Komentar::where('po_id', $purchaseOrder->id)
+            ->where('user_id', Auth::user()->id)
+            ->where('komentar', '!=', 'Acc')
+            ->count();
+
+        $tgl = Carbon::createFromFormat('Y-m-d', $purchaseOrder->tanggal)->format('d-m-Y');
+
         return view('purchase-order.direktur.detail-purchase-order')->with([
             'po' => $purchaseOrder,
             'detail' => $detail,
+            'komen' => $komen,
+            'tgl' => $tgl,
         ]);
     }
 
     public function accPoDir(PurchaseOrder $purchaseOrder)
     {
+        $user = Auth::user()->id;
+        // dd($user);
+
         PurchaseOrder::where('id', $purchaseOrder->id)->update([
             'acc_direktur' => 'divalidasi',
+        ]);
+
+        Komentar::create([
+            'po_id' => $purchaseOrder->id,
+            'user_id' => $user,
+            'komentar' => 'Acc',
         ]);
 
         return redirect('/direktur/purchase-order');
@@ -306,6 +346,9 @@ class PurchaseOrderController extends Controller
             ->addIndexColumn()
             ->editColumn('jenis_request', function ($data) {
                 return '<span style= "text-transform:capitalize">' . $data->jenis_request . '</span>';
+            })
+            ->editColumn('tanggal', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tanggal)->format('d-m-Y');
             })
             ->addColumn('stat_dir', function ($data) {
                 if ($data->acc_direktur == 'belum divalidasi') {
@@ -340,6 +383,9 @@ class PurchaseOrderController extends Controller
             ->editColumn('jenis_request', function ($data) {
                 return '<span style= "text-transform:capitalize">' . $data->jenis_request . '</span>';
             })
+            ->editColumn('tanggal', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tanggal)->format('d-m-Y');
+            })
             ->addColumn('stat_dir', function ($data) {
                 if ($data->acc_direktur == 'belum divalidasi') {
                     return '<div class="btn bg-danger">' . $data->acc_direktur . '</div>';
@@ -371,16 +417,35 @@ class PurchaseOrderController extends Controller
         $detail = DetailPO::where('po_id', $purchaseOrder->id)
             ->with('barang')
             ->get();
+
+        $komen = Komentar::where('po_id', $purchaseOrder->id)
+            ->where('user_id', Auth::user()->id)
+            ->where('komentar', '!=', 'Acc')
+            ->count();
+
+        $tgl = Carbon::createFromFormat('Y-m-d', $purchaseOrder->tanggal)->format('d-m-Y');
+
         return view('purchase-order.akunting.detail-purchase-order')->with([
             'po' => $purchaseOrder,
             'detail' => $detail,
+            'komen' => $komen,
+            'tgl' => $tgl,
         ]);
     }
 
     public function accPoAkt(PurchaseOrder $purchaseOrder)
     {
+        $user = Auth::user()->id;
+
         PurchaseOrder::where('id', $purchaseOrder->id)->update([
             'acc_akunting' => 'divalidasi',
+        ]);
+
+        // dd($user);
+        Komentar::create([
+            'po_id' => $purchaseOrder->id,
+            'user_id' => $user,
+            'komentar' => 'Acc',
         ]);
 
         return redirect('/akunting/purchase-order');
@@ -395,6 +460,9 @@ class PurchaseOrderController extends Controller
             ->addIndexColumn()
             ->editColumn('jenis_request', function ($data) {
                 return '<span style= "text-transform:capitalize">' . $data->jenis_request . '</span>';
+            })
+            ->editColumn('tanggal', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tanggal)->format('d-m-Y');
             })
             ->addColumn('stat_dir', function ($data) {
                 if ($data->acc_direktur == 'belum divalidasi') {
@@ -441,5 +509,39 @@ class PurchaseOrderController extends Controller
             'po' => $purchaseOrder,
             'detail' => $detail,
         ]);
+    }
+
+    public function insertKomentar(Request $request)
+    {
+        // ddd($request);
+
+        Komentar::create([
+            'po_id' => $request->id_po,
+            'user_id' => $request->user()->id,
+            'komentar' => $request->keterangan,
+        ]);
+
+        PurchaseOrder::where('id', $request->id_po)
+            ->update([
+                'status' => 'perlu perbaikan',
+            ]);
+
+        if ($request->user()->role == 'direktur') {
+            return redirect('/direktur/purchase-order');
+        } elseif ($request->user()->role == 'akunting') {
+            return redirect('/akunting/purchase-order');
+        }
+    }
+
+    public function tableKeterangan(PurchaseOrder $purchaseOrder)
+    {
+        $ket = Komentar::where('po_id', $purchaseOrder->id)->get();
+        return DataTables::of($ket)
+            ->addIndexColumn()
+            ->addColumn('user', function ($data) {
+                return ucfirst($data->user->role);
+                // return $data->user->role;
+            })
+            ->make(true);
     }
 }

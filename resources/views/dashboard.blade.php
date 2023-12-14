@@ -240,6 +240,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
             @include('template.footer')
         </footer>
     </div>
+
+    {{-- @include('sweetalert::alert') --}}
     <!-- ./wrapper -->
 
     <!-- REQUIRED SCRIPTS -->

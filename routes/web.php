@@ -59,7 +59,8 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin']], function () {
     Route::get('/purchase-order/tabelpo', [PurchaseOrderController::class, 'table']);
     Route::get('/purchase-order/show/{id}', [PurchaseOrderController::class, 'show']);
     Route::resource('/purchase-order', PurchaseOrderController::class);
-    Route::post('/purchase-order/update', [PurchaseOrderController::class, 'update'])->name('updatePO');
+    Route::post('/purchase-order/update/{purchase_order}', [PurchaseOrderController::class, 'update'])->name('updatePO');
+    Route::get('/purchase-order/tabel-komentar/{purchase_order}', [PurchaseOrderController::class, 'tableKeterangan']);
     // Route::get('/purchase-order/detail-table/{id}', [PurchaseOrderController::class, 'tableDetail']);
 
     // Route::get('/barang-masuk', [BarangMasukController::class, 'index'])->name('barangMasuk');
@@ -81,12 +82,14 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin']], function () {
     Route::get('/request-material/{request_material}/proses', [RequestMaterialController::class, 'prosesRM']);
     Route::post('/request-material/store-po', [RequestMaterialController::class, 'storePO'])->name('storeRMtoPO');
     // Route::get('/purchase-order', [PurchaseController::class, 'purchase'])->name('purchaseOrder');
-    Route::get('/prediksi', [PrediksiController::class, 'index'])->name('prediksi');
-    Route::get('/prediksi/hasil', [PrediksiController::class, 'store']);
-    Route::get('/prediksi/tabel', [PrediksiController::class, 'table']);
-    Route::get('/prediksi/{barang}', [PrediksiController::class, 'show']);
-    Route::get('/prediksi/tabel-histori/{barang}', [PrediksiController::class, 'tableHistory']);
-    Route::get('/prediksi/detail/{prediksi}', [PrediksiController::class, 'showDetailPerhitungan']);
+
+
+    // Route::get('/prediksi', [PrediksiController::class, 'index'])->name('prediksi');
+    // Route::get('/prediksi/hasil', [PrediksiController::class, 'store']);
+    // Route::get('/prediksi/tabel', [PrediksiController::class, 'table']);
+    // Route::get('/prediksi/{barang}', [PrediksiController::class, 'show']);
+    // Route::get('/prediksi/tabel-histori/{barang}', [PrediksiController::class, 'tableHistory']);
+    // Route::get('/prediksi/detail/{prediksi}', [PrediksiController::class, 'showDetailPerhitungan']);
 
     Route::get('/barang-masuk/tabelbm', [BarangMasukController::class, 'tableBm']);
     Route::get('/barang-keluar/tabelbk', [BarangKeluarController::class, 'table']);
@@ -156,12 +159,37 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin,akunting']], function ()
     // Route::get('/laporan/tabel-histori-search', [LaporanController::class, 'awok']);
 });
 
+Route::group(['middleware' => ['auth', 'rolecheck:direktur,akunting']], function () {
+    Route::post('/purchase-order/decline', [PurchaseOrderController::class, 'insertKomentar']);
+});
+
+Route::group(['middleware' => ['auth', 'rolecheck:direktur,admin']], function () {
+    // Route::post('/purchase-order/decline', [PurchaseOrderController::class, 'insertKomentar']);
+    Route::get('/prediksi', [PrediksiController::class, 'index'])->name('prediksi');
+    Route::get('/prediksi/hasil', [PrediksiController::class, 'store']);
+    Route::get('/prediksi/tabel', [PrediksiController::class, 'table']);
+    Route::get('/prediksi/{barang}', [PrediksiController::class, 'show']);
+    Route::get('/prediksi/tabel-histori/{barang}', [PrediksiController::class, 'tableHistory']);
+    Route::get('/prediksi/detail/{prediksi}', [PrediksiController::class, 'showDetailPerhitungan']);
+
+    Route::get('/select-barang', [PurchaseOrderController::class, 'viewBarang']);
+    Route::get('/select-years', [PrediksiController::class, 'viewYears']);
+});
+
 Route::group(['middleware' => ['auth', 'rolecheck:direktur']], function () {
     Route::get('/direktur/purchase-order', [PurchaseOrderController::class, 'viewPoDirektur']);
     Route::get('/direktur/purchase-order/tabelpo', [PurchaseOrderController::class, 'tablePoDir']);
     Route::get('/direktur/purchase-order/tabelpoacc', [PurchaseOrderController::class, 'tablePoDirAcc']);
     Route::get('/direktur/purchase-order/{purchase_order}', [PurchaseOrderController::class, 'showPoDir']);
     Route::get('/direktur/purchase-order/{purchase_order}/acc', [PurchaseOrderController::class, 'accPoDir']);
+
+    Route::get('/data-user', [UserController::class, 'viewDataUser'])->name('dataUser');
+    Route::get('/data-user/tabel', [UserController::class, 'table']);
+    Route::get('/data-user/create', [UserController::class, 'create']);
+    Route::get('/data-user/{user}', [UserController::class, 'show']);
+    Route::get('/data-user/update-status/{user}', [UserController::class, 'updateStatus']);
+    Route::get('/data-user/update/{user}', [UserController::class, 'update']);
+    Route::post('/data-user/store', [UserController::class, 'store']);
 });
 
 Route::group(['middleware' => ['auth', 'rolecheck:teknisi']], function () {

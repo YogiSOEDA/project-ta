@@ -65,8 +65,7 @@ class DataBarangController extends Controller
             ]);
         }
 
-
-        return redirect('/data-barang');
+        return redirect()->intended('/data-barang')->with('success', 'Data Berhasil Disimpan');
     }
 
     public function show(string $id)

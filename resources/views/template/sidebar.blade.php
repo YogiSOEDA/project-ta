@@ -131,7 +131,7 @@
                         </ul>
                     </li>
                 @endif
-                @if (auth()->user()->role == 'admin')
+                @if (auth()->user()->role == 'admin' || auth()->user()->role == 'direktur')
                     <li class="nav-item">
                         <a href="{{ route('prediksi') }}"
                             class="nav-link {{ 'prediksi' == request()->path() ? 'active' : '' }}">
@@ -149,11 +149,11 @@
                         </a>
                     </li>
                 @endif
-                @if (auth()->user()->role == 'admin')
+                @if (auth()->user()->role == 'admin' || auth()->user()->role == 'direktur')
                     <li
-                        class="nav-item {{ 'dataproyek' == request()->path() || 'data-barang' == request()->path() || 'satuan' == request()->path() ? 'menu-open' : 'menu' }}">
+                        class="nav-item {{ 'dataproyek' == request()->path() || 'data-barang' == request()->path() || 'satuan' == request()->path() || 'data-user' == request()->path() ? 'menu-open' : 'menu' }}">
                         <a href="#"
-                            class="nav-link {{ 'dataproyek' == request()->path() || 'data-barang' == request()->path() || 'satuan' == request()->path() ? 'active' : '' }}">
+                            class="nav-link {{ 'dataproyek' == request()->path() || 'data-barang' == request()->path() || 'satuan' == request()->path() || 'data-user' == request()->path() ? 'active' : '' }}">
                             <i class="nav-icon fas fa-archive"></i>
                             <p>
                                 Master Data
@@ -161,27 +161,38 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="{{ route('databarang') }}"
-                                    class="nav-link {{ 'data-barang' == request()->path() ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Data Barang</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('dataproyek') }}"
-                                    class="nav-link {{ 'dataproyek' == request()->path() ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Data Proyek</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('satuan') }}"
-                                    class="nav-link {{ 'satuan' == request()->path() ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Data Satuan</p>
-                                </a>
-                            </li>
+                            @if (auth()->user()->role == 'admin')
+                                <li class="nav-item">
+                                    <a href="{{ route('databarang') }}"
+                                        class="nav-link {{ 'data-barang' == request()->path() ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Data Barang</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('dataproyek') }}"
+                                        class="nav-link {{ 'dataproyek' == request()->path() ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Data Proyek</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('satuan') }}"
+                                        class="nav-link {{ 'satuan' == request()->path() ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Data Satuan</p>
+                                    </a>
+                                </li>
+                            @endif
+                            @if (auth()->user()->role == 'direktur')
+                                <li class="nav-item">
+                                    <a href="{{ route('dataUser') }}"
+                                        class="nav-link {{ 'data-user' == request()->path() ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Data User</p>
+                                    </a>
+                                </li>
+                            @endif
                         </ul>
                     </li>
                 @endif

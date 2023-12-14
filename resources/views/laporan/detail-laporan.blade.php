@@ -122,6 +122,10 @@
                 processing: true,
                 ajax: {
                     'url': url,
+                    data: function(data) {
+                        data.tgl_awal = $('#input_tanggal_awal').val();
+                        data.tgl_akhir = $('#input_tanggal_akhir').val();
+                    },
                     // 'data': function(data) {
                     //     // data.tgl_awal =
                     // }
@@ -157,16 +161,18 @@
         }
 
         function tampilkanDataTertentu() {
-            var proyek_id = $("#proyek_id").val();
-            var tgl_awal = $("#input_tanggal_awal").val();
-            var tgl_akhir = $("#input_tanggal_akhir").val();
+            $('#pemakaian-barang').DataTable().ajax.reload();
 
-            if (tgl_awal == "" || tgl_akhir == "") {
-                alert("Both date required");
-            } else {
-                $('#pemakaian-barang').DataTable().destroy();
-                fetch(tgl_awal, tgl_akhir);
-            }
+            // var proyek_id = $("#proyek_id").val();
+            // var tgl_awal = $("#input_tanggal_awal").val();
+            // var tgl_akhir = $("#input_tanggal_akhir").val();
+
+            // if (tgl_awal == "" || tgl_akhir == "") {
+            //     alert("Both date required");
+            // } else {
+            //     $('#pemakaian-barang').DataTable().destroy();
+            //     fetch(tgl_awal, tgl_akhir);
+            // }
 
             // $.ajax({
             //     type: "get",

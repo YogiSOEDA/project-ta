@@ -98,6 +98,16 @@
         $(document).ready(function() {
             table();
             table2();
+
+            $('#close').on('click', function() {
+                $('#keterangan').val('');
+            })
+
+            // var btnClose = $('#close');
+
+            // btnClose.addEventListener('click', () => {
+            //     $('#keterangan').val('');
+            // })
         });
 
         function table() {
@@ -203,9 +213,16 @@
             });
         }
 
-        function decline() {
+        function decline(id) {
             $("#ModalKomentar").modal('show');
+            $('#id_po').val(id);
         }
+
+        function cancel() {
+            $('#keterangan').val('');
+            $('#ModalKomentar').modal('hide');
+        }
+
     </script>
 </body>
 
