@@ -25,7 +25,9 @@ class UserController extends Controller
                 'rm' => $rm
             ]);
         } elseif ($user == 'teknisi') {
-            $rm = RequestMaterial::where('status', '!=', 'selesai')->count();
+            $rm = RequestMaterial::where('status', '!=', 'selesai')
+            ->where('user_id', Auth::user()->id)
+            ->count();
 
             return view('dashboard')->with([
                 'rm' => $rm

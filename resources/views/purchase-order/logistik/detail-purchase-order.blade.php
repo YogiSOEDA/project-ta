@@ -26,6 +26,7 @@
                     </div>
                 </div>
             </section>
+
             <section class="content">
                 <div class="container-fluid">
                     <div class="row">
@@ -43,7 +44,7 @@
                                             <tr>
                                                 <td>Tanggal</td>
                                                 <td>:</td>
-                                                <td>{{ $po->tanggal }}</td>
+                                                <td>{{ $tgl }}</td>
                                             </tr>
                                             <tr>
                                                 <td>Poyek</td>
@@ -70,16 +71,16 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($detail as $dtl)
-                                                <tr>
-                                                    <td class="no-table"></td>
-                                                    <td>{{ $dtl->barang->nama_barang }}</td>
-                                                    <td>{{ $dtl->jumlah }}</td>
-                                                    <td>
-                                                        {{-- {{ $dtl->harga }} --}}
-                                                        {{ number_format($dtl->harga) }}
-                                                    </td>
-                                                    <td class="money"></td>
-                                                </tr>
+                                            <tr>
+                                                <td class="no-table"></td>
+                                                <td>{{ $dtl->barang->nama_barang }}</td>
+                                                <td>{{ $dtl->jumlah }}</td>
+                                                <td>
+                                                    {{-- {{ $dtl->harga }} --}}
+                                                    {{ number_format($dtl->harga) }}
+                                                </td>
+                                                <td class="money"></td>
+                                            </tr>
                                             @endforeach
                                         </tbody>
                                         <tfoot>
@@ -91,11 +92,13 @@
                                     </table>
                                 </div>
                                 @if ( $po->status == 'belum diproses')
+                                <form action="/logistik/purchase-order/proses/{{$po->id}}" method="get" enctype="multipart/form-data">
                                     <div class="card-footer">
-                                        <button class="btn btn-success btn-block">
+                                        <button type="submit" class="btn btn-success btn-block">
                                             PROSES PURCHASE ORDER
                                         </button>
                                     </div>
+                                </form>
                                 @endif
                             </div>
                         </div>
@@ -150,6 +153,54 @@
             });
 
             $('.totalSum').text(totalBiaya);
+        }
+
+        function prosesPO(id)
+        {
+            $.get("{{ url('logistik/purchase-order/proses') }}/" + id, {}, function(data, status) {
+
+            })
+            // const swalWithBootstrapButtons = Swal.mixin({
+            //         customClass: {
+            //             confirmButton: "btn btn-success",
+            //             cancelButton: "btn btn-danger"
+            //         },
+            //         buttonsStyling: false
+            //     });
+            //     swalWithBootstrapButtons.fire({
+            //         title: "Anda Yakin?",
+            //         text: "Anda akan mengubah data user ini",
+            //         icon: "warning",
+            //         showCancelButton: true,
+            //         confirmButtonText: "Yes",
+            //         cancelButtonText: "No",
+            //         reverseButtons: true
+            //     }).then((result) => {
+            //         if (result.isConfirmed) {
+            //             $.ajax({
+            //                 type: "get",
+            //                 url: "{{ url('data-user/update') }}/" + id,
+            //                 data: "name=" + name + "&username=" + username + "&role=" + role,
+            //                 success: function(data) {
+            //                     swalWithBootstrapButtons.fire({
+            //                         title: "Berhasil!",
+            //                         text: "Data berhasil diubah",
+            //                         icon: "success"
+            //                     });
+            //                     $("#close").click();
+            //                     $('#data-user').DataTable().ajax.reload();
+            //                 }
+            //             })
+            //         } else if (
+            //             result.dismiss === Swal.DismissReason.cancel
+            //         ) {
+            //             swalWithBootstrapButtons.fire({
+            //                 title: "Gagal",
+            //                 text: "Data gagal diubah",
+            //                 icon: "error"
+            //             });
+            //         }
+            //     });
         }
     </script>
 </body>

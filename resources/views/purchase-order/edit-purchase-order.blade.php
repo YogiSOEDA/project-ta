@@ -90,20 +90,20 @@
                                                         </td>
                                                         <td>
                                                             <div class="input-group">
-                                                                <input type="number" class="form-control harga"
+                                                                <input type="text" class="form-control harga money"
                                                                     id="harga" name="harga[]"
                                                                     value="{{ $dtl->harga }}"
                                                                     onchange="totalHarga(this)">
                                                             </div>
                                                         </td>
-                                                        <td class="total"></td>
+                                                        <td class="total money"></td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
                                             <tfoot>
                                                 <tr>
                                                     <td colspan="4">Total</td>
-                                                    <td class="totalSum"></td>
+                                                    <td class="totalSum money"></td>
                                                 </tr>
                                             </tfoot>
                                         </table>
@@ -134,6 +134,8 @@
             numberingTable();
             ttlHarga();
             totalSum();
+
+            $(".money").simpleMoneyFormat();
         });
 
         function numberingTable() {
@@ -150,6 +152,7 @@
             $('#barang-po tbody tr').each(function(index, no) {
                 qty = $(this).find('.qty').val();
                 harga = $(this).find('.harga').val();
+                harga = harga.replace(/[^0-9\.]+/g, "");
                 total = qty * harga;
                 $(this).children().eq(4).text(total);
             });
@@ -159,20 +162,53 @@
             var parent = $(row).closest('#barang-po tbody tr');
             var qty = parent.find('.qty').val() == "" ? 1 : parent.find('.qty').val();
             var harga = parent.find('.harga').val() == "" ? 1 : parent.find('.harga').val();
+            harga = harga.replace(/[^0-9\.]+/g, "");
             var total = qty * harga;
+            total = total.toLocaleString('en-US', {
+                    valute: 'USD',
+                });
             parent.find('.total').text(total);
 
-            totalSum();
+            totalBiayaSum();
         }
 
         function totalSum() {
             var totalBiaya = 0;
             $('#barang-po tbody tr').each(function(index) {
-                totalBiaya += $(this).children().eq(4).text() * 1;
+                biaya = $(this).children().eq(4).text() * 1;
+                // totalBiaya += $(this).children().eq(4).text() * 1;
+                totalBiaya += biaya;
             });
 
+            totalBiaya = totalBiaya.toLocaleString('en-US', {
+                    valute: 'USD',
+                });
             $('.totalSum').text(totalBiaya);
         }
+
+        function totalBiayaSum() {
+                var biaya = 'text';
+                var biayaReplace = 'text';
+                var biayaNumber = 0;
+                var totalBiaya = 0;
+                $('#barang-po tbody tr').each(function(index) {
+                    biaya = $(this).children().eq(4).text();
+                    biayaReplace = biaya.replace(/[^0-9\.]+/g, "");
+                    biayaNumber = biayaReplace*1;
+                    // console.log(biayaNumber);
+                    // totalBiaya += $(this).children().eq(4).text() * 1;
+                    // console.log(totalBiaya);
+                    totalBiaya += biayaNumber;
+
+                    // console.log(totalBiaya);
+                });
+
+                totalBiaya = totalBiaya.toLocaleString('en-US', {
+                    valute: 'USD',
+                });
+
+                $('.totalSum').text(totalBiaya);
+            }
     </script>
 </body>
 

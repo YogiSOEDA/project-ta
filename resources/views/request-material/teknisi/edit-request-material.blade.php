@@ -54,12 +54,12 @@
                                             <tr>
                                                 <td width="20%">Tanggal Request</td>
                                                 <td>:</td>
-                                                <td width="50%">{{ $rm->tanggal_request }}</td>
+                                                <td width="50%">{{ $tgl_req }}</td>
                                             </tr>
                                             <tr>
                                                 <td width="20%">Tanggal Kebutuhan</td>
                                                 <td>:</td>
-                                                <td width="50%">{{ $rm->tanggal_kebutuhan }}</td>
+                                                <td width="50%">{{ $tgl_keb }}</td>
                                             </tr>
                                             <tr>
                                                 <td width="20%">Proyek</td>

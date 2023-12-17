@@ -83,11 +83,15 @@
                     </div>
                 </div>
             </section>
+
+            @include('template.modal-komentar')
         </div>
 
         <footer class="main-footer">
             @include('template.footer')
         </footer>
+
+        @include('sweetalert::alert')
     </div>
 
     @include('template.script')
@@ -96,6 +100,10 @@
         $(document).ready(function() {
             table();
             table2();
+
+            $('#close').on('click', function() {
+                $('#keterangan').val('');
+            })
         });
 
         function table() {
@@ -200,6 +208,64 @@
                 }],
             });
         }
+
+        function decline(id) {
+            $("#ModalKomentar").modal('show');
+            $('#id_po').val(id);
+        }
+
+        function cancel() {
+            $('#keterangan').val('');
+            $('#ModalKomentar').modal('hide');
+        }
+
+        // function confirmDecline()
+        // {
+        //     var id_po = $('#id_po').val();
+        //     var keterangan = $('#keterangan').val();
+
+        //     const swalWithBootstrapButtons = Swal.mixin({
+        //             customClass: {
+        //                 confirmButton: "btn btn-success",
+        //                 cancelButton: "btn btn-danger"
+        //             },
+        //             buttonsStyling: false
+        //         });
+        //         swalWithBootstrapButtons.fire({
+        //             title: "Anda Yakin?",
+        //             text: "Anda akan menolak purchase order ini",
+        //             icon: "warning",
+        //             showCancelButton: true,
+        //             confirmButtonText: "Yes",
+        //             cancelButtonText: "No",
+        //             reverseButtons: true
+        //         }).then((result) => {
+        //             if (result.isConfirmed) {
+        //                 $.ajax({
+        //                     type: "get",
+        //                     url: "/purchase/decline",//"{{ url('/decline') }}",
+        //                     data: 'id_po=' + id_po + '&keterangan=' + keterangan,
+        //                     success: function(data) {
+        //                         // console.log(data);
+        //                         swalWithBootstrapButtons.fire({
+        //                             title: "Berhasil!",
+        //                             text: "Data berhasil disimpan",
+        //                             icon: "success"
+        //                         });
+        //                 //         $('#data-user').DataTable().ajax.reload();
+        //                     }
+        //                 })
+        //             } else if (
+        //                 result.dismiss === Swal.DismissReason.cancel
+        //             ) {
+        //                 swalWithBootstrapButtons.fire({
+        //                     title: "Gagal",
+        //                     text: "Data gagal disimpan",
+        //                     icon: "error"
+        //                 });
+        //             }
+        //         });
+        // }
     </script>
 </body>
 

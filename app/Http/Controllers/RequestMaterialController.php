@@ -75,10 +75,14 @@ class RequestMaterialController extends Controller
     public function show(RequestMaterial $requestMaterial)
     {
         // dd($requestMaterial);
+        $tgl_req = Carbon::createFromFormat('Y-m-d', $requestMaterial->tanggal_request)->format('d-m-Y');
+        $tgl_keb = Carbon::createFromFormat('Y-m-d', $requestMaterial->tanggal_kebutuhan)->format('d-m-Y');
         $detail = DetailRM::where('rm_id', $requestMaterial->id)->where('jumlah', '>', 0)->with('barang')->get();
         return view('request-material.teknisi.detail-request-material')->with([
             'rm' => $requestMaterial,
             'detail' => $detail,
+            'tgl_req' => $tgl_req,
+            'tgl_keb' => $tgl_keb,
         ]);
     }
 
@@ -87,10 +91,14 @@ class RequestMaterialController extends Controller
      */
     public function edit(RequestMaterial $requestMaterial)
     {
+        $tgl_req = Carbon::createFromFormat('Y-m-d', $requestMaterial->tanggal_request)->format('d-m-Y');
+        $tgl_keb = Carbon::createFromFormat('Y-m-d', $requestMaterial->tanggal_kebutuhan)->format('d-m-Y');
         $detail = DetailRM::where('rm_id', $requestMaterial->id)->where('jumlah', '>', 0)->with('barang')->get();
         return view('request-material.teknisi.edit-request-material')->with([
             'rm' => $requestMaterial,
             'detail' => $detail,
+            'tgl_req' => $tgl_req,
+            'tgl_keb' => $tgl_keb,
         ]);
     }
 
@@ -156,6 +164,9 @@ class RequestMaterialController extends Controller
             })
             ->editColumn('tanggal_request', function ($data) {
                 return Carbon::createFromFormat('Y-m-d', $data->tanggal_request)->format('d-m-Y');
+            })
+            ->editColumn('tanggal_kebutuhan', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tanggal_kebutuhan)->format('d-m-Y');
             })
             ->addColumn('status', function ($data) {
                 if ($data->status == 'belum diproses') {
@@ -320,7 +331,7 @@ class RequestMaterialController extends Controller
             'status' => 'diproses',
         ]);
 
-        return redirect('/request-material');
+        return redirect('/request-material')->withSuccess('Data Berhasil Disimpan');
     }
 
     public function viewRMLogistik()

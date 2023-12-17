@@ -13,13 +13,14 @@
                     <div id="modal-page" class="card-body">
                         <div class="form-group">
                             <label for="">Keterangan</label>
-                            <textarea class="form-control" name="keterangan" id="keterangan" rows="3"></textarea>
+                            <textarea class="form-control" name="keterangan" id="keterangan" rows="3" required></textarea>
                             <input type="hidden" name="id_po" id="id_po">
                         </div>
                         <div class="form-group">
                             <div class="float-sm-right">
                                 <a href="#" class="btn btn-danger" onclick="cancel()">Cancel</a>
                                 <button class="btn btn-success" type="submit">Simpan</button>
+                                {{-- <button class="btn btn-success" onclick="confirmDecline()">Simpan</button> --}}
                             </div>
                         </div>
                     </div>

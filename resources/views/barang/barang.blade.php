@@ -80,7 +80,7 @@
     </div>
 
     @include('sweetalert::alert')
-    
+
     <input type="hidden" id="table-url-barang" value="{{ route('tabelbarang') }}">
     @include('template.script')
 
@@ -89,6 +89,8 @@
             // select2();
             table();
             select2();
+
+            $(".money").simpleMoneyFormat();
 
             // $('#databarang').DataTable({
             //     ordering: true,
@@ -188,6 +190,7 @@
             $.get("{{ url('data-barang/create') }}", {}, function(data, status) {
                 selectSatuan();
                 $("#modal-page").html(data);
+                $(".money").simpleMoneyFormat();
                 // select2();
                 $("#ModalBarang").modal('show');
             });
@@ -199,6 +202,7 @@
                 selectSatuan();
                 $("#modal-page").html(data);
                 $("#modal-title").html('Update Barang');
+                $(".money").simpleMoneyFormat();
                 $("#ModalBarang").modal('show');
             });
             // var nama_barang = $("#input_nama_barang").val();

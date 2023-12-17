@@ -18,7 +18,7 @@
                     <i class="fa-solid fa-rupiah-sign"></i>
                 </span>
             </div>
-            <input type="number" class="form-control" id="input_harga" name="harga"
+            <input type="text" class="form-control money" id="input_harga" name="harga"
                 placeholder="Masukkan Harga Barang" required>
         </div>
     </div>

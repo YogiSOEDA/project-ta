@@ -64,6 +64,8 @@
         <footer class="main-footer">
             @include('template.footer')
         </footer>
+
+        @include('sweetalert::alert')
     </div>
 
     @include('template.script')

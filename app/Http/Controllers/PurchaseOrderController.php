@@ -113,7 +113,7 @@ class PurchaseOrderController extends Controller
         foreach ($qty as $e => $qt) {
             DetailPO::where('id', $id_detail_po[$e])->update([
                 'jumlah' => $qty[$e],
-                'harga' => $harga[$e],
+                'harga' => str_replace(",", "",$harga[$e]),
             ]);
         }
 
@@ -207,6 +207,9 @@ class PurchaseOrderController extends Controller
 
     public function viewPoAkunting()
     {
+        $title = 'Tolak Purchase Order!';
+        $text = 'Anda yakin menolak purchase order ini?';
+        confirmDelete($title, $text);
         return view('purchase-order.akunting.purchase-order');
     }
 
@@ -331,7 +334,7 @@ class PurchaseOrderController extends Controller
             'komentar' => 'Acc',
         ]);
 
-        return redirect('/direktur/purchase-order');
+        return redirect('/direktur/purchase-order')->withSuccess('Data Berhasil Disimpan');
     }
 
     public function viewPoLogistik()
@@ -368,7 +371,16 @@ class PurchaseOrderController extends Controller
                 // if ($data->acc_direktur == 'divalidasi' || $data->acc_akunting == 'divalidasi') {
                 //     return '<a href="purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
                 // } else {
-                return '<a href="/akunting/purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a> <a href="/akunting/purchase-order/' . $data->id . '/acc" class="btn btn-success"><i class="fa-solid fa-check"></i> Accept</a> <a href="/akunting/purchase-order/' . $data->id . '/decline" class="btn btn-danger"><i class="fa-solid fa-x"></i> Decline</a>';
+
+                if ($data->status == 'perlu perbaikan') {
+                    $komen = Komentar::where('po_id', $data->id)->where('user_id', Auth::user()->id)->where('komentar', '!=', 'Acc')->count();
+
+                    if ($komen >= 1) {
+                        return '<a href="/direktur/purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
+                    }
+                }
+
+                return '<a href="/akunting/purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a> <a href="/akunting/purchase-order/' . $data->id . '/acc" class="btn btn-success"><i class="fa-solid fa-check"></i> Accept</a> <button class="btn btn-danger" onclick="decline(' . $data->id . ')"><i class="fa-solid fa-x"></i> Decline</button>';
                 // }
             })
             ->rawColumns(['stat_dir', 'stat_akt', 'status', 'action', 'jenis_request'])
@@ -448,7 +460,7 @@ class PurchaseOrderController extends Controller
             'komentar' => 'Acc',
         ]);
 
-        return redirect('/akunting/purchase-order');
+        return redirect('/akunting/purchase-order')->withSuccess('Data Berhasil Disimpan');
     }
 
     public function tablePoLogistik()
@@ -505,15 +517,21 @@ class PurchaseOrderController extends Controller
         $detail = DetailPO::where('po_id', $purchaseOrder->id)
             ->with('barang')
             ->get();
+
+            $tgl = Carbon::createFromFormat('Y-m-d', $purchaseOrder->tanggal)->format('d-m-Y');
         return view('purchase-order.logistik.detail-purchase-order')->with([
             'po' => $purchaseOrder,
             'detail' => $detail,
+            'tgl' => $tgl,
         ]);
     }
 
     public function insertKomentar(Request $request)
     {
         // ddd($request);
+        // $user => 'user_id';
+        // $request['user_id'] = Auth::user()->id;
+        // return $request;
 
         Komentar::create([
             'po_id' => $request->id_po,
@@ -527,9 +545,9 @@ class PurchaseOrderController extends Controller
             ]);
 
         if ($request->user()->role == 'direktur') {
-            return redirect('/direktur/purchase-order');
+            return redirect('/direktur/purchase-order')->withSuccess('Data Berhasil Disimpan');
         } elseif ($request->user()->role == 'akunting') {
-            return redirect('/akunting/purchase-order');
+            return redirect('/akunting/purchase-order')->withSuccess('Data Berhasil Disimpan');
         }
     }
 
@@ -543,5 +561,14 @@ class PurchaseOrderController extends Controller
                 // return $data->user->role;
             })
             ->make(true);
+    }
+
+    public function prosesPOLogistik(PurchaseOrder $purchaseOrder)
+    {
+        PurchaseOrder::where('id', $purchaseOrder->id)
+        ->update([
+            'status' => 'diproses'
+        ]);
+        return redirect('/logistik/purchase-order')->withSuccess('Data Berhasil Disimpan');
     }
 }

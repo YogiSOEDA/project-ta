@@ -258,7 +258,7 @@
                     valute: 'USD',
                 });
                 parent.find('.total').text(total);
-                console.log(total);
+                // console.log(total);
                 // totalSum();
                 totalBiayaSum();
             }

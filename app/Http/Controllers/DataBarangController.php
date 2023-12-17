@@ -52,7 +52,7 @@ class DataBarangController extends Controller
         if($request->file('gambar')){
             Barang::create([
                 'nama_barang' => $request->nama_barang,
-                'harga' => $request->harga,
+                'harga' => str_replace(",","",$request->harga),
                 'gambar' => $request->file('gambar')->store('barang-images'),
                 'stok' => $stok,
                 'satuan_id' => $request->satuan_id,
@@ -60,7 +60,7 @@ class DataBarangController extends Controller
         } else {
             Barang::create([
                 'nama_barang' => $request->nama_barang,
-                'harga' => $request->harga,
+                'harga' => str_replace(",","",$request->harga),
                 'stok' => $stok,
             ]);
         }
@@ -104,13 +104,13 @@ class DataBarangController extends Controller
         if ($request->file('gambar') == null) {
             Barang::where('id', $request->id_barang)->update([
                 'nama_barang' => $request->nama_barang,
-                'harga' => $request->harga,
+                'harga' => str_replace(",","",$request->harga),
                 'satuan_id' => $request->satuan_id,
             ]);
         } else {
             Barang::where('id', $request->id_barang)->update([
                 'nama_barang' => $request->nama_barang,
-                'harga' => $request->harga,
+                'harga' => str_replace(",","",$request->harga),
                 'satuan_id' => $request->satuan_id,
                 'gambar' => $request->file('gambar')->store('barang-images'),
             ]);

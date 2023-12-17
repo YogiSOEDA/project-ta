@@ -136,6 +136,8 @@ Route::group(['middleware' => ['auth', 'rolecheck:logistik']], function () {
     Route::get('/logistik/purchase-order', [PurchaseOrderController::class, 'viewPoLogistik']);
     Route::get('/logistik/purchase-order/tabel', [PurchaseOrderController::class, 'tablePoLogistik']);
     Route::get('/logistik/purchase-order/{purchase_order}', [PurchaseOrderController::class, 'viewDetailPOLogistik']);
+    Route::get('/logistik/purchase-order/proses/{purchase_order}', [PurchaseOrderController::class, 'prosesPOLogistik']);
+
     Route::get('/logistik/request-material', [RequestMaterialController::class, 'viewRMLogistik']);
     Route::get('/logistik/request-material/tabel', [RequestMaterialController::class, 'tableRMLogistik']);
     Route::get('/logistik/request-material/{request_material}', [RequestMaterialController::class, 'viewDetailRMLogistik']);

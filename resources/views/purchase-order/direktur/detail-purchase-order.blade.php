@@ -75,15 +75,15 @@
                                                         <td class="no-table"></td>
                                                         <td>{{ $dtl->barang->nama_barang }}</td>
                                                         <td>{{ $dtl->jumlah }}</td>
-                                                        <td>{{ $dtl->harga }}</td>
-                                                        <td></td>
+                                                        <td class="money">{{ $dtl->harga }}</td>
+                                                        <td class="money"></td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
                                             <tfoot>
                                                 <tr>
                                                     <td colspan="4">Total</td>
-                                                    <td class="totalSum"></td>
+                                                    <td class="totalSum money"></td>
                                                 </tr>
                                             </tfoot>
                                         </table>
@@ -119,7 +119,7 @@
                                                 class="btn btn-danger">
                                                 <i class="fa-solid fa-x"></i> Decline
                                             </a> --}}
-                                                    <button class="btn btn-danger" onclick="decline()">
+                                                    <button class="btn btn-danger" onclick="decline({{ $po->id }})">
                                                         <i class="fa-solid fa x"></i>
                                                         Decline
                                                     </button>
@@ -147,6 +147,8 @@
                 numberingTable();
                 totalHarga();
                 totalSum();
+
+                $(".money").simpleMoneyFormat();
             });
 
             function numberingTable() {
@@ -177,9 +179,19 @@
                 $('.totalSum').text(totalBiaya);
             }
 
-            function decline() {
-                $("#ModalKomentar").modal('show');
-            }
+            function decline(id) {
+            $("#ModalKomentar").modal('show');
+            $('#id_po').val(id);
+        }
+
+        function cancel() {
+            $('#keterangan').val('');
+            $("#close").click();
+            // $('#ModalKomentar').modal('hide');
+        }
+            // function decline() {
+            //     $("#ModalKomentar").modal('show');
+            // }
         </script>
     </body>
 
