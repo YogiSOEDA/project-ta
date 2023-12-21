@@ -64,7 +64,7 @@ class BarangKeluarController extends Controller
                 ]);
         }
 
-        return redirect('/barang-keluar');
+        return redirect('/barang-keluar')->withSuccess('Data Berhasil Disimpan');
     }
 
     /**

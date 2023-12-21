@@ -85,7 +85,7 @@
                                                                 <input type="number" class="form-control qty"
                                                                     id="qty" name="qty[]"
                                                                     value="{{ $dtl->jumlah }}"
-                                                                    onchange="totalHarga(this)">
+                                                                    onchange="totalHarga(this)" required>
                                                             </div>
                                                         </td>
                                                         <td>
@@ -93,7 +93,7 @@
                                                                 <input type="text" class="form-control harga money"
                                                                     id="harga" name="harga[]"
                                                                     value="{{ $dtl->harga }}"
-                                                                    onchange="totalHarga(this)">
+                                                                    onchange="totalHarga(this)" required>
                                                             </div>
                                                         </td>
                                                         <td class="total money"></td>

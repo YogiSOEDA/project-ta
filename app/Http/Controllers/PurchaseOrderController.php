@@ -60,11 +60,11 @@ class PurchaseOrderController extends Controller
                 'po_id' => $id_po,
                 'barang_id' => $id_barang[$e],
                 'jumlah' => $qty[$e],
-                'harga' => $harga[$e],
+                'harga' => str_replace(",", "", $harga[$e]),
             ]);
         }
 
-        return redirect('/purchase-order');
+        return redirect('/purchase-order')->withSuccess('Data Berhasil Disimpan');
     }
 
     /**
@@ -117,7 +117,7 @@ class PurchaseOrderController extends Controller
             ]);
         }
 
-        return redirect('/purchase-order');
+        return redirect('/purchase-order')->withSuccess('Data Berhasil Disimpan');
     }
 
     /**

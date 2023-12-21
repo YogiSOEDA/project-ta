@@ -42,13 +42,13 @@
                                                 data-target-input="nearest">
                                                 <input type="date" class="form-control datetimepicker-input"
                                                     data-target="#reservationdate" id="input_tanggal"
-                                                    name="input_tanggal" />
+                                                    name="input_tanggal" required>
                                             </div>
                                         </div>
                                         <div class="form-group" id="select-proyek">
                                             <label>Nama Proyek</label>
                                             <select class="form-control select2" id="proyek_id" name="proyek_id"
-                                                style="width: 100%">
+                                                style="width: 100%" required>
                                             </select>
                                         </div>
                                     </div>

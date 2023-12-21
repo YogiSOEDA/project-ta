@@ -67,7 +67,7 @@ class BarangMasukController extends Controller
                 ]);
         }
 
-        return redirect('/barang-masuk');
+        return redirect('/barang-masuk')->withSuccess('Data Berhasil Disimpan');
         // ddd($jumlah_brg);
     }
 

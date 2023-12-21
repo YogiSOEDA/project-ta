@@ -66,7 +66,7 @@ class RequestMaterialController extends Controller
             ]);
         }
 
-        return redirect('/teknisi/request-material');
+        return redirect('/teknisi/request-material')->withSuccess('Data Berhasil Disimpan');
     }
 
     /**
@@ -132,7 +132,7 @@ class RequestMaterialController extends Controller
             // dd($id_barang[$e]);
         }
 
-        return redirect('/teknisi/request-material');
+        return redirect('/teknisi/request-material')->withSuccess('Data Berhasil Disimpan');
         // ddd($request);
     }
 

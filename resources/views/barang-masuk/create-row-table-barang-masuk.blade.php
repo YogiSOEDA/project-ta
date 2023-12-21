@@ -5,7 +5,7 @@
         <div class="input-group">
             <input type="hidden" class="id_barang" name="id_barang[]" id="id_barang" value="{{ $barang->id }}">
             <input type="number" class="form-control qty" id="qty" name="qty[]" value="{{ $qty }}"
-                onchange="totalHarga(this)">
+                onchange="totalHarga(this)" required>
         </div>
     </td>
     <td>

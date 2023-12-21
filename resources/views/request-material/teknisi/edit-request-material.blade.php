@@ -124,7 +124,7 @@
                                                                     name="id_barang[]" id="id_barang"
                                                                     value="{{ $item->barang_id }}">
                                                                 <input type="number" class="form-control qty"
-                                                                    name="qty[]" value="{{ $item->jumlah }}">
+                                                                    name="qty[]" value="{{ $item->jumlah }}" required>
                                                             </div>
                                                         </td>
                                                         {{-- <td>

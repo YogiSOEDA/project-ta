@@ -42,7 +42,7 @@
                                                 data-target-input="nearest">
                                                 <input type="date" class="form-control datetimepicker-input"
                                                     data-target="#reservationdate" id="input_tanggal"
-                                                    name="input_tanggal" />
+                                                    name="input_tanggal" required>
                                             </div>
                                         </div>
                                     </div>

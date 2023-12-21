@@ -5,7 +5,7 @@
         <div class="input-group">
             <input type="hidden" class="id_barang" name="id_barang[]" id="id_barang" value="{{ $barang->id }}">
             <input type="hidden" name="id_detail_rm[]" id="id_detail_rm[]" value="0">
-            <input type="number" class="form-control qty" id="qty" name="qty[]" value="{{ $qty }}">
+            <input type="number" class="form-control qty" id="qty" name="qty[]" value="{{ $qty }}" required>
         </div>
     </td>
     <td>

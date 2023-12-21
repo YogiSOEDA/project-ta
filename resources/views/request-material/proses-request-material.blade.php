@@ -86,7 +86,7 @@
                                                     <tr>
                                                         <td>User</td>
                                                         <td>:</td>
-                                                        <td>{{ $rm->user->name }}</td>
+                                                        <td>{{ $rm->user->name }} ({{$rm->user->role}})</td>
                                                     </tr>
                                                 </table>
                                             </div>
@@ -115,7 +115,7 @@
                                                                         value="{{ $item->barang_id }}">
                                                                     <input type="number" class="form-control qty mr-1"
                                                                         name="qty[]" value="{{ $item->jumlah }}"
-                                                                        onchange="totalHargaOnChange(this)">
+                                                                        onchange="totalHargaOnChange(this)" required>
                                                                     </p class="ml-1">
                                                                     {{ $item->barang->satuan->satuan }}
                                                                     <p>
@@ -127,7 +127,7 @@
                                                                         class="form-control harga money" id="harga"
                                                                         name="harga[]"
                                                                         value="{{ $item->barang->harga }}"
-                                                                        onchange="totalHargaOnChange(this)">
+                                                                        onchange="totalHargaOnChange(this)" required>
                                                                 </div>
                                                             </td>
                                                             <td class="money total"></td>
@@ -238,7 +238,7 @@
                     // console.log(totalBiaya);
                     totalBiaya += biayaNumber;
 
-                    console.log(totalBiaya);
+                    // console.log(totalBiaya);
                 });
 
                 totalBiaya = totalBiaya.toLocaleString('en-US', {
