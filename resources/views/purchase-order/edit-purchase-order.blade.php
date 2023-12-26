@@ -117,6 +117,22 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-lg-12">
+                            <div class="card card-primary card-outline">
+                                <div class="card-body">
+                                    <table id="keterangan" class="table table-bordered table-hover text-center">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>User</th>
+                                                <th>Keterangan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                         </div>
                     </div>
                 </section>
@@ -127,6 +143,8 @@
         </footer>
     </div>
 
+    <input type="hidden" id="tabel-ket" value="/purchase-order/tabel-komentar/{{ $po->id }}">
+
     @include('template.script')
 
     <script>
@@ -136,6 +154,7 @@
             totalSum();
 
             $(".money").simpleMoneyFormat();
+            table();
         });
 
         function numberingTable() {
@@ -209,6 +228,46 @@
 
                 $('.totalSum').text(totalBiaya);
             }
+
+
+            function table() {
+            var url = $('#tabel-ket').val();
+
+            $('#keterangan').DataTable({
+                ordering: true,
+                serverSide: true,
+                processing: true,
+                searching: false,
+                paging: false,
+                info: false,
+                ajax: {
+                    'url': url
+                },
+                columns: [
+                    {
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        width: '10px',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'user',
+                        name: 'user'
+                    },
+                    {
+                        data: 'komentar',
+                        name: 'komentar'
+                    }
+                ],
+                responsive: true,
+                autoWidth: false,
+                columnDefs: [{
+                    className: 'dt-center',
+                    targets: '_all'
+                }],
+            });
+        }
     </script>
 </body>
 

@@ -115,6 +115,7 @@
                         searchable: false
                     }
                 ],
+                order: [[1, 'desc']],
                 responsive: true,
                 autoWidth: false,
                 columnDefs: [{

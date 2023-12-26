@@ -199,10 +199,13 @@
         function show(id) {
             $.get("{{ url('data-barang/edit') }}/" + id, {}, function(data, status) {
                 // select2();
-                selectSatuan();
+                // console.log(data);
                 $("#modal-page").html(data);
                 $("#modal-title").html('Update Barang');
                 $(".money").simpleMoneyFormat();
+                var s = $('#satuan').val();
+                selectedSatuan(s);
+                console.log(s);
                 $("#ModalBarang").modal('show');
             });
             // var nama_barang = $("#input_nama_barang").val();
@@ -262,6 +265,8 @@
                     $('#id_barang').val(id);
                     $('#input_edit_nama_barang').val(response.result.nama_barang);
                     $('#input_edit_harga').val(response.result.harga);
+                    // selectedSatuan(response.result.satuan_id);
+                    console.log(response);
                     const imgPreview = document.querySelector('#img-edit-preview');
 
                     imgPreview.classList.add("col-sm-5");
@@ -281,12 +286,19 @@
 
         function select2() {
             var satuanSelect2 = $('#satuan_id').select2();
+            var satuanSelected2 = $('#satuan_id_select').select2();
             satuanSelect2.data('select2').$selection.css('height', '1%');
+            satuanSelected2.data('select2').$selection.css('height', '1%');
         }
 
         function selectSatuan() {
             $.get("{{ url('select-satuan') }}", {}, function(data, status) {
                 $("#satuan_id").html(data);
+            })
+        }
+        function selectedSatuan(id) {
+            $.get("{{ url('selected-satuan') }}/"+id, {}, function(data, status) {
+                $("#satuan_id_select").html(data);
             })
         }
 

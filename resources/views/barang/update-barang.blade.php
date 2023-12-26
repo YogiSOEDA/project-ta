@@ -7,8 +7,9 @@
     </div>
     <div class="form-group" id="select-satuan">
         <label>Nama Satuan</label>
-        <select class="form-control select2" id="satuan_id" name="satuan_id" style="width: 100%">
+        <select class="form-control select2" id="satuan_id_select" name="satuan_id" style="width: 100%">
         </select>
+        <input type="hidden" id="satuan" value="{{$data->satuan_id}}">
     </div>
     <div class="form-group">
         <label for="inputHargaBarang">Harga Barang</label>

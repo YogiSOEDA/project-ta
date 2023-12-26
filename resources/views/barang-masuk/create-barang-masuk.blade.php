@@ -139,7 +139,7 @@
         }
 
         function selectBarang() {
-            $.get("{{ url('select-barang') }}", {}, function(data, status) {
+            $.get("{{ url('select-barang-log') }}", {}, function(data, status) {
                 $("#barang_id").html(data);
             })
         }
@@ -180,15 +180,15 @@
 
         function barang() {
             $('#input_qty').val(0);
-            // var barang_id = $("#barang_id").val();
-            // $.ajax({
-            //     type: "get",
-            //     url: "{{ url('data-barang/show') }}/" + barang_id,
-            //     success: function(response) {
-            //         $('#input_harga').val(response.result.harga);
-            //         $('#input_qty').val(0);
-            //     }
-            // })
+            var barang_id = $("#barang_id").val();
+            $.ajax({
+                type: "get",
+                url: "{{ url('data-barang/show') }}/" + barang_id,
+                success: function(response) {
+                    $('#input_harga').val(response.result.harga);
+                    $('#input_qty').val(0);
+                }
+            })
         }
 
 

@@ -61,7 +61,7 @@
                                         <div class="form-group">
                                             <label>Nama Barang</label>
                                             <select class="select2 form-control" id="barang_id" style="width: 100%"
-                                                onchange="barang()">
+                                                 onchange="barang()">
                                             </select>
                                         </div>
                                         <div class="form-group">
@@ -136,12 +136,14 @@
         function selectProyek() {
             $.get("{{ url('select-proyek') }}", {}, function(data, status) {
                 $("#proyek_id").html(data);
+                console.log(data);
             })
         }
 
         function selectBarang() {
-            $.get("{{ url('select-barang') }}", {}, function(data, status) {
+            $.get("{{ url('select-barang-log') }}", {}, function(data, status) {
                 $("#barang_id").html(data);
+                console.log(data);
             })
         }
 

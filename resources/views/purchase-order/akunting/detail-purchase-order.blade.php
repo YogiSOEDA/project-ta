@@ -31,7 +31,15 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card card-primary card-outline">
-                                <div class="card-header"></div>
+                                <div class="card-header">
+                                    <div class="float-sm-right">
+                                        <a href="/akunting/purchase-order/cetak-po/{{$po->id}}" class="btn btn-info" target="_blank">
+                                        {{-- <a href="{{ route('createPO') }}" class="btn btn-success"> --}}
+                                            <i class="fa-solid fa-print"></i>
+                                            Print
+                                        </a>
+                                    </div>
+                                </div>
                                 <div class="card-body">
                                     <div class="col-lg-6">
                                         <table class="text-left" width="50%">
@@ -87,30 +95,102 @@
                                         </tfoot>
                                     </table>
                                 </div>
-                                @if ($po->acc_akunting == 'belum divalidasi')
+                                {{-- @if ($po->acc_akunting == 'belum divalidasi')
                                     <div class="card-footer">
                                         <div class="float-sm-right">
                                             <a href="/akunting/purchase-order/{{ $po->id }}/acc"
                                                 class="btn btn-success">
                                                 <i class="fa-solid fa-check"></i> Accept
-                                            </a>
+                                            </a> --}}
                                             {{-- <a href="/akunting/purchase-order/{{ $po->id }}/decline"
                                                 class="btn btn-danger">
                                                 <i class="fa-solid fa-x"></i> Decline
                                             </a> --}}
-                                            <button class="btn btn-danger" onclick="decline({{ $po->id }})">
+                                            {{-- <button class="btn btn-danger" onclick="decline()">
                                                 <i class="fa-solid fa-x"></i> Decline
                                             </button>
                                         </div>
                                     </div>
-                                @endif
+                                @endif --}}
+
+                                @if ($po->acc_akunting == 'belum divalidasi' && $po->status == 'belum diproses')
+                                        <div class="card-footer">
+                                            <div class="float-sm-right">
+                                                <a href="/akunting/purchase-order/{{ $po->id }}/acc"
+                                                    class="btn btn-success">
+                                                    <i class="fa-solid fa-check"></i> Accept
+                                                </a>
+                                                {{-- <a href="/direktur/purchase-order/{{ $po->id }}/decline"
+                                                class="btn btn-danger">
+                                                <i class="fa-solid fa-x"></i> Decline
+                                            </a> --}}
+                                                <button class="btn btn-danger" onclick="decline({{ $po->id }})">
+                                                    <i class="fa-solid fa x"></i>
+                                                    Decline
+                                                </button>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    @if ($po->acc_akunting == 'belum divalidasi' && $po->status == 'perlu perbaikan')
+                                        @if ($komen >= 1)
+                                        @else
+                                            <div class="card-footer">
+                                                <div class="float-sm-right">
+                                                    <a href="/akunting/purchase-order/{{ $po->id }}/acc"
+                                                        class="btn btn-success">
+                                                        <i class="fa-solid fa-check"></i> Accept
+                                                    </a>
+                                                    {{-- <a href="/direktur/purchase-order/{{ $po->id }}/decline"
+                                                class="btn btn-danger">
+                                                <i class="fa-solid fa-x"></i> Decline
+                                            </a> --}}
+                                                    <button class="btn btn-danger" onclick="decline()">
+                                                        <i class="fa-solid fa x"></i>
+                                                        Decline
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endif
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            @include('template.modal-komentar')
+
+            <div class="modal fade" id="ModalKomentar" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 id="modal-title" class="modal-title">Keterangan</h5>
+                <button class="close" type="button" data-dismiss="modal" id="close" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/purchase-order/decline" method="post" enctype="multipart/form-data">
+                {{ csrf_field() }}
+                <div class="modal-body">
+                    <div id="modal-page" class="card-body">
+                        <div class="form-group">
+                            <label for="">Keterangan</label>
+                            <textarea class="form-control" name="keterangan" id="keterangan" rows="3" required></textarea>
+                            <input type="hidden" name="id_po" id="id_po" value="{{$po->id}}">
+                        </div>
+                        <div class="form-group">
+                            <div class="float-sm-right">
+                                <a href="#" class="btn btn-danger" onclick="cancel()">Cancel</a>
+                                <button class="btn btn-success" type="submit">Simpan</button>
+                                {{-- <button class="btn btn-success" onclick="confirmDecline()">Simpan</button> --}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+            {{-- @include('template.modal-komentar') --}}
         </div>
 
         <footer class="main-footer">
@@ -158,8 +238,11 @@
         }
 
         function decline(id) {
-            $("#ModalKomentar").modal('show');
+            // console.log(id);
             $('#id_po').val(id);
+            var po = $('#id_po').val();
+            console.log(po);
+            $("#ModalKomentar").modal('show');
         }
 
         function cancel() {

@@ -49,6 +49,8 @@ class DataBarangController extends Controller
         // ddd($request);
         $stok = 0;
 
+        // ddd($request);
+
         if($request->file('gambar')){
             Barang::create([
                 'nama_barang' => $request->nama_barang,
@@ -62,6 +64,7 @@ class DataBarangController extends Controller
                 'nama_barang' => $request->nama_barang,
                 'harga' => str_replace(",","",$request->harga),
                 'stok' => $stok,
+                'satuan_id' => $request->satuan_id,
             ]);
         }
 

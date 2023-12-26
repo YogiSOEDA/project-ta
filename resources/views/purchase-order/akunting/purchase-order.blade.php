@@ -131,9 +131,13 @@
                         name: 'jenis_request'
                     },
                     {
-                        data: 'proyek.nama_proyek',
-                        name: 'proyek.name_proyek'
+                        data: 'proyek',
+                        name: 'proyek'
                     },
+                    // {
+                    //     data: 'proyek.nama_proyek',
+                    //     name: 'proyek.name_proyek'
+                    // },
                     {
                         data: 'stat_dir',
                         name: 'stat_dir'

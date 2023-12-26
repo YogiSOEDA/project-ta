@@ -93,4 +93,13 @@ class SatuanController extends Controller
             'data' => $data,
         ]);
     }
+
+    public function selectedBarang(Satuan $satuan)
+    {
+        $data = Satuan::get();
+        return view('template.select-satuan-selected')->with([
+            'data' => $data,
+            'satuan' => $satuan->id,
+        ]);
+    }
 }

@@ -91,6 +91,11 @@
                 data: "satuan=" + satuan,
                 success: function(data) {
                     $("#close").click();
+                    Swal.fire({
+                                    title: "Berhasil!",
+                                    text: "Data berhasil disimpan",
+                                    icon: "success"
+                                });
                     $('#data-satuan').DataTable().ajax.reload();
                 }
 
@@ -148,6 +153,11 @@
                 data: "satuan=" + satuan,
                 success: function(data) {
                     $("#close").click();
+                    Swal.fire({
+                                    title: "Berhasil!",
+                                    text: "Data berhasil disimpan",
+                                    icon: "success"
+                                });
                     $('#data-satuan').DataTable().ajax.reload();
                 }
 

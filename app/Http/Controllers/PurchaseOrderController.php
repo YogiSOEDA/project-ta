@@ -7,6 +7,7 @@ use App\Models\DetailPO;
 use App\Models\Komentar;
 use App\Models\Proyek;
 use App\Models\PurchaseOrder;
+use App\Models\Satuan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -143,6 +144,8 @@ class PurchaseOrderController extends Controller
             'data' => $data,
         ]);
     }
+
+
 
     public function addRow(Request $request)
     {
@@ -353,6 +356,9 @@ class PurchaseOrderController extends Controller
             ->editColumn('tanggal', function ($data) {
                 return Carbon::createFromFormat('Y-m-d', $data->tanggal)->format('d-m-Y');
             })
+            ->editColumn('proyek', function ($data) {
+                return $data->proyek->nama_proyek;
+            })
             ->addColumn('stat_dir', function ($data) {
                 if ($data->acc_direktur == 'belum divalidasi') {
                     return '<div class="btn bg-danger">' . $data->acc_direktur . '</div>';
@@ -376,7 +382,7 @@ class PurchaseOrderController extends Controller
                     $komen = Komentar::where('po_id', $data->id)->where('user_id', Auth::user()->id)->where('komentar', '!=', 'Acc')->count();
 
                     if ($komen >= 1) {
-                        return '<a href="/direktur/purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
+                        return '<a href="/akunting/purchase-order/' . $data->id . '" class="btn btn-info"><i class="fa-solid fa-circle-info"></i> Detail</a>';
                     }
                 }
 
@@ -570,5 +576,24 @@ class PurchaseOrderController extends Controller
             'status' => 'diproses'
         ]);
         return redirect('/logistik/purchase-order')->withSuccess('Data Berhasil Disimpan');
+    }
+
+    public function cetakPO(PurchaseOrder $purchaseOrder)
+    {
+
+        // ddd($purchaseOrder);
+        // $purchaseOrder = PurchaseOrder::where('id', $id);
+        $detail = DetailPO::where('po_id', $purchaseOrder->id)
+            ->with('barang')
+            ->get();
+
+        $tgl = Carbon::createFromFormat('Y-m-d', $purchaseOrder->tanggal)->format('d-m-Y');
+
+        return view('template.cetak-po')->with([
+            'po' => $purchaseOrder,
+            'detail' => $detail,
+            'tgl' => $tgl,
+        ]);
+        // return view('template.cetak-po');
     }
 }

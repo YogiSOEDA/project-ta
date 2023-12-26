@@ -1,6 +1,6 @@
-<aside class="main-sidebar sidebar-dark-primary elevation-4">
+<aside class="main-sidebar sidebar-dark-primary elevation-4 sticky-top">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
+    <a href="/dashboard" class="brand-link">
         <img src="{{ asset('img/logo.png') }}" alt="Alam Raya" class="brand-image img-circle elevation-3"
             style="opacity: .8">
         <span class="brand-text font-weight-light">Alam Raya</span>
@@ -23,9 +23,9 @@
                 </li>
                 {{-- @if (auth()->user()->role == 'admin' || auth()->user()->role == 'akunting' || auth()->user()->role == 'direktur' || auth()->user()->role == 'teknisi') --}}
                 <li
-                    class="nav-item {{ 'request-material' == request()->path() || 'purchase-order' == request()->path() || 'purchase-order/create' == request()->path() || 'direktur/purchase-order' == request()->path() || 'teknisi/request-material' == request()->path() || 'teknisi/request-material/create' == request()->path() || 'logistik/purchase-order' == request()->path() || 'logistik/request-material' == request()->path() ? 'menu-open' : 'menu' }}">
+                    class="nav-item {{ 'request-material' == request()->path() || 'purchase-order' == request()->path() || 'purchase-order/create' == request()->path() || 'direktur/purchase-order' == request()->path() || 'akunting/purchase-order' == request()->path() || 'teknisi/request-material' == request()->path() || 'teknisi/request-material/create' == request()->path() || 'logistik/purchase-order' == request()->path() || 'logistik/request-material' == request()->path() ? 'menu-open' : 'menu' }}">
                     <a href="#"
-                        class="nav-link {{ 'request-material' == request()->path() || 'purchase-order' == request()->path() || 'purchase-order/create' == request()->path() || 'direktur/purchase-order' == request()->path() || 'teknisi/request-material' == request()->path() || 'teknisi/request-material/create' == request()->path() || 'logistik/purchase-order' == request()->path() || 'logistik/request-material' == request()->path() ? 'active' : '' }}">
+                        class="nav-link {{ 'request-material' == request()->path() || 'purchase-order' == request()->path() || 'purchase-order/create' == request()->path() || 'direktur/purchase-order' == request()->path() || 'akunting/purchase-order' == request()->path() ||'teknisi/request-material' == request()->path() || 'teknisi/request-material/create' == request()->path() || 'logistik/purchase-order' == request()->path() || 'logistik/request-material' == request()->path() ? 'active' : '' }}">
                         <i class="nav-icon fas fa-archive"></i>
                         <p>
                             Purchasing
@@ -52,7 +52,7 @@
                         @if (auth()->user()->role == 'akunting')
                             <li class="nav-item">
                                 <a href="/akunting/purchase-order" {{-- <a href="{{ route('purchaseOrder') }}" --}}
-                                    class="nav-link {{ 'purchase-order' == request()->path() || 'purchase-order/create' == request()->path() ? 'active' : '' }}">
+                                    class="nav-link {{ 'akunting/purchase-order' == request()->path() ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Purchase Order</p>
                                 </a>
@@ -61,7 +61,7 @@
                         @if (auth()->user()->role == 'direktur')
                             <li class="nav-item">
                                 <a href="/direktur/purchase-order" {{-- <a href="{{ route('purchaseOrder') }}" --}}
-                                    class="nav-link {{ 'direktur/purchase-order' == request()->path() || 'purchase-order/create' == request()->path() ? 'active' : '' }}">
+                                    class="nav-link {{ 'direktur/purchase-order' == request()->path() ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Purchase Order</p>
                                 </a>

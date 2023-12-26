@@ -22,11 +22,16 @@ use Illuminate\Support\Facades\Route;
 Route::get('/register', function () {
     return view('register');
 });
+// Route::get('/cetak-po', function () {
+//     return view('template.cetak-po');
+// });
 Route::get('/', [UserController::class, 'login']);
 Route::get('/login', [UserController::class, 'login'])->name('login');
 Route::post('/postlogin', [UserController::class, 'postlogin'])->name('postlogin');
 Route::post('/saveregister', [UserController::class, 'register'])->name('saveregister');
 Route::get('/logout', [UserController::class, 'logout'])->name('logout');
+
+// Route::get('/select-barang', [PurchaseOrderController::class, 'viewBarang']);
 
 
 // Route::group(['middleware' => ['auth']], function () {
@@ -107,6 +112,9 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin']], function () {
     Route::get('/satuan/update/{satuan}', [SatuanController::class, 'update']);
 
     Route::get('/select-satuan', [SatuanController::class, 'selectSatuan']);
+    Route::get('/selected-satuan/{satuan}', [SatuanController::class, 'selectedBarang']);
+
+    // Route::get('/select-barang-log', [PurchaseOrderController::class, 'viewBarang']);
 
 });
 
@@ -130,6 +138,7 @@ Route::group(['middleware' => ['auth', 'rolecheck:admin,logistik']], function ()
 
     Route::get('/select-proyek', [PurchaseOrderController::class, 'viewProyek']);
     Route::get('/select-barang', [PurchaseOrderController::class, 'viewBarang']);
+    Route::get('/select-barang-log', [PurchaseOrderController::class, 'viewBarang']);
 });
 
 Route::group(['middleware' => ['auth', 'rolecheck:logistik']], function () {
@@ -141,6 +150,9 @@ Route::group(['middleware' => ['auth', 'rolecheck:logistik']], function () {
     Route::get('/logistik/request-material', [RequestMaterialController::class, 'viewRMLogistik']);
     Route::get('/logistik/request-material/tabel', [RequestMaterialController::class, 'tableRMLogistik']);
     Route::get('/logistik/request-material/{request_material}', [RequestMaterialController::class, 'viewDetailRMLogistik']);
+
+    // Route::get('/select-proyek', [PurchaseOrderController::class, 'viewProyek']);
+    // Route::get('/select-barang-log', [PurchaseOrderController::class, 'viewBarang']);
 });
 
 Route::group(['middleware' => ['auth', 'rolecheck:akunting']], function () {
@@ -149,6 +161,9 @@ Route::group(['middleware' => ['auth', 'rolecheck:akunting']], function () {
     Route::get('/akunting/purchase-order/tabelpoacc', [PurchaseOrderController::class, 'tablePoAktAcc']);
     Route::get('/akunting/purchase-order/{purchase_order}', [PurchaseOrderController::class, 'showPoAkt']);
     Route::get('/akunting/purchase-order/{purchase_order}/acc', [PurchaseOrderController::class, 'accPoAkt']);
+
+    Route::get('/akunting/purchase-order/cetak-po/{purchase_order}',[PurchaseOrderController::class, 'cetakPO']);
+
 });
 
 Route::group(['middleware' => ['auth', 'rolecheck:admin,akunting']], function () {
@@ -207,6 +222,8 @@ Route::group(['middleware' => ['auth', 'rolecheck:teknisi']], function () {
     Route::get('/teknisi/request-material/{id}/delete-row', [RequestMaterialController::class, 'deleteItem']);
     Route::post('/teknisi/request-material/{request_material}/update', [RequestMaterialController::class, 'update']);
 });
+
+// Route::get('/cetak-po/{purchase-order}',[PurchaseOrderController::class, 'cetakPO']);
 
 // Route::middleware(['auth', 'rolecheck::admin'])->group(function () {
 //     Route::get('/dashboard', [UserController::class, 'index']);

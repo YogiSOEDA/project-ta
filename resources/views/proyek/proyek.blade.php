@@ -133,6 +133,11 @@
                 data: "nama_proyek=" + nama_proyek + "&cp_proyek=" + cp_proyek,
                 success: function(data) {
                     $("#close").click();
+                    Swal.fire({
+                                    title: "Berhasil!",
+                                    text: "Data berhasil disimpan",
+                                    icon: "success"
+                                });
                     $('#dataproyek').DataTable().ajax.reload();
                 }
 
@@ -156,6 +161,11 @@
                 data: "nama_proyek=" + nama_proyek + "&cp_proyek=" + cp_proyek,
                 success: function(data) {
                     $("#close").click();
+                    Swal.fire({
+                                    title: "Berhasil!",
+                                    text: "Data berhasil disimpan",
+                                    icon: "success"
+                                });
                     $('#dataproyek').DataTable().ajax.reload();
                 }
 
