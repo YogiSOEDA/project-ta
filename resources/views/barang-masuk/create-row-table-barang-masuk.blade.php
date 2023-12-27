@@ -9,8 +9,11 @@
         </div>
     </td>
     <td>
-        <button class="btn btn-danger" onclick="deleteRow(this)">
+        {{-- <button class="btn btn-danger" onclick="deleteRow(this)">
             <i class="fa-regular fa-trash-can"></i>
-        </button>
+        </button> --}}
+        <a href="#" class="btn btn-danger" onclick="deleteRow(this)">
+            <i class="fa-regular fa-trash-can"></i>
+        </a>
     </td>
 </tr>

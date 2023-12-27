@@ -356,9 +356,9 @@ class PurchaseOrderController extends Controller
             ->editColumn('tanggal', function ($data) {
                 return Carbon::createFromFormat('Y-m-d', $data->tanggal)->format('d-m-Y');
             })
-            ->editColumn('proyek', function ($data) {
-                return $data->proyek->nama_proyek;
-            })
+            // ->editColumn('proyek', function ($data) {
+            //     return $data->proyek->nama_proyek;
+            // })
             ->addColumn('stat_dir', function ($data) {
                 if ($data->acc_direktur == 'belum divalidasi') {
                     return '<div class="btn bg-danger">' . $data->acc_direktur . '</div>';

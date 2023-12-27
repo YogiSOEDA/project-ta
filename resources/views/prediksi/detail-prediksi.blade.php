@@ -71,7 +71,7 @@
                                             <td>Mean Absolute Percentage Error (MAPE)</td>
                                             <td></td>
                                             <td>
-                                                = {{ $error }} / {{ $nilai_aktual }} x 100<br>
+                                                = {{ $mad }} / {{ $nilai_aktual }} x 100<br>
                                                 = {{ $mape }}
                                             </td>
                                         </tr>

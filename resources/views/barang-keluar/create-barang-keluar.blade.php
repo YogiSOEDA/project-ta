@@ -136,14 +136,14 @@
         function selectProyek() {
             $.get("{{ url('select-proyek') }}", {}, function(data, status) {
                 $("#proyek_id").html(data);
-                console.log(data);
+                // console.log(data);
             })
         }
 
         function selectBarang() {
             $.get("{{ url('select-barang-log') }}", {}, function(data, status) {
                 $("#barang_id").html(data);
-                console.log(data);
+                // console.log(data);
             })
         }
 
@@ -176,8 +176,9 @@
             var barang_id = $("#barang_id").val();
             var qty = $("#input_qty").val();
 
-            var rawCount = $('#list-bm tbody tr').length;
+            var rawCount = $('#list-bk tbody tr').length;
             rawCount = rawCount + 1;
+            console.log(rawCount);
 
             $.ajax({
                 type: "get",
@@ -188,12 +189,13 @@
 
                     selectBarang();
                     $("#input_qty").val('');
+                    // numberingTable();
                 }
             })
         }
 
         function deleteRow(row) {
-            var parent = $(row).closest('#list-bm tbody tr');
+            var parent = $(row).closest('#list-bk tbody tr');
             parent.remove();
 
             numberingTable();
@@ -201,7 +203,7 @@
 
         function numberingTable() {
             var number = 0;
-            $('#list-bm tbody tr').each(function(index, no) {
+            $('#list-bk tbody tr').each(function(index, no) {
                 $(no).find('.no-table').text(++number);
             });
         }

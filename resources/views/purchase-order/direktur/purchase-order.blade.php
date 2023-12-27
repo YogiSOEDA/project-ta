@@ -138,7 +138,7 @@
                     },
                     {
                         data: 'proyek.nama_proyek',
-                        name: 'proyek.name_proyek'
+                        name: 'proyek.nama_proyek'
                     },
                     {
                         data: 'stat_dir',
@@ -189,7 +189,7 @@
                     },
                     {
                         data: 'proyek.nama_proyek',
-                        name: 'proyek.name_proyek'
+                        name: 'proyek.nama_proyek'
                     },
                     {
                         data: 'stat_dir',
